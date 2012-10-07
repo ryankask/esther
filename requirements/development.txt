@@ -1,0 +1,2 @@
+ipdb>=0.7
+Flask-DebugToolbar>=0.7.1

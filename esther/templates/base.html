@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}RyanKaskel.com{% endblock %}</title>
+    <meta name="description" content="Ryan Kaskel's Website">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <div class="row">
+      <div class="twelve columns">
+        <nav>
+          <ul class="nav-bar">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+
+        <h1>RyanKaskel.com <small>Welcome.</small></h1>
+        <hr>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="nine columns" role="content">
+        <article>
+          <h3><a href="#">Blog Post Title</a></h3>
+          <h6>Written by <a href="#">John Smith</a> on August 12, 2012.</h6>
+
+          <div class="row">
+            <div class="six columns">
+              <p>Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck
+                duis velit. Aute in reprehenderit, dolore aliqua non est magna in labore pig pork
+                biltong. Eiusmod swine spare ribs reprehenderit culpa.</p>
+              <p>Boudin aliqua adipisicing rump corned beef. Nulla corned beef sunt ball tip, qui
+                bresaola enim jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
+            </div>
+            <div class="six columns">
+              <img src="http://placehold.it/400x240&text=[img]">
+            </div>
+          </div>
+          <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs
+            meatball irure bacon nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt
+            ball tip, qui bresaola enim jowl. Capicola short ribs minim salami nulla nostrud
+            pastrami. Nulla corned beef sunt ball tip, qui bresaola enim jowl. Capicola short ribs
+            minim salami nulla nostrud pastrami.</p>
+
+          <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs
+            meatball irure bacon nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt
+            ball tip, qui bresaola enim jowl. Capicola short ribs minim salami nulla nostrud
+            pastrami.</p>
+        </article>
+      </div>
+
+      <aside class="three columns">
+        <h5>Categories</h5>
+        <nav>
+          <ul class="side-nav">
+            <li><a href="#">News</a></li>
+            <li><a href="#">Code</a></li>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Fun</a></li>
+            <li><a href="#">Weasels</a></li>
+          </ul>
+        </nav>
+
+        <div class="panel">
+          <h5>Featured</h5>
+          <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon nulla pork belly cupidatat meatloaf cow.</p>
+          <a href="#">Read More &rarr;</a>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="row">
+      <div class="twelve columns">
+        <hr>
+        <div class="row">
+          <div class="twelve columns">
+            <p>&copy; 2012 Ryan Kaskel.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    <script>
+      var _gaq=[['_setAccount','UA-6663004-1'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+  </body>
+</html>

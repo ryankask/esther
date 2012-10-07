@@ -1,0 +1,7 @@
+*.pyc
+foundation/.sass-cache
+esther/settings/site.py
+*~
+\#*\#
+.elc
+.\#*
