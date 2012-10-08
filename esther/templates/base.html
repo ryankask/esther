@@ -18,8 +18,8 @@
       <div class="twelve columns">
         <nav>
           <ul class="nav-bar">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
         </nav>
@@ -31,6 +31,7 @@
 
     <div class="row">
       <div class="nine columns" role="content">
+        {% block content %}
         <article>
           <h3><a href="#">Blog Post Title</a></h3>
           <h6>Written by <a href="#">John Smith</a> on August 12, 2012.</h6>
@@ -58,6 +59,7 @@
             ball tip, qui bresaola enim jowl. Capicola short ribs minim salami nulla nostrud
             pastrami.</p>
         </article>
+        {% endblock content %}
       </div>
 
       <aside class="three columns">

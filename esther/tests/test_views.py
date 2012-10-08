@@ -7,6 +7,11 @@ class GeneralTests(EstherTestCase):
         self.assert_200(response)
         self.assert_template_used('general/index.html')
 
+    def test_about(self):
+        response = self.client.get('/about')
+        self.assert_200(response)
+        self.assert_template_used('general/about.html')
+
     def test_404(self):
         response = self.client.get('/_404')
         self.assert_404(response)

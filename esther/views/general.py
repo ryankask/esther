@@ -6,6 +6,10 @@ from esther import app
 def index():
     return render_template('general/index.html')
 
+@app.route('/about')
+def about():
+    return render_template('general/about.html')
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404
