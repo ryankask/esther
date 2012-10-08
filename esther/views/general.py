@@ -4,7 +4,7 @@ from esther import app
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('general/index.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
