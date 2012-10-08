@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Welcome!{% endblock %}
+{% block title %}Welcome! {{ super() }}{% endblock %}
 {% block extra_head %}
 <link rel="openid.server" href="http://www.myopenid.com/server" />
 <link rel="openid.delegate" href="http://ryankaskel.myopenid.com/" />
