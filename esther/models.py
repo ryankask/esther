@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from esther import db
+from esther import db, bcrypt
 
 def get_columns(model):
     return [prop.key for prop in model.__mapper__.iterate_properties
@@ -16,9 +16,15 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, email, short_name):
+    def __init__(self, email, short_name, password=None):
         self.email = email
         self.short_name = short_name
 
+        if password is not None:
+            self.set_password(password)
+
     def __unicode__(self):
         return u'<User {0}>'.format(self.email)
+
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(password)
