@@ -5,7 +5,7 @@ from flask.ext.script import Manager, prompt, prompt_bool, prompt_pass
 from sqlalchemy.exc import DatabaseError
 
 from esther import create_app, db
-from esther.models import User
+from esther import models
 
 app = create_app(['esther.settings.site'])
 manager = Manager(app)
@@ -22,6 +22,15 @@ def server():
         DebugToolbarExtension(app)
 
     app.run()
+
+@manager.shell
+def make_shell_context():
+    context = {
+        'app': app,
+        'db': db,
+        'models': models
+    }
+    return context
 
 @manager.command
 def tests():
@@ -50,8 +59,8 @@ def add_user():
     password = prompt_pass('Password')
     is_admin = prompt_bool('Admin user')
 
-    user = User(email=email, short_name=short_name, full_name=full_name,
-                password=password, is_admin=is_admin)
+    user = models.User(email=email, short_name=short_name, full_name=full_name,
+                       password=password, is_admin=is_admin)
 
     db.session.add(user)
 
