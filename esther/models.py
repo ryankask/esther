@@ -10,7 +10,7 @@ def get_columns(model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(254), unique=True, nullable=False)
-    full_name = db.Column(db.String(255))
+    full_name = db.Column(db.String(128))
     short_name = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(128))
     is_active = db.Column(db.Boolean, default=True, nullable=False)
