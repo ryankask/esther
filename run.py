@@ -3,8 +3,9 @@ import sys
 
 from flask.ext.script import Manager
 
-from esther import app
+from esther import create_app
 
+app = create_app(['esther.settings.site'])
 manager = Manager(app)
 
 @manager.command

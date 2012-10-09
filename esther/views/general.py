@@ -1,19 +1,11 @@
-from flask import render_template
+from flask import Blueprint, render_template
 
-from esther import app
+blueprint = Blueprint('general', __name__)
 
-@app.route('/')
+@blueprint.route('/')
 def index():
     return render_template('general/index.html')
 
-@app.route('/about')
+@blueprint.route('/about')
 def about():
     return render_template('general/about.html')
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('errors/404.html'), 404
-
-@app.errorhandler(500)
-def server_error(e):
-    return render_template('errors/500.html'), 500

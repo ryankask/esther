@@ -1,12 +1,11 @@
 from flask.ext.testing import TestCase
 
-from esther import app, db
+from esther import create_app, db
 
 
 class EstherTestCase(TestCase):
     def create_app(self):
-        app.config.from_object('esther.settings.test')
-        return app
+        return create_app(['esther.settings.site', 'esther.settings.test'])
 
 
 class EstherDBTestCase(EstherTestCase):
