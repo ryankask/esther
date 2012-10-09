@@ -16,9 +16,13 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, email, short_name, password=None):
+    def __init__(self, email, short_name, full_name=None, password=None,
+                 is_active=True, is_admin=False):
         self.email = email
         self.short_name = short_name
+        self.full_name = full_name
+        self.is_active = is_active
+        self.is_admin = is_admin
 
         if password is not None:
             self.set_password(password)
