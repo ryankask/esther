@@ -1,0 +1,29 @@
+{% extends "page.html" %}
+
+{% block title %}Contact {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>Contact</h1>
+
+<form method="post" action="{{ request.path }}">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="six columns">
+      {% if form.name.errors %}{{ form.name(placeholder=form.name.label.text, class="error") }}
+      <small class="error">{% for error in form.name.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.name(placeholder=form.name.label.text) }}{% endif %}
+    </div>
+    <div class="six columns">
+      {% if form.email.errors %}{{ form.email(size=80, placeholder=form.email.label.text, class="error") }}
+      <small class="error">{% for error in form.email.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.email(size=80, placeholder=form.email.label.text) }}{% endif %}
+    </div>
+  </div>
+
+  {% if form.message.errors %}{{ form.message(rows=8, placeholder=form.message.label.text, class="error") }}
+  <small class="error">{% for error in form.message.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.message(rows=8, placeholder=form.message.label.text) }}{% endif %}
+
+  <input class="button" type="submit" value="Send Message" />
+</form>
+{% endblock %}

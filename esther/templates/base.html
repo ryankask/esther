@@ -20,7 +20,7 @@
           <ul class="nav-bar">
             <li><a href="{{ url_for('general.index') }}">Home</a></li>
             <li><a href="{{ url_for('general.about') }}">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="{{ url_for('general.contact') }}">Contact</a></li>
           </ul>
         </nav>
 
@@ -45,7 +45,7 @@
                 bresaola enim jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
             </div>
             <div class="six columns">
-              <img src="http://placehold.it/400x240&text=[img]">
+              <img src="http://placekitten.com/400/240">
             </div>
           </div>
           <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs
@@ -95,6 +95,18 @@
 
     <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="messages" class="reveal-modal large">
+      <ul>
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+      </ul>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <script>$('#messages').reveal();</script>
+    {% endif %}
+    {% endwith %}
 
     <script>
       var _gaq=[['_setAccount','UA-6663004-1'],['_trackPageview']];
