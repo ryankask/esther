@@ -1,0 +1,3 @@
+From: {{ form.name.data }} ({{ form.email.data}})
+
+{{ form.message.data }}

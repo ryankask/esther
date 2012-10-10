@@ -1,3 +1,4 @@
+from esther import mail
 from esther.tests.helpers import EstherTestCase
 
 
@@ -23,11 +24,18 @@ class GeneralTests(EstherTestCase):
             'email': 'john@example.com',
             'message': 'Thanks for getting in touch with me...'
         }
-        response = self.client.post('/contact', data=form_data,
-                                    follow_redirects=True)
 
-        # Check that the page redirected and that the flash message
-        # is displayed.
+        with mail.record_messages() as outbox:
+            response = self.client.post('/contact', data=form_data,
+                                        follow_redirects=True)
+
+            # Check that the e-mail was sent
+            self.assertEqual(len(outbox), 1)
+
+            for value in form_data.values():
+                self.assertTrue(value in outbox[0].body)
+
+        # Test that the user is redirected home and shown a success message
         self.assert_template_used('general/index.html')
         self.assertTrue('id="messages"' in response.data)
 

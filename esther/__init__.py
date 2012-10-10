@@ -1,9 +1,11 @@
 from flask import Flask, render_template
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
+from flask.ext.mail import Mail
+from flask.ext.sqlalchemy import SQLAlchemy
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+mail = Mail()
 
 def create_app(config_objects):
     app = Flask(__name__)
@@ -13,6 +15,7 @@ def create_app(config_objects):
 
     bcrypt.init_app(app)
     db.init_app(app)
+    mail.init_app(app)
 
     from esther import models
     from esther.views import general
