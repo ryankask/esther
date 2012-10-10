@@ -11,15 +11,16 @@ app = create_app(['esther.settings.site'])
 manager = Manager(app)
 
 @manager.command
-def server():
+def server(toolbar=False):
     app.debug = True
 
-    try:
-        from flask_debugtoolbar import DebugToolbarExtension
-    except ImportError:
-        pass
-    else:
-        DebugToolbarExtension(app)
+    if toolbar:
+        try:
+            from flask_debugtoolbar import DebugToolbarExtension
+        except ImportError:
+            pass
+        else:
+            DebugToolbarExtension(app)
 
     app.run()
 
