@@ -1,10 +1,4 @@
-import sqlalchemy
-
 from esther import db, bcrypt
-
-def get_columns(model):
-    return [prop.key for prop in model.__mapper__.iterate_properties
-            if isinstance(prop, sqlalchemy.orm.ColumnProperty)]
 
 
 class User(db.Model):
