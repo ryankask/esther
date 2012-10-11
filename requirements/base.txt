@@ -4,3 +4,4 @@ psycopg2>=2.4.5
 Flask-Bcrypt>=0.5.2
 Flask-WTF==0.8
 Flask-Mail==0.7.3
+pytz>=2012f

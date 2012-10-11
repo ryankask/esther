@@ -1,4 +1,31 @@
+import datetime
+
+import pytz
+from sqlalchemy import types
+
 from esther import db, bcrypt
+from esther.decl_enum import DeclEnum
+
+def utc_now():
+    return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+
+
+class UTCDateTime(types.TypeDecorator):
+    """ Adapted from: http://stackoverflow.com/a/2528453/171744. """
+    impl = types.DateTime
+
+    def __init__(self, timezone=True):
+        super(UTCDateTime, self).__init__(timezone)
+
+    def process_bind_param(self, value, enging):
+        if value is not None:
+            return value.astimezone(pytz.utc)
+        return value
+
+    def process_result_value(self, value, engine):
+        if value is not None and value.tzinfo is not None:
+            return value.astimezone(pytz.utc)
+        return value
 
 
 class User(db.Model):
@@ -11,19 +38,50 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, email, short_name, full_name=None, password=None,
-                 is_active=True, is_admin=False):
-        self.email = email
-        self.short_name = short_name
-        self.full_name = full_name
-        self.is_active = is_active
-        self.is_admin = is_admin
+    def __init__(self, **columns):
+        password = columns.pop('password', None)
 
         if password is not None:
             self.set_password(password)
 
-    def __unicode__(self):
-        return u'<User {0}>'.format(self.email)
+        super(User, self).__init__(**columns)
+
+    def __repr__(self):
+        return u'<User "{0}">'.format(self.email)
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
+
+
+class PostStatus(DeclEnum):
+    draft = 'draft', 'Draft'
+    published = 'published', 'Published'
+    retracted = 'retracted', 'Retracted'
+
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    status = db.Column(PostStatus.db_type(), default=PostStatus.draft,
+                       nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    slug = db.Column(db.String(80), unique=True, nullable=False)
+    body = db.Column(db.Text)
+    pub_date = db.Column(UTCDateTime)
+    created = db.Column(UTCDateTime, default=utc_now)
+    modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
+
+    author = db.relation(User, backref=db.backref('posts', lazy='dynamic'))
+
+    def __repr__(self):
+        return u'<Post "{0}">'.format(self.title)
+
+    def publish(self, commit=True):
+        self.status = PostStatus.published
+        self.pub_date = utc_now()
+
+        db.session.add(self)
+
+        if commit:
+            db.session.commit()
