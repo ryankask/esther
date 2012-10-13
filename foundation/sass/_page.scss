@@ -6,3 +6,8 @@
   float: right;
   padding: 0 0 1em 1em;
 }
+
+.auth-error {
+  font-weight: bold;
+  color: $alertColor;
+}

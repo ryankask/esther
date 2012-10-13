@@ -1,0 +1,26 @@
+{% extends "page.html" %}
+
+{% block title %}Login {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>Login</h1>
+
+{% if form.auth_failed %}<p class="auth-error">Incorrect e-mail and/or password.</p>{% endif %}
+
+<form method="post" action="{{ request.path }}">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="six columns">
+      {% if form.email.errors %}{{ form.email(size=80, placeholder=form.email.label.text, class="error") }}
+      <small class="error">{% for error in form.email.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.email(size=80, placeholder=form.email.label.text) }}{% endif %}
+
+      {% if form.password.errors %}{{ form.password(size=80, placeholder=form.password.label.text, class="error") }}
+      <small class="error">{% for error in form.password.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.password(size=80, placeholder=form.password.label.text) }}{% endif %}
+
+      <input class="button right" type="submit" value="Login" />
+    </div>
+  </div>
+</form>
+{% endblock %}

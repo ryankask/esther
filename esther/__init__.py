@@ -1,11 +1,13 @@
 from flask import Flask, render_template
 from flask.ext.bcrypt import Bcrypt
+from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 mail = Mail()
+login_manager = LoginManager()
 
 def create_app(config_objects):
     app = Flask(__name__)
@@ -15,12 +17,18 @@ def create_app(config_objects):
 
     bcrypt.init_app(app)
     db.init_app(app)
+    login_manager.init_app(app)
     mail.init_app(app)
 
     from esther import models
+    from esther.views import auth
     from esther.views import general
 
+    app.register_blueprint(auth.blueprint)
     app.register_blueprint(general.blueprint)
+
+    # Flask-Login settings are stored on the ``LoginManager`` instance
+    auth.configure(login_manager, app)
 
     @app.errorhandler(404)
     def page_not_found(e):

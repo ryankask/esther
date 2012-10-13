@@ -30,6 +30,6 @@ def contact():
 
         flash(u'Your message has been sent. I will get back to you as soon '
               'as possible.')
-        return redirect(url_for('general.index'))
+        return redirect(url_for('.index'))
 
     return render_template('general/contact.html', form=form)

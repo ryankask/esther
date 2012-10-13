@@ -4,10 +4,20 @@ from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
 class UserTests(EstherTestCase):
+    def init_user(self, **kwargs):
+        return User(email='ryan@example.com', short_name='Ryan', **kwargs)
+
     def test_set_password(self):
-        user = User(email='ryan@example.com', short_name='Ryan')
+        user = self.init_user()
         user.set_password('password')
         self.assertNotEqual(user.password, 'password')
+
+    def test_is_active(self):
+        user = self.init_user()
+        self.assertTrue(user.is_active())
+
+        user.is_active_user = False
+        self.assertFalse(user.is_active())
 
 
 class PostTests(EstherDBTestCase):

@@ -1,5 +1,6 @@
 import datetime
 
+from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
 
@@ -28,14 +29,14 @@ class UTCDateTime(types.TypeDecorator):
         return value
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(254), unique=True, nullable=False)
     full_name = db.Column(db.String(128))
     short_name = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(128))
-    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    is_active_user = db.Column(db.Boolean, default=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(self, **columns):
@@ -51,6 +52,9 @@ class User(db.Model):
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
+
+    def is_active(self):
+        return True if self.is_active_user is None else self.is_active_user
 
 
 class PostStatus(DeclEnum):
