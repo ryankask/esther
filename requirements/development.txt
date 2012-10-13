@@ -1,5 +1,4 @@
 ipdb>=0.7
 Flask-DebugToolbar>=0.7.1
-Flask-Script>=0.5.1
 Flask-Testing>=0.4
 blinker>=1.2
