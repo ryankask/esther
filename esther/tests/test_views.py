@@ -185,7 +185,8 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertEqual(post.body, post_data['body'])
         self.assertEqual(post.status, PostStatus.published)
 
-        # If a post is published when adding it, ``pub_data`` should be set
+        # Make sure ``pub_date`` is set if the post is being published
+        # immediatley
         self.assertNotEqual(post.pub_date, None)
 
 
