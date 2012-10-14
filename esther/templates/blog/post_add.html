@@ -5,7 +5,7 @@
 {% block page_content %}
 <h1>Add a New Blog Post</h1>
 
-<form class="custom" method="post" action="{{ request.path }}">
+<form class="custom" method="post">
   {{ form.csrf_token }}
   <div class="row">
     <div class="nine columns">
