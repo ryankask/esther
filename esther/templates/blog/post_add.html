@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Add a New Post {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>Add a New Blog Post</h1>
+
+<form class="custom" method="post" action="{{ request.path }}">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="nine columns">
+      {% if form.title.errors %}{{ form.title(placeholder=form.title.label.text, class="error") }}
+      <small class="error">{% for error in form.title.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.title(placeholder=form.title.label.text) }}{% endif %}
+
+      {% if form.slug.errors %}{{ form.slug(placeholder=form.slug.label.text, class="error") }}
+      <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
+    </div>
+    <div class="three columns">
+      {% if form.status.errors %}{{ form.status(class="error") }}
+      <small class="error">{% for error in form.status.errors %}{{ error }}{% endfor %}</small>
+      {% else %}{{ form.status }}{% endif %}
+    </div>
+  </div>
+
+  {% if form.body.errors %}{{ form.body(rows=8, placeholder=form.body.label.text, class="error") }}
+  <small class="error">{% for error in form.body.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.body(rows=25, placeholder=form.body.label.text) }}{% endif %}
+
+  <input class="button" type="submit" value="Add post" />
+</form>
+{% endblock %}

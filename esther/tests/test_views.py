@@ -1,8 +1,11 @@
+from flask import url_for
 from flask.ext.login import login_required
+from werkzeug.datastructures import MultiDict
 from werkzeug.urls import url_quote_plus
 
 from esther import db, mail
-from esther.models import User
+from esther.forms import PostForm
+from esther.models import User, PostStatus, Post
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -122,6 +125,68 @@ class AuthTests(EstherDBTestCase, PageMixin):
 
     def test_logout_with_next_param(self):
         self.assertRedirects(self.client.get('/logout?next=/about'), '/about')
+
+
+class BlogTests(EstherDBTestCase, PageMixin):
+    def create_user(self, commit=True):
+        user = User(email='ryan@example.com', short_name='Ryan',
+                    password='password')
+        db.session.add(user)
+
+        if commit:
+            db.session.commit()
+
+        return user
+
+    def create_post(self, user, body=u''):
+        post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
+                    body=body)
+        db.session.add(post)
+        db.session.commit()
+        return post
+
+    def login(self, create_user=True):
+        if create_user:
+            self.create_user()
+
+        self.client.post('/login', data={'email': 'ryan@example.com',
+                                         'password': 'password'})
+
+    def test_add_post_page(self):
+        self.login()
+        self.assert_page('/blog/posts/add', 'blog/post_add.html')
+
+    def test_used_slug_raises_validation_error(self):
+        post = self.create_post(self.create_user(commit=False))
+        form_data = MultiDict({'title': 'My Second Post', 'slug': post.slug,
+                               'status': PostStatus.draft, 'body': 'Welcome'})
+        form = PostForm(form_data)
+        self.assertFalse(form.validate())
+        self.assertEqual(form.errors['slug'],
+                         [u'Slug already used by another post.'])
+
+    def test_add_post_success(self):
+        user = self.create_user()
+        self.login(create_user=False)
+
+        post_data = {
+            'title': 'New Railroad Opens',
+            'slug': 'new-railroad-opens',
+            'status': PostStatus.published.value,
+            'body': 'A new railroad is opening tomorrow.'
+        }
+
+        response = self.client.post(url_for('blog.add_post'), data=post_data)
+        self.assertRedirects(response, '/')
+
+        post = Post.query.filter_by(slug=post_data['slug']).first()
+        self.assertEqual(post.author, user)
+        self.assertEqual(post.title, post_data['title'])
+        self.assertEqual(post.body, post_data['body'])
+        self.assertEqual(post.status, PostStatus.published)
+
+        # If a post is published when adding it, ``pub_data`` should be set
+        self.assertNotEqual(post.pub_date, None)
 
 
 class ErrorTests(EstherTestCase):

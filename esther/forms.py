@@ -1,8 +1,9 @@
+from sqlalchemy.sql import exists
 from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField,
-                           Required, Length, Email)
+                           SelectField, ValidationError, Required, Length, Email)
 
-from esther import bcrypt
-from esther.models import User
+from esther import bcrypt, db
+from esther.models import User, PostStatus, Post
 
 
 class ContactForm(Form):
@@ -35,3 +36,15 @@ class LoginForm(Form):
 
         self.auth_failed = True
         return False
+
+
+class PostForm(Form):
+    title = TextField(u'Title', [Required(), Length(max=255)])
+    slug = TextField(u'Slug', [Required(), Length(max=80)])
+    status = SelectField(u'Status', choices=[(v, h) for v, h in PostStatus])
+    body = TextAreaField(u'Post body', [Required()])
+
+    def validate_slug(form, field):
+        # Really clunky EXISTS
+        if db.session.query(exists().where(Post.slug == field.data)).scalar():
+            raise ValidationError(u'Slug already used by another post.')

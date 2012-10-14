@@ -22,9 +22,11 @@ def create_app(config_objects):
 
     from esther import models
     from esther.views import auth
+    from esther.views import blog
     from esther.views import general
 
     app.register_blueprint(auth.blueprint)
+    app.register_blueprint(blog.blueprint, url_prefix='/blog')
     app.register_blueprint(general.blueprint)
 
     # Flask-Login settings are stored on the ``LoginManager`` instance
