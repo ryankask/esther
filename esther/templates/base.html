@@ -21,6 +21,7 @@
             <li><a href="{{ url_for('general.index') }}">Home</a></li>
             <li><a href="{{ url_for('general.about') }}">About</a></li>
             <li><a href="{{ url_for('general.contact') }}">Contact</a></li>
+            {% if current_user.is_authenticated() %}<li><a href="{{ url_for('auth.logout') }}">Logout</a></li>{% endif %}
           </ul>
         </nav>
 
