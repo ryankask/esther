@@ -30,6 +30,18 @@
       </div>
     </div>
 
+    {%- with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="row">
+      <div class="twelve columns">
+        {%- for category, message in messages %}
+        <div class="alert-box{% if category %} {{ category }}{% endif %}">{{ message }}<a href="" class="close">&times;</a></div>
+        {%- endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {%- endwith %}
+
     <div class="row">
       <div class="nine columns" role="content">
         {% block content %}
@@ -96,19 +108,6 @@
 
     <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div id="messages" class="reveal-modal large">
-      <ul>
-        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-      </ul>
-      <a class="close-reveal-modal">&#215;</a>
-    </div>
-    <script>$('#messages').reveal();</script>
-    {% endif %}
-    {% endwith %}
-
     <script>
       var _gaq=[['_setAccount','UA-6663004-1'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

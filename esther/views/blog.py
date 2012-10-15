@@ -25,7 +25,9 @@ def add_post():
         db.session.add(post)
         db.session.commit()
 
-        flash(u'Post "{0}" successfully added'.format(form.title.data))
+        message = u'Post "{0}" successfully added.'.format(form.title.data)
+        flash(message, 'success')
+
         return redirect(url_for('general.index'))
 
     return render_template('blog/post_add.html', form=form)

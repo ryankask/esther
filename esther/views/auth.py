@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask.ext.login import login_user, logout_user
 
 from esther.forms import LoginForm
@@ -28,4 +28,5 @@ def login():
 @blueprint.route('/logout')
 def logout():
     logout_user()
+    flash(u'You have successfully logged out.', 'success')
     return redirect(request.args.get('next') or url_for('general.index'))

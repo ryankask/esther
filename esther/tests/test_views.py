@@ -45,7 +45,7 @@ class GeneralTests(EstherTestCase, PageMixin):
 
         # Test that the user is redirected home and shown a success message
         self.assert_template_used('general/index.html')
-        self.assertTrue('id="messages"' in response.data)
+        self.assertTrue('class="alert-box success"' in response.data)
 
 
 class AuthTests(EstherDBTestCase, PageMixin):
