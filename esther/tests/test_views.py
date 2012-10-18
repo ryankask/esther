@@ -152,6 +152,18 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.client.post('/login', data={'email': 'ryan@example.com',
                                          'password': 'password'})
 
+    def test_post_list(self):
+        user = self.create_user(commit=False)
+        post = self.create_post(user)
+        self.login(create_user=False)
+
+        self.client.get('/blog/posts')
+        self.assert_template_used('blog/post_list.html')
+
+        posts = self.get_context_variable('posts')
+        self.assertEqual(len(posts), 1)
+        self.assertEqual(posts[0], post)
+
     def test_add_post_page(self):
         self.login()
         self.assert_page('/blog/posts/add', 'blog/post_add.html')

@@ -3,6 +3,7 @@ from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
+import pytz
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -15,22 +16,30 @@ def create_app(config_objects):
     for config_object in config_objects:
         app.config.from_object(config_object)
 
+    # Conver the time zone name into a pytz timezone and store it in the config.
+    # TODO: Is there a better way to do this?
+    app.config['TIME_ZONE'] = pytz.timezone(app.config['TIME_ZONE_NAME'])
+
     bcrypt.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
 
+    # Import all modules needed to create an app
+    # TODO: Find a decent alternative to the unused models import (?)
     from esther import models
+    from esther import filters
     from esther.views import auth
     from esther.views import blog
     from esther.views import general
 
+    # Flask-Login settings are stored on the ``LoginManager`` instance
+    auth.configure(login_manager, app)
+    filters.register_all(app)
+
     app.register_blueprint(auth.blueprint)
     app.register_blueprint(blog.blueprint, url_prefix='/blog')
     app.register_blueprint(general.blueprint)
-
-    # Flask-Login settings are stored on the ``LoginManager`` instance
-    auth.configure(login_manager, app)
 
     @app.errorhandler(404)
     def page_not_found(e):

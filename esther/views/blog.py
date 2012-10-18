@@ -7,6 +7,13 @@ from esther.models import PostStatus, Post, utc_now
 
 blueprint = Blueprint('blog', __name__)
 
+@blueprint.route('/posts')
+@login_required
+def view_posts():
+    created = Post.created.desc()
+    posts = Post.query.filter_by(author=current_user).order_by(created).all()
+    return render_template('blog/post_list.html', posts=posts)
+
 @blueprint.route('/posts/add', methods=('GET', 'POST'))
 @login_required
 def add_post():

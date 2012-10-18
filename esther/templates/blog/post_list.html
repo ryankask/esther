@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+
+{% block title %}All Posts {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>All Blog Posts</h1>
+
+{%- if posts %}
+<ul>
+  {%- for post in posts %}
+  <li>{{ post.title }} created on {{ post.created|localize_datetime|format_datetime }} ({{ post.status.value }})</li>
+  {%- endfor %}
+</ul>
+{%- else %}
+<p>No posts.</p>
+{%- endif %}
+{% endblock %}
