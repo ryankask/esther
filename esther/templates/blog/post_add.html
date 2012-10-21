@@ -1,9 +1,9 @@
 {% extends "blog/base.html" %}
 
-{% block title %}Add a New Post {{ super() }}{% endblock %}
+{% block title %}{% block title_message %}Add a New Post{% endblock %} {{ super() }}{% endblock %}
 
 {% block page_content %}
-<h1>Add a New Blog Post</h1>
+<h1>{% block content_heading %}Add a New Blog Post{% endblock %}</h1>
 
 <form class="custom" method="post">
   {{ form.csrf_token }}
@@ -28,6 +28,6 @@
   <small class="error">{% for error in form.body.errors %}{{ error }}{% endfor %}</small>
   {% else %}{{ form.body(rows=25, placeholder=form.body.label.text) }}{% endif %}
 
-  <input class="button" type="submit" value="Add post" />
+  <input class="button" type="submit" value="{% block submit_verb %}Add{% endblock %} post" />
 </form>
 {% endblock %}

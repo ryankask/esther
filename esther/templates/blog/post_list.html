@@ -8,7 +8,11 @@
 {%- if posts %}
 <ul>
   {%- for post in posts %}
-  <li>{{ post.title }} created on {{ post.created|localize_datetime|format_datetime }} ({{ post.status.value }})</li>
+  <li>
+    {{ post.title }} created on
+    {{ post.created|localize_datetime|format_datetime }} ({{ post.status.value }})
+    [<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
+  </li>
   {%- endfor %}
 </ul>
 {%- else %}

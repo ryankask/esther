@@ -38,3 +38,21 @@ def add_post():
         return redirect(url_for('general.index'))
 
     return render_template('blog/post_add.html', form=form)
+
+@blueprint.route('/posts/<int:post_id>', methods=('GET', 'POST'))
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = PostForm(request.form, obj=post)
+
+    if form.validate_on_submit():
+        form.populate_obj(post)
+        post.status = PostStatus.from_string(form.status.data)
+        db.session.add(post)
+        db.session.commit()
+
+        message = u'Edited post "{0}".'.format(form.title.data)
+        flash(message, 'success')
+        return redirect(url_for('blog.view_posts'))
+
+    return render_template('blog/post_edit.html', post=post, form=form)

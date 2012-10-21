@@ -201,6 +201,41 @@ class BlogTests(EstherDBTestCase, PageMixin):
         # immediatley
         self.assertNotEqual(post.pub_date, None)
 
+    def test_edit_post_page(self):
+        user = self.create_user(commit=False)
+        post = self.create_post(user=user, body=u'Some text')
+        self.login(create_user=False)
+
+        self.client.get(url_for('blog.edit_post', post_id=post.id))
+        self.assert_template_used('blog/post_edit.html')
+
+
+        form = self.get_context_variable('form')
+        self.assertEqual(form.title.data, post.title)
+        self.assertEqual(form.body.data, u'Some text')
+
+    def test_edit_post_success(self):
+        user = self.create_user(commit=False)
+        post = self.create_post(user=user, body=u'Some text')
+        self.login(create_user=False)
+
+        edit_data = {
+            'title': 'My first edited post',
+            'slug': post.slug,
+            'status': PostStatus.published.value,
+            'body': 'Some different text',
+        }
+
+        response = self.client.post(url_for('blog.edit_post', post_id=post.id),
+                                    data=edit_data)
+        self.assert_redirects(response, url_for('blog.view_posts'))
+
+        edited_post = Post.query.get(post.id)
+        self.assertEqual(edited_post.title, 'My first edited post')
+        self.assertEqual(edited_post.slug, post.slug)
+        self.assertEqual(edited_post.status, PostStatus.published)
+        self.assertEqual(edited_post.body, 'Some different text')
+
 
 class ErrorTests(EstherTestCase):
     def test_404(self):

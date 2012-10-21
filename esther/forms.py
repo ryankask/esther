@@ -45,6 +45,9 @@ class PostForm(Form):
     body = TextAreaField(u'Post body', [Required()])
 
     def validate_slug(form, field):
-        # Really clunky EXISTS
-        if db.session.query(exists().where(Post.slug == field.data)).scalar():
+        # Only validate the slug if there is no object data for the field
+        # (a Post is being added) or an edited post's slug is being changed.
+        # Then do a really clunky EXISTS.
+        if (field.object_data != field.data and
+            db.session.query(exists().where(Post.slug == field.data)).scalar()):
             raise ValidationError(u'Slug already used by another post.')
