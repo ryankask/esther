@@ -2,3 +2,4 @@ ipdb>=0.7
 Flask-DebugToolbar>=0.7.1
 Flask-Testing>=0.4
 blinker>=1.2
+Fabric>=1.4.2
