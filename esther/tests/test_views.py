@@ -189,7 +189,7 @@ class BlogTests(EstherDBTestCase, PageMixin):
         }
 
         response = self.client.post(url_for('blog.add_post'), data=post_data)
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, url_for('blog.view_posts'))
 
         post = Post.query.filter_by(slug=post_data['slug']).first()
         self.assertEqual(post.author, user)

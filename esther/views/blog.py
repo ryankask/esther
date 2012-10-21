@@ -34,8 +34,7 @@ def add_post():
 
         message = u'Post "{0}" successfully added.'.format(form.title.data)
         flash(message, 'success')
-
-        return redirect(url_for('general.index'))
+        return redirect(url_for('.view_posts'))
 
     return render_template('blog/post_add.html', form=form)
 
@@ -53,6 +52,6 @@ def edit_post(post_id):
 
         message = u'Edited post "{0}".'.format(form.title.data)
         flash(message, 'success')
-        return redirect(url_for('blog.view_posts'))
+        return redirect(url_for('.view_posts'))
 
     return render_template('blog/post_edit.html', post=post, form=form)
