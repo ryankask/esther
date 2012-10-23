@@ -5,7 +5,7 @@
 {% block content %}
 {% block pre_article %}{% endblock %}
 <article class="post">
-  <h1>{% block article_title %}{% endblock %}</h1>
+  <h1>{% block article_title %}{{ post.title }}{% endblock %}</h1>
   {%- block article_content %}
   {{ post_body_html|safe }}
   {%- endblock %}
