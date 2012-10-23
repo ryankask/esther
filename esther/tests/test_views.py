@@ -138,9 +138,9 @@ class BlogTests(EstherDBTestCase, PageMixin):
 
         return user
 
-    def create_post(self, user, body=u''):
+    def create_post(self, user):
         post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
-                    body=body)
+                    body='Post body')
         db.session.add(post)
         db.session.commit()
         return post
@@ -152,11 +152,14 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.client.post('/login', data={'email': 'ryan@example.com',
                                          'password': 'password'})
 
-    def test_post_list(self):
+    def create_post_and_login(self):
         user = self.create_user(commit=False)
         post = self.create_post(user)
         self.login(create_user=False)
+        return post
 
+    def test_post_list(self):
+        post = self.create_post_and_login()
         self.client.get('/blog/posts')
         self.assert_template_used('blog/post_list.html')
 
@@ -202,23 +205,16 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertNotEqual(post.pub_date, None)
 
     def test_edit_post_page(self):
-        user = self.create_user(commit=False)
-        post = self.create_post(user=user, body=u'Some text')
-        self.login(create_user=False)
-
+        post = self.create_post_and_login()
         self.client.get(url_for('blog.edit_post', post_id=post.id))
         self.assert_template_used('blog/post_edit.html')
 
-
         form = self.get_context_variable('form')
         self.assertEqual(form.title.data, post.title)
-        self.assertEqual(form.body.data, u'Some text')
+        self.assertEqual(form.body.data, u'Post body')
 
     def test_edit_post_success(self):
-        user = self.create_user(commit=False)
-        post = self.create_post(user=user, body=u'Some text')
-        self.login(create_user=False)
-
+        post = self.create_post_and_login()
         edit_data = {
             'title': 'My first edited post',
             'slug': post.slug,
