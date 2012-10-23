@@ -1,11 +1,12 @@
-{% extends "blog/base.html" %}
+{% extends "blog/post_view.html" %}
 
-{% block title %}Preview Post "{{ post.title }}" {{ super() }}{% endblock %}
+{% block title %}Preview - {{ super() }}{% endblock %}
 
-{% block page_content %}
+{% block pre_article %}
 <div class="right">
-  Previewing post "{{ post.title }}"
-  [<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
+Previewing post "{{ post.title }}"
+[<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
 </div>
-{{ post_body_html|safe }}
 {% endblock %}
+
+{% block article_title %}{{ post.title }}{% endblock %}
