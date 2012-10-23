@@ -12,6 +12,7 @@
     {{ post.title }} created on
     {{ post.created|localize_datetime|format_datetime }} ({{ post.status.value }})
     [<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
+    [<a href="{{ url_for('blog.preview_post', post_id=post.id) }}">Preview</a>]
   </li>
   {%- endfor %}
 </ul>

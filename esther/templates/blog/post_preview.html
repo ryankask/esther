@@ -1,0 +1,11 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Preview Post "{{ post.title }}" {{ super() }}{% endblock %}
+
+{% block page_content %}
+<div class="right">
+  Previewing post "{{ post.title }}"
+  [<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
+</div>
+{{ post_body_html|safe }}
+{% endblock %}

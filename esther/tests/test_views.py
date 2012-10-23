@@ -232,6 +232,11 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertEqual(edited_post.status, PostStatus.published)
         self.assertEqual(edited_post.body, 'Some different text')
 
+    def test_preview_post(self):
+        post = self.create_post_and_login()
+        self.assert_page(u'/blog/posts/{0}/preview'.format(post.id),
+                         'blog/post_preview.html')
+
 
 class ErrorTests(EstherTestCase):
     def test_404(self):

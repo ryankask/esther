@@ -1,5 +1,6 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for
 from flask.ext.login import login_required, current_user
+import markdown
 
 from esther import db
 from esther.forms import PostForm
@@ -55,3 +56,13 @@ def edit_post(post_id):
         return redirect(url_for('.view_posts'))
 
     return render_template('blog/post_edit.html', post=post, form=form)
+
+@blueprint.route('/posts/<int:post_id>/preview', methods=('GET', 'POST'))
+@login_required
+def preview_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    context = {
+        'post': post,
+        'post_body_html': markdown.markdown(post.body)
+    }
+    return render_template('blog/post_preview.html', **context)
