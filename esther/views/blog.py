@@ -61,7 +61,7 @@ def edit_post(post_id):
 @blueprint.route('/posts/<int:post_id>/preview', methods=('GET', 'POST'))
 @login_required
 def preview_post(post_id):
-    post = Post.query.get_or_404(post_id)
+    post = Post.query.filter_by(author=current_user, id=post_id).first_or_404()
     context = {
         'post': post,
         'post_body_html': markdown.markdown(post.body)

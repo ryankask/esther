@@ -244,18 +244,25 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertEqual(edited_post.status, PostStatus.published)
         self.assertEqual(edited_post.body, 'Some different text')
 
-    def test_edit_as_non_author_aborts(self):
+    def assert_author_only(self, view):
         john = self.create_user(email='john@example.com')
         post = self.create_post(john)
         # Login as a different user and try to edit John's post
         self.login()
-        response = self.client.get(url_for('blog.edit_post', post_id=post.id))
+        response = self.client.get(url_for(view, post_id=post.id))
         self.assert_404(response)
+
+    def test_edit_as_non_author_aborts(self):
+        self.assert_author_only('blog.edit_post')
 
     def test_preview_post(self):
         post = self.create_post_and_login()
         self.assert_page(u'/blog/posts/{0}/preview'.format(post.id),
                          'blog/post_preview.html')
+
+    def test_preview_non_author_aborts(self):
+        self.assert_author_only('blog.preview_post')
+
 
     ### Public view tests
 
