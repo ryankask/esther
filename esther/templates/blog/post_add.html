@@ -20,7 +20,7 @@
     <div class="three columns">
       {% if form.status.errors %}{{ form.status(class="error") }}
       <small class="error">{% for error in form.status.errors %}{{ error }}{% endfor %}</small>
-      {% else %}{{ form.status }}{% endif %}
+      {% else %}{{ form.status(class="expand") }}{% endif %}
     </div>
   </div>
 
