@@ -128,9 +128,14 @@ class AuthTests(EstherDBTestCase, PageMixin):
 
 
 class BlogTests(EstherDBTestCase, PageMixin):
-    def create_user(self, commit=True):
-        user = User(email='ryan@example.com', short_name='Ryan',
-                    password='password')
+    def create_user(self, commit=True, **kwargs):
+        user_data = {
+            'email': 'ryan@example.com',
+            'short_name': 'Ryan',
+            'password': 'password'
+        }
+        user_data.update(kwargs)
+        user = User(**user_data)
         db.session.add(user)
 
         if commit:
@@ -238,6 +243,14 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertEqual(edited_post.slug, post.slug)
         self.assertEqual(edited_post.status, PostStatus.published)
         self.assertEqual(edited_post.body, 'Some different text')
+
+    def test_edit_as_non_author_aborts(self):
+        john = self.create_user(email='john@example.com')
+        post = self.create_post(john)
+        # Login as a different user and try to edit John's post
+        self.login()
+        response = self.client.get(url_for('blog.edit_post', post_id=post.id))
+        self.assert_404(response)
 
     def test_preview_post(self):
         post = self.create_post_and_login()

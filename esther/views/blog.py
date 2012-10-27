@@ -44,7 +44,7 @@ def add_post():
 @blueprint.route('/posts/<int:post_id>', methods=('GET', 'POST'))
 @login_required
 def edit_post(post_id):
-    post = Post.query.get_or_404(post_id)
+    post = Post.query.filter_by(author=current_user, id=post_id).first_or_404()
     form = PostForm(request.form, obj=post)
 
     if form.validate_on_submit():
