@@ -138,9 +138,9 @@ class BlogTests(EstherDBTestCase, PageMixin):
 
         return user
 
-    def create_post(self, user):
+    def create_post(self, user, **kwargs):
         post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
-                    body='Post body')
+                    body='Post body', **kwargs)
         db.session.add(post)
         db.session.commit()
         return post
@@ -249,6 +249,22 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assert_404(self.client.get(url))
         post.publish()
         self.assert_page(url, 'blog/post_view.html')
+
+    def assert_archive(self, posts, **date_components):
+        url = url_for('blog.post_archive', **date_components)
+        self.assert_page(url, 'blog/post_archive.html')
+        self.assertEqual(set(self.get_context_variable('posts')), set(posts))
+
+    def test_post_archive(self):
+        now = utc_now()
+        posts = [
+            self.create_post(self.create_user(), status=PostStatus.published,
+                             pub_date=now)
+        ]
+
+        self.assert_archive(posts, year=now.year)
+        self.assert_archive(posts, year=now.year, month=now.month)
+        self.assert_archive(posts, year=now.year, month=now.month, day=now.day)
 
 
 class ErrorTests(EstherTestCase):

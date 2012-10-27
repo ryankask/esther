@@ -1,7 +1,8 @@
-from flask import Blueprint, request, flash, render_template, redirect, url_for
+from flask import (Blueprint, request, flash, render_template, redirect,
+                   url_for, abort)
 from flask.ext.login import login_required, current_user
 import markdown
-from sqlalchemy.sql import extract
+from sqlalchemy import and_, extract
 
 from esther import db
 from esther.forms import PostForm
@@ -84,3 +85,23 @@ def view_post(year, month, day, slug):
         'post_body_html': markdown.markdown(post.body)
     }
     return render_template('blog/post_view.html', **context)
+
+@blueprint.route('/<int:year>')
+@blueprint.route('/<int:year>/<int(fixed_digits=2):month>')
+@blueprint.route('/<int:year>/<int(fixed_digits=2):month>/<int(fixed_digits=2):day>')
+def post_archive(year, month=None, day=None):
+    filters = [(Post.status == PostStatus.published),
+               (extract('year', Post.pub_date) == year)]
+
+    if month:
+        filters.append((extract('month', Post.pub_date) == month))
+    if day:
+        filters.append((extract('day', Post.pub_date) == day))
+
+    posts = Post.query.filter(and_(*filters)).order_by(Post.pub_date).all()
+
+    if not posts:
+        abort(404)
+
+    return render_template('blog/post_archive.html', posts=posts, year=year,
+                           month=month, day=day)

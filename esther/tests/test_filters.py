@@ -24,3 +24,11 @@ class FilterTests(EstherTestCase):
     def test_format_datetime_with_format_string(self):
         dt = datetime.datetime(2010, 5, 3, 14, 54, 21, tzinfo=pytz.utc)
         self.assertEqual(filters.format_datetime(dt, '%B %Y %Z'), 'May 2010 UTC')
+
+    def test_format_date(self):
+        d = datetime.date(2010, 5, 3)
+        self.assertEqual(filters.format_date(d), '03 May 2010')
+
+    def test_format_date_with_format_string(self):
+        d = datetime.date(2010, 5, 3)
+        self.assertEqual(filters.format_date(d, '%Y'), '2010')
