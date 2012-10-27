@@ -1,5 +1,6 @@
 import datetime
 
+from flask import url_for
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
@@ -89,3 +90,14 @@ class Post(db.Model):
 
         if commit:
             db.session.commit()
+
+    @property
+    def is_published(self):
+        return self.status == PostStatus.published
+
+    @property
+    def url(self):
+        if self.pub_date:
+            return url_for('blog.view_post', year=self.pub_date.year,
+                           month=self.pub_date.month, day=self.pub_date.day,
+                           slug=self.slug)

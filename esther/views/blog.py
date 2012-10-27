@@ -1,6 +1,7 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for
 from flask.ext.login import login_required, current_user
 import markdown
+from sqlalchemy.sql import extract
 
 from esther import db
 from esther.forms import PostForm
@@ -66,3 +67,20 @@ def preview_post(post_id):
         'post_body_html': markdown.markdown(post.body)
     }
     return render_template('blog/post_preview.html', **context)
+
+### Public views
+
+@blueprint.route('/<int:year>/<int(fixed_digits=2):month>/<int(fixed_digits=2):day>/<slug>')
+def view_post(year, month, day, slug):
+    post = Post.query.filter(
+        (extract('year', Post.pub_date) == year) &
+        (extract('month', Post.pub_date) == month) &
+        (extract('day', Post.pub_date) == day) &
+        (Post.status == PostStatus.published) &
+        (Post.slug == slug)).first_or_404()
+
+    context = {
+        'post': post,
+        'post_body_html': markdown.markdown(post.body)
+    }
+    return render_template('blog/post_view.html', **context)

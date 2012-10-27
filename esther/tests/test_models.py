@@ -1,3 +1,5 @@
+import datetime
+
 from esther import db
 from esther.models import User, Post, PostStatus
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
@@ -38,3 +40,13 @@ class PostTests(EstherDBTestCase):
 
         self.assertEqual(post.status, PostStatus.published)
         self.assertNotEqual(post.pub_date, None)
+
+    def test_is_published(self):
+        post = Post(status=PostStatus.published)
+        self.assertTrue(post.is_published)
+
+    def test_url(self):
+        post = Post(status=PostStatus.published, slug='test-post')
+        self.assertEqual(post.url, None)
+        post.pub_date = datetime.date(2012, 4, 3)
+        self.assertEqual(post.url, '/blog/2012/04/03/test-post')

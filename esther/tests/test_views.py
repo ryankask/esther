@@ -5,7 +5,7 @@ from werkzeug.urls import url_quote_plus
 
 from esther import db, mail
 from esther.forms import PostForm
-from esther.models import User, PostStatus, Post
+from esther.models import User, PostStatus, Post, utc_now
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -158,6 +158,8 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.login(create_user=False)
         return post
 
+    ### Admin view tests
+
     def test_post_list(self):
         post = self.create_post_and_login()
         self.client.get('/blog/posts')
@@ -236,6 +238,17 @@ class BlogTests(EstherDBTestCase, PageMixin):
         post = self.create_post_and_login()
         self.assert_page(u'/blog/posts/{0}/preview'.format(post.id),
                          'blog/post_preview.html')
+
+    ### Public view tests
+
+    def test_view_post(self):
+        post = self.create_post(self.create_user())
+        now = utc_now()
+        url = url_for('blog.view_post', year=now.year, month=now.month,
+                      day=now.day, slug=post.slug)
+        self.assert_404(self.client.get(url))
+        post.publish()
+        self.assert_page(url, 'blog/post_view.html')
 
 
 class ErrorTests(EstherTestCase):
