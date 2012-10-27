@@ -1,5 +1,8 @@
 .page, .post {
-  h1 { font-size: ms(3); clear: right; }
+  h1 {
+    font-size: ms(3);
+    clear: right;
+  }
 }
 
 .profile-picture {
@@ -14,7 +17,10 @@
 
 .social {
   list-style: none;
-  li { margin-top: 10px; }
+
+  li {
+    margin-top: 10px;
+  }
 }
 
 .post-table {
