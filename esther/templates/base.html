@@ -75,17 +75,6 @@
       </div>
 
       <aside class="three columns">
-        <h5>Categories</h5>
-        <nav>
-          <ul class="side-nav">
-            <li><a href="#">News</a></li>
-            <li><a href="#">Code</a></li>
-            <li><a href="#">Design</a></li>
-            <li><a href="#">Fun</a></li>
-            <li><a href="#">Weasels</a></li>
-          </ul>
-        </nav>
-
         <h5>Admin</h5>
         <nav>
           <ul class="side-nav">
@@ -99,11 +88,13 @@
           </ul>
         </nav>
 
-        <div class="panel">
-          <h5>Featured</h5>
-          <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon nulla pork belly cupidatat meatloaf cow.</p>
-          <a href="#">Read More &rarr;</a>
-        </div>
+        <ul class="social">
+          <li><a href="https://twitter.com/ryankask" class="twitter-follow-button" data-show-count="false">
+              Follow @ryankask</a></li>
+          <li><iframe src="http://ghbtns.com/github-btn.html?user=ryankask&type=follow" allowtransparency="true" frameborder="0" scrolling="0" width="132px" height="20px"></iframe></li>
+          <li><g:plusone href="https://ryankaskel.com/"></g:plusone></li>
+        </ul>
+
       </aside>
     </div>
 
@@ -125,6 +116,16 @@
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
+
+      /* Google+ */
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+
+      /* Twitter button */
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.async=true;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
     </script>
   </body>
 </html>
