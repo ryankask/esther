@@ -42,6 +42,14 @@ class StatusField(SelectField):
     def populate_obj(self, obj, name):
         setattr(obj, name, PostStatus.from_string(self.data))
 
+    def process_data(self, value):
+        """ If the field is being populated by a ``Post`` object, set its
+        value to the field's string representation. """
+        try:
+            self.data = value.value
+        except AttributeError:
+            self.data = value
+
 
 class PostForm(Form):
     title = TextField(u'Title', [Required(), Length(max=255)])

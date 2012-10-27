@@ -152,9 +152,10 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.client.post('/login', data={'email': 'ryan@example.com',
                                          'password': 'password'})
 
-    def create_post_and_login(self):
+    def create_post_and_login(self, post_data=None):
+        post_data = post_data or {}
         user = self.create_user(commit=False)
-        post = self.create_post(user)
+        post = self.create_post(user, **post_data)
         self.login(create_user=False)
         return post
 
@@ -207,12 +208,16 @@ class BlogTests(EstherDBTestCase, PageMixin):
         self.assertNotEqual(post.pub_date, None)
 
     def test_edit_post_page(self):
-        post = self.create_post_and_login()
+        post = self.create_post_and_login({
+            'status': PostStatus.published,
+            'pub_date': utc_now()
+        })
         self.client.get(url_for('blog.edit_post', post_id=post.id))
         self.assert_template_used('blog/post_edit.html')
 
         form = self.get_context_variable('form')
         self.assertEqual(form.title.data, post.title)
+        self.assertEqual(form.status.data, 'published')
         self.assertEqual(form.body.data, u'Post body')
 
     def test_edit_post_success(self):
