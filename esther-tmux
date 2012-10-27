@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+tmux new-session -d -s esther
+
+tmux new-window -t esther:1 -n 'shell-server'
+tmux split-window -t esther:1
+
+tmux send-keys -t esther:0 'workon esther' C-m
+tmux send-keys -t esther:1.0 'workon esther' C-m './run.py shell' C-m
+tmux send-keys -t esther:1.1 'workon esther' C-m './run.py server' C-m
+
+tmux resize-pane -D -t esther:1.1 5
+tmux select-pane -t esther:1.0
+tmux select-window -t esther:0
+tmux attach-session -t esther
