@@ -49,7 +49,6 @@ def edit_post(post_id):
 
     if form.validate_on_submit():
         form.populate_obj(post)
-        post.status = PostStatus.from_string(form.status.data)
         db.session.add(post)
         db.session.commit()
 

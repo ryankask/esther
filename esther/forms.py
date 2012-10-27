@@ -38,10 +38,15 @@ class LoginForm(Form):
         return False
 
 
+class StatusField(SelectField):
+    def populate_obj(self, obj, name):
+        setattr(obj, name, PostStatus.from_string(self.data))
+
+
 class PostForm(Form):
     title = TextField(u'Title', [Required(), Length(max=255)])
     slug = TextField(u'Slug', [Required(), Length(max=80)])
-    status = SelectField(u'Status', choices=[(v, h) for v, h in PostStatus])
+    status = StatusField(u'Status', choices=[(v, h) for v, h in PostStatus])
     body = TextAreaField(u'Post body', [Required()])
 
     def validate_slug(form, field):
