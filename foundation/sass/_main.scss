@@ -19,4 +19,23 @@
 
 .post-table {
   width: 100%;
+
+  td {
+    vertical-align: middle;
+  }
+
+  ul {
+    list-style: none;
+    margin-bottom: 0;
+
+    li {
+      &:before {
+        content: "[";
+      }
+
+      &:after {
+        content: "]";
+      }
+    }
+  }
 }

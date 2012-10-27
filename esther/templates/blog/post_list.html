@@ -22,9 +22,13 @@
       <td>{{ post.created|localize_datetime|format_datetime }}</td>
       <td>{{ post.status.value }}</td>
       <td>
-        [<a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a>]
-        [<a href="{{ url_for('blog.preview_post', post_id=post.id) }}">Preview</a>]
-        {% if post.is_published %}[<a href="{{ post.url }}">View Live</a>]{% endif %}
+        <ul>
+          <li><a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a></li>
+          <li><a href="{{ url_for('blog.preview_post', post_id=post.id) }}">Preview</a></li>
+          {%- if post.is_published %}
+          <li><a href="{{ post.url }}">View Live</a></li>
+          {%- endif %}
+        </ul>
       </td>
     </tr>
     {%- endfor %}
