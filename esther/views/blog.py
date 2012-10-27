@@ -90,13 +90,13 @@ def view_post(year, month, day, slug):
 @blueprint.route('/<int:year>/<int(fixed_digits=2):month>')
 @blueprint.route('/<int:year>/<int(fixed_digits=2):month>/<int(fixed_digits=2):day>')
 def post_archive(year, month=None, day=None):
-    filters = [(Post.status == PostStatus.published),
-               (extract('year', Post.pub_date) == year)]
+    filters = [Post.status == PostStatus.published,
+               extract('year', Post.pub_date) == year]
 
     if month:
-        filters.append((extract('month', Post.pub_date) == month))
+        filters.append(extract('month', Post.pub_date) == month)
     if day:
-        filters.append((extract('day', Post.pub_date) == day))
+        filters.append(extract('day', Post.pub_date) == day)
 
     posts = Post.query.filter(and_(*filters)).order_by(Post.pub_date).all()
 
