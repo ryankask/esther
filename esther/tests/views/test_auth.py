@@ -140,3 +140,38 @@ class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
         form = UserForm(form_data)
         self.assertFalse(form.validate())
         self.assertEqual(form.errors['email'], [u'E-mail is not unique.'])
+
+    def test_edit_user(self):
+        admin = self.create_admin_and_login()[0]
+        original_password = admin.password
+        change_data = {
+            'email': 'admin@example.com',
+            'full_name': 'Admin Boss',
+            'short_name': 'admin'
+        }
+        response = self.client.post(url_for('auth.edit_user', user_id=admin.id),
+                                    data=change_data, follow_redirects=True)
+        # The user is no longer an admin so they can't view the page
+        self.assert_403(response)
+
+        self.assertEqual(admin.email, 'admin@example.com')
+        self.assertEqual(admin.full_name, 'Admin Boss')
+        self.assertEqual(admin.short_name, 'admin')
+        self.assertEqual(admin.is_admin, False)
+        # The password should be the same
+        self.assertEqual(admin.password, original_password)
+
+    def test_edit_user_with_password_change(self):
+        admin = self.create_admin_and_login()[0]
+        original_password = admin.password
+        change_data = {
+            'email': 'admin@example.com',
+            'short_name': 'Admin',
+            'password': 'secret',
+            'is_admin': 'y'
+        }
+        self.client.post(url_for('auth.edit_user', user_id=admin.id),
+                         data=change_data)
+        self.assertEqual(admin.email, 'admin@example.com')
+        self.assertNotEqual(admin.password, original_password)
+        self.assertNotEqual(admin.password, 'secret')

@@ -6,7 +6,7 @@ from flask.ext.login import (login_user, logout_user, login_required,
                              current_user)
 
 from esther import db
-from esther.forms import LoginForm, AddUserForm
+from esther.forms import LoginForm, UserForm, AddUserForm
 from esther.models import User
 
 blueprint = Blueprint('auth', __name__)
@@ -70,3 +70,20 @@ def add_user():
         return redirect(url_for('.list_users'))
 
     return render_template('auth/user_add.html', form=form)
+
+@blueprint.route('/users/<int:user_id>', methods=('GET', 'POST'))
+@admin_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    form = UserForm(request.form, obj=user)
+
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+
+        message = u'Edited user "{0}".'.format(user.email)
+        flash(message, 'success')
+        return redirect(url_for('.list_users'))
+
+    return render_template('auth/user_edit.html', user=user, form=form)

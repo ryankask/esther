@@ -57,10 +57,17 @@ class LoginForm(Form):
         return False
 
 
+class ChangePasswordField(PasswordField):
+    def populate_obj(self, obj, name):
+        if obj and self.data:
+            obj.set_password(self.data)
+
+
 class UserForm(Form):
     email = TextField(u'E-mail', [Required(), Email(), unique(User.email)])
     full_name = TextField(u'Full name')
     short_name = TextField(u'Short name', [Required()])
+    password = ChangePasswordField(u'Password')
     is_admin = BooleanField(u'Is admin?')
 
 

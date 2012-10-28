@@ -1,0 +1,34 @@
+{% extends "auth/admin_base.html" %}
+{% from "helpers/forms.html" import form_field %}
+
+{% block title %}Edit user "{{ user.email }}" {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>Edit User</h1>
+
+<form class="custom" method="post">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="two columns">{{ form.email.label(class="inline") }}</div>
+    <div class="ten columns">{{ form_field(form.email) }}</div>
+  </div>
+  <div class="row">
+    <div class="two columns">{{ form.full_name.label(class="inline") }}</div>
+    <div class="ten columns">{{ form_field(form.full_name) }}</div>
+  </div>
+  <div class="row">
+    <div class="two columns">{{ form.short_name.label(class="inline") }}</div>
+    <div class="ten columns">{{ form_field(form.short_name) }}</div>
+  </div>
+  <div class="row">
+    <div class="two columns">{{ form.password.label(class="inline") }}</div>
+    <div class="ten columns">{{ form_field(form.password, placeholder_text='Enter a new password to change it or leave it blank to keep the current one.') }}</div>
+  </div>
+  <div class="row">
+    <div class="two columns">{{ form.is_admin.label(class="inline") }}</div>
+    <div class="ten columns">{{ form_field(form.is_admin, placeholder=False) }}</div>
+  </div>
+  <br>
+  <input class="button" type="submit" value="Edit user" />
+</form>
+{% endblock %}

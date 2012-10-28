@@ -13,7 +13,7 @@
   <tbody>
     {%- for user in users %}
     <tr>
-      <td>{{ user.email }}</td>
+      <td><a href="{{ url_for('auth.edit_user', user_id=user.id) }}">{{ user.email }}</a></td>
       <td>{{ user.full_name }}</td>
       <td>{{ user.is_active_user }}</td>
       <td>{{ user.is_admin }}</td>

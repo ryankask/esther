@@ -1,14 +1,14 @@
-{% macro form_field(field, placeholder=True) -%}
+{% macro form_field(field, placeholder=True, placeholder_text=None) -%}
   {%- if field.errors %}
     {%- if placeholder %}
-    {{ field(placeholder=field.label.text, class="error") }}
+    {{ field(placeholder=placeholder_text or field.label.text, class="error") }}
     {%- else %}
     {{ field(class="error") }}
     {%- endif %}
     <small class="error">{% for error in field.errors %}{{ error }}{% endfor %}</small>
   {%- else %}
     {%- if placeholder %}
-    {{ field(placeholder=field.label.text) }}
+    {{ field(placeholder=placeholder_text or field.label.text) }}
     {%- else %}
     {{ field }}
     {%- endif %}
