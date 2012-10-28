@@ -1,8 +1,10 @@
 from flask import url_for
 from flask.ext.login import login_required
+from werkzeug.datastructures import MultiDict
 from werkzeug.urls import url_quote_plus
 
 from esther import db
+from esther.forms import UserForm
 from esther.models import User
 from esther.tests.helpers import EstherDBTestCase, PageMixin
 
@@ -115,3 +117,26 @@ class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
         users = self.get_context_variable('users')
         self.assertEqual(len(users), 1)
         self.assertEqual(users[0], admin)
+
+    def test_add_user(self):
+        self.create_admin_and_login()
+        new_user_data = {
+            'email': 'john@example.com',
+            'full_name': 'John Smith',
+            'short_name': 'John',
+            'password': 'password',
+            'is_admin': False
+        }
+        response = self.client.post(url_for('auth.add_user'), data=new_user_data)
+        self.assert_redirects(response, url_for('auth.list_users'))
+        user = User.query.filter_by(email='john@example.com').first()
+        # Just check that the e-mail and full name are set; wtforms is doing
+        # its job
+        self.assertEqual(user.full_name, 'John Smith')
+
+    def test_email_validation(self):
+        user = self.create_user()
+        form_data = MultiDict({'email': user.email, 'short_name': 'John'})
+        form = UserForm(form_data)
+        self.assertFalse(form.validate())
+        self.assertEqual(form.errors['email'], [u'E-mail is not unique.'])

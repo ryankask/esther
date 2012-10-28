@@ -1,0 +1,16 @@
+{% macro form_field(field, placeholder=True) -%}
+  {%- if field.errors %}
+    {%- if placeholder %}
+    {{ field(placeholder=field.label.text, class="error") }}
+    {%- else %}
+    {{ field(class="error") }}
+    {%- endif %}
+    <small class="error">{% for error in field.errors %}{{ error }}{% endfor %}</small>
+  {%- else %}
+    {%- if placeholder %}
+    {{ field(placeholder=field.label.text) }}
+    {%- else %}
+    {{ field }}
+    {%- endif %}
+  {%- endif %}
+{%- endmacro %}

@@ -1,9 +1,12 @@
+from functools import wraps
+
 from flask import (Blueprint, request, render_template, redirect, url_for,
                    flash, abort)
 from flask.ext.login import (login_user, logout_user, login_required,
                              current_user)
 
-from esther.forms import LoginForm
+from esther import db
+from esther.forms import LoginForm, AddUserForm
 from esther.models import User
 
 blueprint = Blueprint('auth', __name__)
@@ -35,10 +38,35 @@ def logout():
 
 ### User management views
 
-@login_required
+def admin_required(func):
+    @wraps(func)
+    @login_required
+    def decorated(*args, **kwargs):
+        if not current_user.is_admin:
+            abort(403)
+        return func(*args, **kwargs)
+    return decorated
+
 @blueprint.route('/users')
+@admin_required
 def list_users():
-    if not current_user.is_admin:
-        abort(403)
     users = User.query.order_by(User.email).all()
     return render_template('auth/user_list.html', users=users)
+
+@blueprint.route('/users/add', methods=('GET', 'POST'))
+@admin_required
+def add_user():
+    form = AddUserForm()
+
+    if form.validate_on_submit():
+        user = User(email=form.email.data, full_name=form.full_name.data,
+                    short_name=form.short_name.data, password=form.password.data,
+                    is_admin=form.is_admin.data)
+        db.session.add(user)
+        db.session.commit()
+
+        message = u'User "{0}" successfully added.'.format(user.email)
+        flash(message, 'success')
+        return redirect(url_for('.list_users'))
+
+    return render_template('auth/user_add.html', form=form)

@@ -1,5 +1,4 @@
 from flask import url_for
-
 from werkzeug.datastructures import MultiDict
 
 from esther import db
@@ -45,8 +44,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
                                'status': PostStatus.draft, 'body': 'Welcome'})
         form = PostForm(form_data)
         self.assertFalse(form.validate())
-        self.assertEqual(form.errors['slug'],
-                         [u'Slug already used by another post.'])
+        self.assertEqual(form.errors['slug'], [u'Slug is not unique.'])
 
     def test_add_post_success(self):
         user = self.create_user()
