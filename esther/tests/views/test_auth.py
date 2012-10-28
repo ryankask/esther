@@ -1,3 +1,4 @@
+from flask import url_for
 from flask.ext.login import login_required
 from werkzeug.urls import url_quote_plus
 
@@ -92,3 +93,25 @@ class AuthTests(EstherDBTestCase, AuthMixin, PageMixin):
 
     def test_logout_with_next_param(self):
         self.assert_redirects(self.client.get('/logout?next=/about'), '/about')
+
+
+class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
+    def create_admin(self, **kwargs):
+        kwargs['is_admin'] = True
+        return self.create_user(**kwargs)
+
+    def create_admin_and_login(self):
+        admin = self.create_admin()
+        response = self.login(create_user=False)
+        return admin, response
+
+    def test_list_users_as_non_admin_forbidden(self):
+        self.login()
+        self.assert_403(self.client.get(url_for('auth.list_users')))
+
+    def test_list_users(self):
+        admin = self.create_admin_and_login()[0]
+        self.assert_page(url_for('auth.list_users'), 'auth/user_list.html')
+        users = self.get_context_variable('users')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0], admin)

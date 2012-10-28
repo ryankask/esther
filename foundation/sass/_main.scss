@@ -23,12 +23,20 @@
   }
 }
 
-.post-table {
+@mixin admin-table {
   width: 100%;
 
   td {
     vertical-align: middle;
   }
+}
+
+.user-table {
+  @include admin-table;
+}
+
+.post-table {
+  @include admin-table;
 
   ul {
     list-style: none;

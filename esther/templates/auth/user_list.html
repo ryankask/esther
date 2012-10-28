@@ -1,0 +1,25 @@
+{% extends "auth/admin_base.html" %}
+
+{% block title %}All Users {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>All Users</h1>
+
+{%- if users %}
+<table class="user-table">
+  <thead>
+    <tr><th>E-mail</th><th>Full Name</th><th>Is Active?</th><th>Is Admin?</th></tr>
+  </thead>
+  <tbody>
+    {%- for user in users %}
+    <tr>
+      <td>{{ user.email }}</td>
+      <td>{{ user.full_name }}</td>
+      <td>{{ user.is_active_user }}</td>
+      <td>{{ user.is_admin }}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+{%- endif %}
+{% endblock %}

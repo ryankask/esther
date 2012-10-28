@@ -79,6 +79,9 @@
         <nav>
           <ul class="side-nav">
             {%- if current_user.is_authenticated() %}
+            {%- if current_user.is_admin %}
+            <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
+            {%- endif %}
             <li><a href="{{ url_for('blog.view_posts') }}">View all posts</a></li>
             <li><a href="{{ url_for('blog.add_post') }}">Add new post</a></li>
             <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
