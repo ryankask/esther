@@ -1,4 +1,5 @@
 {% extends "blog/admin_base.html" %}
+{% from "helpers/forms.html" import form_field %}
 
 {% block title %}{% block title_message %}Add a New Post{% endblock %} {{ super() }}{% endblock %}
 
@@ -7,26 +8,38 @@
 
 <form class="custom" method="post">
   {{ form.csrf_token }}
-  <div class="row">
-    <div class="nine columns">
-      {% if form.title.errors %}{{ form.title(placeholder=form.title.label.text, class="error") }}
-      <small class="error">{% for error in form.title.errors %}{{ error }}{% endfor %}</small>
-      {% else %}{{ form.title(placeholder=form.title.label.text) }}{% endif %}
+  {% if form.title.errors %}{{ form.title(placeholder=form.title.label.text, class="error") }}
+  <small class="error">{% for error in form.title.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.title(placeholder=form.title.label.text) }}{% endif %}
 
-      {% if form.slug.errors %}{{ form.slug(placeholder=form.slug.label.text, class="error") }}
-      <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
-      {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
+  {% if form.slug.errors %}{{ form.slug(placeholder=form.slug.label.text, class="error") }}
+  <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
+
+  {% if form.body.errors %}{{ form.body(rows=8, placeholder=form.body.label.text, class="error") }}
+  <small class="error">{% for error in form.body.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.body(rows=25, placeholder=form.body.label.text) }}{% endif %}
+
+  <div class="row">
+    <div class="two columns">
+      {{ form.status.label(class="inline") }}
     </div>
-    <div class="three columns">
+    <div class="ten columns">
       {% if form.status.errors %}{{ form.status(class="error") }}
       <small class="error">{% for error in form.status.errors %}{{ error }}{% endfor %}</small>
       {% else %}{{ form.status(class="expand") }}{% endif %}
     </div>
   </div>
-
-  {% if form.body.errors %}{{ form.body(rows=8, placeholder=form.body.label.text, class="error") }}
-  <small class="error">{% for error in form.body.errors %}{{ error }}{% endfor %}</small>
-  {% else %}{{ form.body(rows=25, placeholder=form.body.label.text) }}{% endif %}
+  {%- if post and post.pub_date %}
+  <div class="row">
+    <div class="two columns">
+      {{ form.pub_date.label(class="inline") }}
+    </div>
+    <div class="ten columns">
+      {{ form_field(form.pub_date, placeholder=False) }}
+    </div>
+  </div>
+  {%- endif %}
 
   <input class="button" type="submit" value="{% block submit_verb %}Add{% endblock %} post" />
 </form>

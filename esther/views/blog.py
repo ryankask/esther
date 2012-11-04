@@ -49,6 +49,10 @@ def edit_post(post_id):
 
     if form.validate_on_submit():
         form.populate_obj(post)
+
+        if (post.pub_date is None and post.status == PostStatus.published):
+            post.pub_date = utc_now()
+
         db.session.add(post)
         db.session.commit()
 

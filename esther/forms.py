@@ -1,7 +1,8 @@
-from sqlalchemy.sql import exists
+from flask import current_app
 from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField,
-                           BooleanField, SelectField, ValidationError,
-                           Required, Length, Email)
+                           BooleanField, SelectField, DateTimeField,
+                           ValidationError, Required, Length, Email)
+from sqlalchemy.sql import exists
 
 from esther import bcrypt, db
 from esther.models import User, PostStatus, Post
@@ -91,8 +92,16 @@ class StatusField(SelectField):
             self.data = value
 
 
+class UTCDateTimeField(DateTimeField):
+    def populate_obj(self, obj, name):
+        if self.data:
+            timezone = current_app.config['TIME_ZONE']
+            setattr(obj, name, timezone.localize(self.data, is_dst=None))
+
+
 class PostForm(Form):
     title = TextField(u'Title', [Required(), Length(max=255)])
     slug = TextField(u'Slug', [Required(), Length(max=80), unique(Post.slug)])
     status = StatusField(u'Status', choices=[(v, h) for v, h in PostStatus])
+    pub_date = UTCDateTimeField(u'Date Published')
     body = TextAreaField(u'Post body', [Required()])

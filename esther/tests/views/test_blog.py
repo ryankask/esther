@@ -1,4 +1,7 @@
+import datetime
+
 from flask import url_for
+import pytz
 from werkzeug.datastructures import MultiDict
 
 from esther import db
@@ -83,7 +86,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.assertEqual(form.status.data, 'published')
         self.assertEqual(form.body.data, u'Post body')
 
-    def test_edit_post_success(self):
+    def edit_post(self, **kwargs):
         post = self.create_post_and_login()
         edit_data = {
             'title': 'My first edited post',
@@ -91,16 +94,27 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
             'status': PostStatus.published.value,
             'body': 'Some different text',
         }
+        edit_data.update(kwargs)
 
         response = self.client.post(url_for('blog.edit_post', post_id=post.id),
                                     data=edit_data)
         self.assert_redirects(response, url_for('blog.view_posts'))
+        return post
 
-        edited_post = Post.query.get(post.id)
+    def test_edit_post_success(self):
+        edited_post = self.edit_post()
         self.assertEqual(edited_post.title, 'My first edited post')
-        self.assertEqual(edited_post.slug, post.slug)
         self.assertEqual(edited_post.status, PostStatus.published)
+        # The post is being published for the first time so its pub_date is set
+        self.assertNotEqual(edited_post.pub_date, None)
         self.assertEqual(edited_post.body, 'Some different text')
+
+    def test_edit_post_pub_date(self):
+        edited_post = self.edit_post(pub_date='2012-09-05 13:45:12')
+        self.assertEqual(edited_post.status, PostStatus.published)
+        utc_pub_date = datetime.datetime(2012, 9, 5, 12, 45, 12).replace(
+            tzinfo=pytz.utc)
+        self.assertEqual(edited_post.pub_date, utc_pub_date)
 
     def assert_author_only(self, view):
         john = self.create_user(email='john@example.com')
