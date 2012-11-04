@@ -1,5 +1,5 @@
 from flask import (Blueprint, request, flash, render_template, redirect,
-                   url_for, abort)
+                   url_for, abort, current_app)
 from flask.ext.login import login_required, current_user
 import markdown
 from sqlalchemy import and_, extract
@@ -10,12 +10,15 @@ from esther.models import PostStatus, Post, utc_now
 
 blueprint = Blueprint('blog', __name__)
 
-@blueprint.route('/posts')
+@blueprint.route('/posts', defaults={'page': 1})
+@blueprint.route('/posts/page/<int:page>')
 @login_required
-def view_posts():
+def view_posts(page):
     created = Post.created.desc()
-    posts = Post.query.filter_by(author=current_user).order_by(created).all()
-    return render_template('blog/post_list.html', posts=posts)
+    posts = Post.query.filter_by(author=current_user).order_by(created)
+    per_page = current_app.config['NUM_POSTS_PER_LIST_PAGE']
+    paginated_posts = posts.paginate(page, per_page)
+    return render_template('blog/post_list.html', posts=paginated_posts)
 
 @blueprint.route('/posts/add', methods=('GET', 'POST'))
 @login_required

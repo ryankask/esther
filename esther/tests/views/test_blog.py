@@ -33,7 +33,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.client.get('/blog/posts')
         self.assert_template_used('blog/post_list.html')
 
-        posts = self.get_context_variable('posts')
+        posts = self.get_context_variable('posts').items
         self.assertEqual(len(posts), 1)
         self.assertEqual(posts[0], post)
 

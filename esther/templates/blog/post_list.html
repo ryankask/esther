@@ -1,4 +1,5 @@
 {% extends "blog/admin_base.html" %}
+{% from "helpers/pagination.html" import render_pagination %}
 
 {% block title %}All Posts {{ super() }}{% endblock %}
 
@@ -6,6 +7,8 @@
 <h1>All Blog Posts</h1>
 
 {%- if posts %}
+{%- with pagination_html=render_pagination(posts, 'blog.view_posts', 'right') %}
+{{ pagination_html }}
 <table class="post-table">
   <thead>
     <tr>
@@ -16,7 +19,7 @@
     </tr>
   </thead>
   <tbody>
-    {%- for post in posts %}
+    {%- for post in posts.items %}
     <tr>
       <td>{{ post.title }}</td>
       <td>{{ post.created|localize_datetime|format_datetime }}</td>
@@ -34,6 +37,8 @@
     {%- endfor %}
   </tbody>
 </table>
+{{ pagination_html }}
+{%- endwith %}
 {%- else %}
 <p>No posts.</p>
 {%- endif %}
