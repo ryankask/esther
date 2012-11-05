@@ -41,7 +41,6 @@ class PostTests(EstherDBTestCase):
 
         return post
 
-
     def test_publish(self):
         post = self.create_post()
         self.assertEqual(post.status, PostStatus.draft)
