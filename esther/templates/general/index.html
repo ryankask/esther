@@ -8,3 +8,26 @@
 <link rel="openid2.provider" href="http://www.myopenid.com/server">
 <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=ryankaskel.myopenid.com">
 {% endblock %}
+
+{% block content %}
+<article>
+  {%- for post in posts.items %}
+  <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+  <h6>Written by {{ post.author.short_name }}</a> on {{ post.pub_date|localize_datetime|format_date }}</h6>
+  <div class="row">
+    <div class="twelve columns">
+      {{ post.preview|markdown }}
+    </div>
+  </div>
+  <hr>
+  {% endfor %}
+</article>
+
+{% if posts.has_prev %}
+<a href="{{ url_for('.index', page=posts.prev_num) }}">&laquo; Newer</a>
+{%- endif %}
+{%- if posts.has_prev and posts.has_next %} | {%- endif %}
+{%- if posts.has_next %}
+<a href="{{ url_for('.index', page=posts.next_num) }}">Older &raquo;</a>
+{%- endif %}
+{% endblock %}

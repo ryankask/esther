@@ -2,13 +2,16 @@ from flask import (Blueprint, current_app, request, flash, render_template,
                    redirect, url_for)
 
 from esther import mail
+from esther.models import Post
 from esther.forms import ContactForm
 
 blueprint = Blueprint('general', __name__)
 
-@blueprint.route('/')
-def index():
-    return render_template('general/index.html')
+@blueprint.route('/', defaults={'page': 1})
+@blueprint.route('/page/<int:page>')
+def index(page):
+    recent_posts = Post.get_recent(page)
+    return render_template('general/index.html', posts=recent_posts)
 
 @blueprint.route('/about')
 def about():

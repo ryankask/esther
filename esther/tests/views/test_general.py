@@ -1,16 +1,18 @@
 from esther import mail
-from esther.tests.helpers import EstherTestCase, PageMixin
+from esther.tests.helpers import EstherTestCase, EstherDBTestCase, PageMixin
 
 
 class GeneralTests(EstherTestCase, PageMixin):
-    def test_home(self):
-        self.assert_page('/', 'general/index.html')
-
     def test_about(self):
         self.assert_page('/about', 'general/about.html')
 
     def test_contact(self):
         self.assert_page('/contact', 'general/contact.html')
+
+
+class GeneralTestsWithDB(EstherDBTestCase, PageMixin):
+    def test_home(self):
+        self.assert_page('/', 'general/index.html')
 
     def test_contact_form_submission(self):
         form_data = {

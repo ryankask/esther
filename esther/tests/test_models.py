@@ -23,16 +23,27 @@ class UserTests(EstherTestCase):
 
 
 class PostTests(EstherDBTestCase):
-    def test_publish(self):
+    def create_post(self, **kwargs):
         user = User(email='ryan@example.com', short_name='Ryan')
         db.session.add(user)
 
-        post = Post(author=user, title='First Tiger on the Moon',
-                    slug='first-tiger-moon', body='The contents.')
-        db.session.add(post)
+        post_data = {
+            'author': user,
+            'title': 'First Tiger on the Moon',
+            'slug': 'first-tiger-moon',
+            'body': 'The contents.'
+        }
+        post_data.update(kwargs)
+        post = Post(**post_data)
 
+        db.session.add(post)
         db.session.commit()
 
+        return post
+
+
+    def test_publish(self):
+        post = self.create_post()
         self.assertEqual(post.status, PostStatus.draft)
         self.assertEqual(post.pub_date, None)
 
@@ -40,6 +51,12 @@ class PostTests(EstherDBTestCase):
 
         self.assertEqual(post.status, PostStatus.published)
         self.assertNotEqual(post.pub_date, None)
+
+    def test_get_recent(self):
+        post = self.create_post()
+        self.assertEqual(len(Post.get_recent(1).items), 0)
+        post.publish()
+        self.assertEqual(len(Post.get_recent(1).items), 1)
 
     def test_is_published(self):
         post = Post(status=PostStatus.published)

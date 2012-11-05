@@ -110,3 +110,14 @@ class Post(db.Model):
     def preview(self):
         separator = current_app.config['POST_BODY_PREVIEW_SEPARATOR']
         return self.body.split(separator, 1)[0].rstrip()
+
+    @classmethod
+    def get_recent(cls, page, num=None):
+        if num is None:
+            num = current_app.config['NUM_POSTS_PER_INDEX_PAGE']
+
+        pub_date = Post.pub_date.desc()
+        posts = cls.query.filter_by(
+            status=PostStatus.published).order_by(pub_date)
+
+        return posts.paginate(page, per_page=num)
