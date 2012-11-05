@@ -50,3 +50,10 @@ class PostTests(EstherDBTestCase):
         self.assertEqual(post.url, None)
         post.pub_date = datetime.date(2012, 4, 3)
         self.assertEqual(post.url, '/blog/2012/04/03/test-post')
+
+    def test_preview(self):
+        post = Post(body=u'test <!-- preview -->')
+        self.assertEqual(post.preview, u'test')
+
+        post = Post(body=u'test ')
+        self.assertEqual(post.preview, u'test')

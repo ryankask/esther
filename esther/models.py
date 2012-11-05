@@ -1,6 +1,6 @@
 import datetime
 
-from flask import url_for
+from flask import url_for, current_app
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
@@ -105,3 +105,8 @@ class Post(db.Model):
             return url_for('blog.view_post', year=self.pub_date.year,
                            month=self.pub_date.month, day=self.pub_date.day,
                            slug=self.slug)
+
+    @property
+    def preview(self):
+        separator = current_app.config['POST_BODY_PREVIEW_SEPARATOR']
+        return self.body.split(separator, 1)[0].rstrip()
