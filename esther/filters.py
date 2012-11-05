@@ -1,4 +1,6 @@
 from flask import current_app
+from jinja2 import Markup
+import markdown as md
 
 def localize_datetime(value):
     # Return immediatley if a naive datetime is received
@@ -17,7 +19,11 @@ def format_datetime(value, format_string=None,
 def format_date(value, format_string=None):
     return format_datetime(value, format_string, 'DATE_FORMAT')
 
+def markdown(value):
+    return Markup(md.markdown(value))
+
 def register_all(app):
     app.add_template_filter(localize_datetime)
     app.add_template_filter(format_datetime)
     app.add_template_filter(format_date)
+    app.add_template_filter(markdown)

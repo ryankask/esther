@@ -7,7 +7,7 @@
 <article class="post">
   <h1>{% block article_title %}{{ post.title }}{% endblock %}</h1>
   {%- block article_content %}
-  {{ post_body_html|safe }}
+  {{ post.body|markdown|safe }}
   {%- endblock %}
 </article>
 {% endblock %}

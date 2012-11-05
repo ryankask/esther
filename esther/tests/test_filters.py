@@ -32,3 +32,7 @@ class FilterTests(EstherTestCase):
     def test_format_date_with_format_string(self):
         d = datetime.date(2010, 5, 3)
         self.assertEqual(filters.format_date(d, '%Y'), '2010')
+
+    def test_markdown(self):
+        text = '# Test Title'
+        self.assertEqual(filters.markdown(text), '<h1>Test Title</h1>')

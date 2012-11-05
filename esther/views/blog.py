@@ -1,7 +1,6 @@
 from flask import (Blueprint, request, flash, render_template, redirect,
                    url_for, abort, current_app)
 from flask.ext.login import login_required, current_user
-import markdown
 from sqlalchemy import and_, extract
 
 from esther import db
@@ -69,11 +68,7 @@ def edit_post(post_id):
 @login_required
 def preview_post(post_id):
     post = Post.query.filter_by(author=current_user, id=post_id).first_or_404()
-    context = {
-        'post': post,
-        'post_body_html': markdown.markdown(post.body)
-    }
-    return render_template('blog/post_preview.html', **context)
+    return render_template('blog/post_preview.html', post=post)
 
 ### Public views
 
@@ -85,12 +80,7 @@ def view_post(year, month, day, slug):
         (extract('day', Post.pub_date) == day) &
         (Post.status == PostStatus.published) &
         (Post.slug == slug)).first_or_404()
-
-    context = {
-        'post': post,
-        'post_body_html': markdown.markdown(post.body)
-    }
-    return render_template('blog/post_view.html', **context)
+    return render_template('blog/post_view.html', post=post)
 
 @blueprint.route('/<int:year>')
 @blueprint.route('/<int:year>/<int(fixed_digits=2):month>')
