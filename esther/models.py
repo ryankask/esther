@@ -53,7 +53,7 @@ class User(db.Model, UserMixin):
         super(User, self).__init__(**columns)
 
     def __repr__(self):
-        return u'<User "{0}">'.format(self.email)
+        return u'<User "{0}">'.format(self.email).encode('utf-8')
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
@@ -84,7 +84,7 @@ class Post(db.Model):
     author = db.relation(User, backref=db.backref('posts', lazy='dynamic'))
 
     def __repr__(self):
-        return u'<Post "{0}">'.format(self.title)
+        return u'<Post "{0}">'.format(self.title).encode('utf-8')
 
     def publish(self, commit=True):
         self.status = PostStatus.published
