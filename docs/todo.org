@@ -1,0 +1,17 @@
+#+TITLE: TODO
+#+TAGS: { style(s) functionality(f) } { quick(q) long(l) }
+
+* TODO Add "read more" link below posts with a preview          :style:quick:
+* TODO Auto generate Post slugs                         :functionality:quick:
+* TODO Tagging system                                    :functionality:long:
+* TODO Add space below code samples                             :style:quick:
+* TODO Syntax highlighting for code samples                     :style:quick:
+* TODO Customize Foundation style                                :style:long:
+** Drop Foundation and build my own design? Probably not.
+* TODO Markdown preview                                  :functionality:long:
+** Should this go next to it? Or is there some kind of Markdown editor JS plugin?
+* TODO RSS feeds                                         :functionality:long:
+* TODO Disqus comments                                  :functionality:quick:
+* TODO Caching                                           :functionality:long:
+** SQLAlchemy query results
+** markdown-generated HTML
