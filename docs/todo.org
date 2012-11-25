@@ -4,7 +4,8 @@
 * TODO Add "read more" link below posts with a preview          :style:quick:
 * TODO Auto generate Post slugs                         :functionality:quick:
 * TODO Tagging system                                    :functionality:long:
-* TODO Add space below code samples                             :style:quick:
+* DONE Add space below code samples                             :style:quick:
+  CLOSED: [2012-11-25 Sun 08:45]
 * TODO Syntax highlighting for code samples                     :style:quick:
 * TODO Customize Foundation style                                :style:long:
 ** Drop Foundation and build my own design? Probably not.
