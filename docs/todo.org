@@ -12,7 +12,8 @@
 * TODO Markdown preview                                  :functionality:long:
 ** Should this go next to it? Or is there some kind of Markdown editor JS plugin?
 * TODO RSS feeds                                         :functionality:long:
-* TODO Disqus comments                                  :functionality:quick:
+* DONE Disqus comments                                  :functionality:quick:
+  CLOSED: [2012-11-25 Sun 11:31]
 * TODO Caching                                           :functionality:long:
 ** SQLAlchemy query results
 ** markdown-generated HTML
