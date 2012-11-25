@@ -15,3 +15,4 @@
 * TODO Caching                                           :functionality:long:
 ** SQLAlchemy query results
 ** markdown-generated HTML
+* TODO Create image upload facility                      :functionality:long:
