@@ -6,6 +6,7 @@
 {% block pre_article %}{% endblock %}
 <article class="post">
   <h1>{% block article_title %}{{ post.title }}{% endblock %}</h1>
+  <h6 class="meta">Posted by {{ post.author.short_name }}</a> on {{ post.pub_date|localize_datetime|format_date }}</h6>
   {%- block article_content %}
   {{ post.body|markdown }}
   {%- endblock %}
