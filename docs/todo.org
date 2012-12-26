@@ -1,7 +1,8 @@
 #+TITLE: TODO
 #+TAGS: { style(s) functionality(f) } { quick(q) long(l) }
 
-* TODO Add "read more" link below posts with a preview          :style:quick:
+* DONE Add "read more" link below posts with a preview          :style:quick:
+  CLOSED: [2012-12-26 Wed 12:23]
 * TODO Auto generate Post slugs                         :functionality:quick:
 * TODO Tagging system                                    :functionality:long:
 * DONE Add space below code samples                             :style:quick:
