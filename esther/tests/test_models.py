@@ -69,7 +69,7 @@ class PostTests(EstherDBTestCase):
 
     def test_preview(self):
         post = Post(body=u'test <!-- preview -->')
-        self.assertEqual(post.preview, u'test')
+        self.assertEqual(post.preview, u'test...')
 
         post = Post(body=u'test ')
         self.assertEqual(post.preview, u'test')

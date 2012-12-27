@@ -109,7 +109,13 @@ class Post(db.Model):
     @property
     def preview(self):
         separator = current_app.config['POST_BODY_PREVIEW_SEPARATOR']
-        return self.body.split(separator, 1)[0].rstrip()
+        parts = self.body.split(separator, 1)
+        preview_part = parts[0].rstrip()
+
+        if len(parts) == 2:
+            return u'{0}...'.format(preview_part)
+        else:
+            return preview_part
 
     @classmethod
     def get_recent(cls, page, num=None):
