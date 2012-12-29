@@ -13,7 +13,7 @@
 <article>
   {%- for post in posts.items %}
   <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-  <h6 class="meta">Posted by {{ post.author.full_name }}</a> on {{ post.pub_date|localize_datetime|format_date }}</h6>
+  <h6 class="meta">Posted by {{ post.author.full_name }} on {{ post.pub_date|localize_datetime|format_date }}</h6>
   <div class="row">
     <div class="twelve columns">
       {{ post.preview|markdown }}
