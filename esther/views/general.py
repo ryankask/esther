@@ -25,7 +25,7 @@ def contact():
         email_body = render_template('general/email.txt', form=form)
 
         mail.send_message(
-            sender=form.email.data,
+            sender=current_app.config['CONTACT_EMAIL_SENDER'],
             recipients=current_app.config['CONTACT_EMAIL_RECIPIENTS'],
             subject=current_app.config['CONTACT_EMAIL_SUBJECT'],
             body=email_body
