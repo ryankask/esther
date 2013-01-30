@@ -77,3 +77,12 @@ nav .side-nav {
 pre {
   margin-bottom: ms(1);
 }
+
+#body-editor {
+  margin-bottom: ms(1);
+  height: 400px;
+}
+
+#body-editor.error {
+  margin-bottom: 13px;
+}

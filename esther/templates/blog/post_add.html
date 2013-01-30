@@ -16,9 +16,11 @@
   <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
   {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
 
-  {% if form.body.errors %}{{ form.body(rows=8, placeholder=form.body.label.text, class="error") }}
+  {% if form.body.errors %}
+  <div id="body-editor" class="error"></div>
   <small class="error">{% for error in form.body.errors %}{{ error }}{% endfor %}</small>
-  {% else %}{{ form.body(rows=25, placeholder=form.body.label.text) }}{% endif %}
+  {% else %}<div id="body-editor"></div>{% endif %}
+  {{ form.body }}
 
   <div class="row">
     <div class="two columns">
@@ -43,4 +45,9 @@
 
   <input class="button" type="submit" value="{% block submit_verb %}Add{% endblock %} post" />
 </form>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='epiceditor/js/epiceditor.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/editor.js') }}">></script>
 {% endblock %}

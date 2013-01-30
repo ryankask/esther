@@ -1,7 +1,8 @@
 from flask import current_app
 from flask.ext.wtf import (Form, TextField, TextAreaField, PasswordField,
                            BooleanField, SelectField, DateTimeField,
-                           ValidationError, Required, Length, Email)
+                           ValidationError, Required, Length, Email,
+                           HiddenInput)
 from sqlalchemy.sql import exists
 
 from esther import bcrypt, db
@@ -104,4 +105,4 @@ class PostForm(Form):
     slug = TextField(u'Slug', [Required(), Length(max=80), unique(Post.slug)])
     status = StatusField(u'Status', choices=[(v, h) for v, h in PostStatus])
     pub_date = UTCDateTimeField(u'Date Published')
-    body = TextAreaField(u'Post body', [Required()])
+    body = TextAreaField(u'Post body', [Required()], widget=HiddenInput())
