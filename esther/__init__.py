@@ -4,11 +4,13 @@ from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
 import pytz
+from raven.contrib.flask import Sentry
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 mail = Mail()
 login_manager = LoginManager()
+sentry = Sentry()
 
 def create_app(config_objects):
     app = Flask(__name__)
@@ -24,6 +26,7 @@ def create_app(config_objects):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    sentry.init_app(app)
 
     # Import all modules needed to create an app
     # TODO: Find a decent alternative to the unused models import (?)

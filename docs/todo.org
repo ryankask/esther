@@ -21,4 +21,5 @@
 ** SQLAlchemy query results
 ** markdown-generated HTML
 * TODO Create image upload facility                      :functionality:long:
-* TODO Set up Sentry/Raven                              :functionality:quick:
+* DONE Set up Sentry/Raven                              :functionality:quick:
+  CLOSED: [2013-02-02 Sat 10:09]

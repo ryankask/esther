@@ -14,3 +14,5 @@ MAIL_PORT = 587
 MAIL_USE_TLS = True
 MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
+
+SENTRY_DSN = 'https://'
