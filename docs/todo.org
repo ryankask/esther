@@ -23,3 +23,7 @@
 * TODO Create image upload facility                      :functionality:long:
 * DONE Set up Sentry/Raven                              :functionality:quick:
   CLOSED: [2013-02-02 Sat 10:09]
+* TODO Create a TODO app                                 :functionality:long:
+** Components:
+   - Angular for the front end
+   - [[https://github.com/twilio/flask-restful][Flask-Restful]] for the API
