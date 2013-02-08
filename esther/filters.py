@@ -20,7 +20,7 @@ def format_date(value, format_string=None):
     return format_datetime(value, format_string, 'DATE_FORMAT')
 
 def markdown(value):
-    return Markup(md.markdown(value))
+    return Markup(md.markdown(value, ['codehilite']))
 
 def register_all(app):
     app.add_template_filter(localize_datetime)

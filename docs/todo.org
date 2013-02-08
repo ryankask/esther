@@ -7,7 +7,8 @@
 * TODO Tagging system                                    :functionality:long:
 * DONE Add space below code samples                             :style:quick:
   CLOSED: [2012-11-25 Sun 08:45]
-* TODO Syntax highlighting for code samples                     :style:quick:
+* DONE Syntax highlighting for code samples                     :style:quick:
+  CLOSED: [2013-02-08 Fri 23:24]
 * TODO Customize Foundation style                                :style:long:
 ** Drop Foundation and build my own design? Probably not.
 * DONE Markdown preview                                  :functionality:long:
