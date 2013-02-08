@@ -6,15 +6,16 @@
 {% block page_content %}
 <h1>{% block content_heading %}Add a New Blog Post{% endblock %}</h1>
 
+<div ng-app="blogApp" ng-controller="AddPostCtrl">
 <form class="custom" method="post">
   {{ form.csrf_token }}
   {% if form.title.errors %}{{ form.title(placeholder=form.title.label.text, class="error") }}
   <small class="error">{% for error in form.title.errors %}{{ error }}{% endfor %}</small>
-  {% else %}{{ form.title(placeholder=form.title.label.text) }}{% endif %}
+  {% else %}{{ form.title(placeholder=form.title.label.text, ng_model='postTitle') }}{% endif %}
 
   {% if form.slug.errors %}{{ form.slug(placeholder=form.slug.label.text, class="error") }}
   <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
-  {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
+  {% else %}{{ form.slug(placeholder=form.slug.label.text, value='{[{ postTitle|slugify }]}') }}{% endif %}
 
   {% if form.body.errors %}
   <div id="body-editor" class="error"></div>
@@ -45,9 +46,14 @@
 
   <input class="button" type="submit" value="{% block submit_verb %}Add{% endblock %} post" />
 </form>
+</div>
 {% endblock %}
 
 {% block script %}
 <script src="{{ url_for('static', filename='epiceditor/js/epiceditor.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/angular.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/apps/blog/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/apps/blog/controllers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/apps/blog/filters.js') }}"></script>
 {% endblock %}
