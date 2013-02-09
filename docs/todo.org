@@ -28,3 +28,5 @@
 ** Components:
    - Angular for the front end
    - [[https://github.com/twilio/flask-restful][Flask-Restful]] for the API
+* TODO Print coverage report after running tests        :functionality:quick:
+* TODO Allow only running tests from specified modules  :functionality:quick:
