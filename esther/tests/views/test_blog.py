@@ -2,11 +2,9 @@ import datetime
 
 from flask import url_for
 import pytz
-from werkzeug.datastructures import MultiDict
 
 from esther import db
-from esther.forms import PostForm
-from esther.models import PostStatus, Post, utc_now
+from esther.models import Post, utc_now
 from esther.tests.helpers import EstherDBTestCase, PageMixin
 from esther.tests.views.test_auth import AuthMixin
 
@@ -40,14 +38,6 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
     def test_add_post_page(self):
         self.login()
         self.assert_page('/blog/posts/add', 'blog/post_add.html')
-
-    def test_used_slug_raises_validation_error(self):
-        post = self.create_post(self.create_user(commit=False))
-        form_data = MultiDict({'title': 'My Second Post', 'slug': post.slug,
-                               'status': PostStatus.draft, 'body': 'Welcome'})
-        form = PostForm(form_data)
-        self.assertFalse(form.validate())
-        self.assertEqual(form.errors['slug'], [u'Slug is not unique.'])
 
     def test_add_post_success(self):
         user = self.create_user()
