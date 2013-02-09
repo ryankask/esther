@@ -1,7 +1,7 @@
 import datetime
 
 from esther import db
-from esther.models import User, Post, PostStatus
+from esther.models import User, Post, PostStatus, Tag
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -73,3 +73,9 @@ class PostTests(EstherDBTestCase):
 
         post = Post(body=u'test ')
         self.assertEqual(post.preview, u'test')
+
+
+class TagTests(EstherTestCase):
+    def test_slug_generated_from_name(self):
+        tag = Tag('train spotting')
+        self.assertEqual(tag.slug, 'train-spotting')

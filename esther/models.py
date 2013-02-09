@@ -7,6 +7,7 @@ from sqlalchemy import types
 
 from esther import db, bcrypt
 from esther.decl_enum import DeclEnum
+from esther.utils import slugify
 
 def utc_now():
     return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -62,6 +63,12 @@ class User(db.Model, UserMixin):
         return True if self.is_active_user is None else self.is_active_user
 
 
+post_tags = db.Table('post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+)
+
+
 class PostStatus(DeclEnum):
     draft = 'draft', 'Draft'
     published = 'published', 'Published'
@@ -82,6 +89,8 @@ class Post(db.Model):
     modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
 
     author = db.relation(User, backref=db.backref('posts', lazy='dynamic'))
+    tags = db.relationship('Tag', secondary=post_tags,
+                           backref=db.backref('posts', lazy='dynamic'))
 
     def __repr__(self):
         return u'<Post "{0}">'.format(self.title).encode('utf-8')
@@ -127,3 +136,18 @@ class Post(db.Model):
             status=PostStatus.published).order_by(pub_date)
 
         return posts.paginate(page, per_page=num)
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+        if not self.id and not self.slug:
+            self.slug = slugify(unicode(name))
+
+    def __repr__(self):
+        return self.name.encode('utf-8')
