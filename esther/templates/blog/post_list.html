@@ -15,6 +15,7 @@
       <th>Title</th>
       <th>Date created</th>
       <th>Status</th>
+      <th>Tags</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -24,6 +25,7 @@
       <td>{{ post.title }}</td>
       <td>{{ post.created|localize_datetime|format_datetime }}</td>
       <td>{{ post.status.value }}</td>
+      <td>{{ post.tags|join(', ', 'name') }}</td>
       <td>
         <ul>
           <li><a href="{{ url_for('blog.edit_post', post_id=post.id) }}">Edit</a></li>

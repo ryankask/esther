@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "helpers/tags.html" import tags %}
 
 {% block title %}{{ post.title }} {{ super() }}{% endblock %}
 
@@ -6,8 +7,9 @@
 {% block pre_article %}{% endblock %}
 <article class="post">
   <h1>{% block article_title %}{{ post.title }}{% endblock %}</h1>
-  <h6 class="meta">Posted by {{ post.author.full_name }}
-  {%- if post.pub_date %} on {{ post.pub_date|localize_datetime|format_date }}{%- endif %}</h6>
+  <h6 class="meta">
+    Posted by {{ post.author.full_name }}
+    {%- if post.pub_date %} on {{ post.pub_date|localize_datetime|format_date }}{%- endif %} {{ tags(post) }}</h6>
   {%- block article_content %}
   {{ post.body|markdown }}
   {%- endblock %}

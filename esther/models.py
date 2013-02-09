@@ -150,4 +150,4 @@ class Tag(db.Model):
             self.slug = slugify(unicode(name))
 
     def __repr__(self):
-        return self.name.encode('utf-8')
+        return u'<Tag: "{}">'.format(self.name).encode('utf-8')

@@ -1,0 +1,5 @@
+{% macro tags(post) %}
+  {%- if post.tags %}
+  <span class="tags">Tags: {{ post.tags|join(', ', 'name') }}</span>
+  {%- endif %}
+{%- endmacro %}

@@ -23,16 +23,18 @@ class UserTests(EstherTestCase):
 
 
 class PostTests(EstherDBTestCase):
-    def create_post(self, **kwargs):
-        user = User(email='ryan@example.com', short_name='Ryan')
-        db.session.add(user)
-
+    def create_post(self, create_user=True, **kwargs):
         post_data = {
-            'author': user,
             'title': 'First Tiger on the Moon',
             'slug': 'first-tiger-moon',
             'body': 'The contents.'
         }
+
+        if 'author' not in kwargs:
+            user = User(email='ryan@example.com', short_name='Ryan')
+            db.session.add(user)
+            post_data['author'] = user
+
         post_data.update(kwargs)
         post = Post(**post_data)
 
@@ -73,6 +75,17 @@ class PostTests(EstherDBTestCase):
 
         post = Post(body=u'test ')
         self.assertEqual(post.preview, u'test')
+
+    def test_tags(self):
+        post = self.create_post(tags=[Tag('boeing'), Tag('airbus')])
+        self.assertEqual(len(post.tags), 2)
+        self.assertEqual(Tag.query.count(), 2)
+
+    def test_duplicate_tags_handled(self):
+        post1 = self.create_post(tags=[Tag('python')])
+        post2 = self.create_post(author=post1.author, slug='post',
+                                 tags=[Tag('python')])
+
 
 
 class TagTests(EstherTestCase):
