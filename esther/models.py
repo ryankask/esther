@@ -90,8 +90,9 @@ class Post(db.Model):
     modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
 
     author = db.relation(User, backref=db.backref('posts', lazy='dynamic'))
-    tags = db.relationship('Tag', secondary=post_tags,
-                           backref=db.backref('posts', lazy='dynamic'))
+    tags = db.relationship('Tag', secondary=post_tags, collection_class=set,
+                           backref=db.backref('posts', lazy='dynamic'),
+                           order_by=lambda: Tag.name)
 
     def __repr__(self):
         return u'<Post "{0}">'.format(self.title).encode('utf-8')

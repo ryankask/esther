@@ -14,7 +14,11 @@
 
   {% if form.slug.errors %}{{ form.slug(placeholder=form.slug.label.text, class="error") }}
   <small class="error">{% for error in form.slug.errors %}{{ error }}{% endfor %}</small>
-  {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{% endif %}
+  {% else %}{{ form.slug(placeholder=form.slug.label.text) }}{%- endif %}
+
+  {% if form.tags.errors %}{{ form.slug(placeholder=form.tags.label.text, class="error") }}
+  <small class="error">{% for error in form.tags.errors %}{{ error }}{% endfor %}</small>
+  {% else %}{{ form.tags(placeholder=form.tags.label.text) }}{%- endif %}
 
   {% if form.body.errors %}
   <div id="body-editor" class="error"></div>

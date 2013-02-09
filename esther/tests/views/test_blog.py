@@ -4,7 +4,7 @@ from flask import url_for
 import pytz
 
 from esther import db
-from esther.models import Post, utc_now
+from esther.models import PostStatus, Post, utc_now, Tag
 from esther.tests.helpers import EstherDBTestCase, PageMixin
 from esther.tests.views.test_auth import AuthMixin
 
@@ -47,7 +47,8 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
             'title': 'New Railroad Opens',
             'slug': 'new-railroad-opens',
             'status': PostStatus.published.value,
-            'body': 'A new railroad is opening tomorrow.'
+            'body': 'A new railroad is opening tomorrow.',
+            'tags': 'green, blue',
         }
 
         response = self.client.post(url_for('blog.add_post'), data=post_data)
@@ -58,6 +59,8 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.assertEqual(post.title, post_data['title'])
         self.assertEqual(post.body, post_data['body'])
         self.assertEqual(post.status, PostStatus.published)
+        self.assertEqual(Tag.query.count(), 2)
+        self.assertEqual(set(tag.name for tag in post.tags), set(['blue', 'green']))
 
         # Make sure ``pub_date`` is set if the post is being published
         # immediatley

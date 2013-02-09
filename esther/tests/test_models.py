@@ -77,15 +77,9 @@ class PostTests(EstherDBTestCase):
         self.assertEqual(post.preview, u'test')
 
     def test_tags(self):
-        post = self.create_post(tags=[Tag('boeing'), Tag('airbus')])
+        post = self.create_post(tags=set([Tag('boeing'), Tag('airbus')]))
         self.assertEqual(len(post.tags), 2)
         self.assertEqual(Tag.query.count(), 2)
-
-    def test_duplicate_tags_handled(self):
-        post1 = self.create_post(tags=[Tag('python')])
-        post2 = self.create_post(author=post1.author, slug='post',
-                                 tags=[Tag('python')])
-
 
 
 class TagTests(EstherTestCase):

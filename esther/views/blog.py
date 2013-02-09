@@ -30,6 +30,7 @@ def add_post():
         post = Post(author=current_user, title=form.title.data,
                     slug=form.slug.data, body=form.body.data,
                     status=status)
+        post.tags.update(form.tags.data)
 
         if status == PostStatus.published:
             post.pub_date = utc_now()
