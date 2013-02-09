@@ -65,7 +65,8 @@ class User(db.Model, UserMixin):
 
 post_tags = db.Table('post_tags',
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')),
+    db.UniqueConstraint('post_id', 'tag_id')
 )
 
 
