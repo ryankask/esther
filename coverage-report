@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+coverage run run.py tests
+echo
+coverage report -m
+coverage erase

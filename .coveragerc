@@ -1,0 +1,20 @@
+[run]
+omit =
+    esther/tests*
+    esther/decl_enum*
+    run*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self\.debug
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    def __unicode__
+    def __str__
+    from .* import .*',
+    import .*
+ignore_errors = True
