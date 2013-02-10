@@ -30,7 +30,9 @@
    - Angular for the front end
    - [[https://github.com/twilio/flask-restful][Flask-Restful]] for the API
 * TODO Print coverage report after running tests        :functionality:quick:
-* TODO Allow only running tests from specified modules  :functionality:quick:
+* DONE Allow only running tests from specified modules  :functionality:quick:
+  CLOSED: [2013-02-10 Sun 19:40]
+** Only a single label is supported now
 * TODO Support mixed-case tags
 ** An integrity error is raised if you attempt to add two tags that differ only in case
 ** This is because the generated slug is the same
