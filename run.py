@@ -34,8 +34,15 @@ def make_shell_context():
     return context
 
 @manager.command
-def tests():
-    result = run_tests()
+def tests(label=None):
+    kwargs = {}
+
+    if label is not None:
+        if not label.startswith('esther.tests'):
+            label = 'esther.tests.{}'.format(label)
+        kwargs['labels'] = [label]
+
+    result = run_tests(**kwargs)
 
     if not result:
         sys.exit(1)
