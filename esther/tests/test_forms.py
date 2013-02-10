@@ -2,7 +2,7 @@ from werkzeug.datastructures import MultiDict
 
 from esther import db
 from esther.forms import PostForm
-from esther.models import PostStatus, Tag
+from esther.models import PostStatus, Post, Tag
 from esther.tests.helpers import EstherDBTestCase
 from esther.tests.views.test_blog import BlogMixin
 
@@ -52,3 +52,8 @@ class PostFormTests(EstherDBTestCase, BlogMixin):
         self.assertEqual(form.tags.data[0].name, 'blue')
         self.assertEqual(form.tags.data[1].name, 'green')
         self.assertEqual(form.tags.data[2].name, 'red')
+
+    def test_post_tags_converted_to_comma_separated_string(self):
+        post = Post(tags=[Tag('green'), Tag('blue')])
+        form = PostForm(obj=post)
+        self.assertEqual(form.tags._value(), 'green, blue')
