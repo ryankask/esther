@@ -46,23 +46,26 @@
         {% block content %}{% endblock %}
       </div>
 
-      <aside class="three columns">
-        <h5>Admin</h5>
-        <nav>
+      <nav class="three columns side">
+        <h5>Blog</h5>
           <ul class="side-nav">
-            {%- if current_user.is_authenticated() %}
-            {%- if current_user.is_admin %}
-            <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
-            <li><a href="{{ url_for('auth.add_user') }}">Add user</a></li>
-            {%- endif %}
-            <li><a href="{{ url_for('blog.view_posts') }}">View all posts</a></li>
-            <li><a href="{{ url_for('blog.add_post') }}">Add new post</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-            {%- else %}
-            <li><a href="{{ url_for('auth.login') }}?next={{ url_for('blog.view_posts') }}">Login</a></li>
-            {%- endif %}
+            <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
           </ul>
-        </nav>
+
+        <h5>Admin</h5>
+        <ul class="side-nav">
+          {%- if current_user.is_authenticated() %}
+          {%- if current_user.is_admin %}
+          <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
+          <li><a href="{{ url_for('auth.add_user') }}">Add user</a></li>
+          {%- endif %}
+          <li><a href="{{ url_for('blog.view_posts') }}">View all posts</a></li>
+          <li><a href="{{ url_for('blog.add_post') }}">Add new post</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+          {%- else %}
+          <li><a href="{{ url_for('auth.login') }}?next={{ url_for('blog.view_posts') }}">Login</a></li>
+          {%- endif %}
+        </ul>
 
         <h5>Social</h5>
         <ul class="social">
@@ -72,8 +75,7 @@
                       frameborder="0" scrolling="0" width="132" height="20"></iframe></li>
           <li><g:plusone href="https://ryankaskel.com/"></g:plusone></li>
         </ul>
-
-      </aside>
+      </nav>
     </div>
 
     <footer class="row">

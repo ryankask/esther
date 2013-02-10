@@ -1,10 +1,10 @@
 {% extends "page.html" %}
 {% from "helpers/pagination.html" import render_pagination %}
 
-{% block title %}All tags - Blog {{ super() }}{% endblock %}
+{% block title %}All Post Tags - Blog {{ super() }}{% endblock %}
 
 {% block page_content %}
-<h1>All Tags</h1>
+<h1>All Post Tags</h1>
 {% if tags.items %}
 <ul>
   {% for tag in tags.items %}
