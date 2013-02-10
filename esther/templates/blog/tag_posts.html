@@ -1,0 +1,16 @@
+{% extends "page.html" %}
+{% from "helpers/pagination.html" import render_pagination %}
+
+{% block title %}Posts tagged "{{ tag.name }}" - Blog {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>Posts tagged "{{ tag.name }}"</h1>
+
+<ul>
+  {%- for post in posts.items %}
+ <li><a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+   posted by {{ post.author.full_name }} on {{ post.pub_date|localize_datetime|format_datetime }}</li>
+  {% endfor %}
+</ul>
+{{ render_pagination(posts, 'blog.tag_posts', 'right', slug=tag.slug) }}
+{% endblock %}

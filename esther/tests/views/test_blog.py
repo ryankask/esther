@@ -13,6 +13,10 @@ class BlogMixin(AuthMixin):
     def create_post(self, user, commit=True, **kwargs):
         post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
                     body='Post body', **kwargs)
+
+        if post.status == PostStatus.published and post.pub_date is None:
+            post.pub_date = utc_now()
+
         db.session.add(post)
         if commit:
             db.session.commit()
@@ -184,3 +188,21 @@ class PublicTests(EstherDBTestCase, BlogMixin, PageMixin):
         tags = self.get_context_variable('tags').items
         self.assertEqual(len(tags), 1)
         self.assertEqual(tags[0], tag)
+
+    def test_tag_posts(self):
+        tag = Tag('blue')
+        db.session.add(tag)
+        post = self.create_post(self.create_user(), tags=[tag],
+                                status=PostStatus.published)
+        self.assert_page(url_for('blog.tag_posts', slug=tag.slug),
+                         'blog/tag_posts.html')
+        posts = self.get_context_variable('posts').items
+        self.assertEqual(len(posts), 1)
+        self.assertEqual(posts[0], post)
+
+    def test_tag_posts_for_tag_without_posts_404s(self):
+        tag = Tag('blue')
+        db.session.add(tag)
+        db.session.commit()
+        url = url_for('blog.tag_posts', slug=tag.slug)
+        self.assertEqual(self.client.get(url).status_code, 404)

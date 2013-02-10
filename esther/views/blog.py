@@ -112,3 +112,15 @@ def tag_list(page):
     per_page = current_app.config['NUM_TAGS_PER_LIST_PAGE']
     paginated_tags = tags.paginate(page, per_page)
     return render_template('blog/tag_list.html', tags=paginated_tags)
+
+@blueprint.route('/tags/<slug>', defaults={'page': 1})
+@blueprint.route('/tags/<slug>/page/<int:page>')
+def tag_posts(slug, page):
+    has_published_post = Tag.posts.any(Post.status == PostStatus.published)
+    tag = Tag.query.filter(has_published_post, Tag.slug == slug).first_or_404()
+    posts = Post.query.filter(Post.status == PostStatus.published,
+                              Post.tags.any(Tag.id == tag.id))
+    per_page = current_app.config['NUM_POSTS_PER_TAG_PAGE']
+    paginated_posts = posts.paginate(page, per_page)
+    return render_template('blog/tag_posts.html', tag=tag,
+                           posts=paginated_posts)

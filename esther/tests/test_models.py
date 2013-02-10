@@ -86,3 +86,7 @@ class TagTests(EstherTestCase):
     def test_slug_generated_from_name(self):
         tag = Tag('train spotting')
         self.assertEqual(tag.slug, 'train-spotting')
+
+    def test_url(self):
+        tag = Tag('train spotting')
+        self.assertEqual(tag.url, '/blog/tags/train-spotting')

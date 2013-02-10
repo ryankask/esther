@@ -1,5 +1,9 @@
 {% macro tags(post) %}
   {%- if post.tags %}
-  <span class="tags">Tags: {{ post.tags|join(', ', 'name') }}</span>
+  <span class="tags">Tags:
+    {%- for tag in post.tags %}
+    <a href="{{ tag.url }}">{{ tag.name }}</a>
+    {%- if not loop.last %},{%- endif %}
+    {%- endfor %}
   {%- endif %}
 {%- endmacro %}

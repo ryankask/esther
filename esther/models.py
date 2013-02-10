@@ -154,3 +154,7 @@ class Tag(db.Model):
 
     def __repr__(self):
         return u'<Tag: "{}">'.format(self.name).encode('utf-8')
+
+    @property
+    def url(self):
+        return url_for('blog.tag_posts', slug=self.slug)
