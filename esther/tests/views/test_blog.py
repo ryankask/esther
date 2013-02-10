@@ -61,7 +61,9 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.assertEqual(post.body, post_data['body'])
         self.assertEqual(post.status, PostStatus.published)
         self.assertEqual(Tag.query.count(), 2)
-        self.assertEqual(set(tag.name for tag in post.tags), set(['blue', 'green']))
+        # Tags are ordered by name
+        self.assertEqual(post.tags[0].name, 'blue')
+        self.assertEqual(post.tags[1].name, 'green')
 
         # Make sure ``pub_date`` is set if the post is being published
         # immediatley
@@ -118,7 +120,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
     def test_edit_post_tags(self):
         user = self.create_user(commit=False)
         post = self.create_post(user, commit=False)
-        post.tags = set([Tag('yellow'), Tag('brown')])
+        post.tags = [Tag('yellow'), Tag('brown')]
         db.session.commit()
         self.edit_post(post=post, tags='yellow')
         self.assertEqual(len(post.tags), 1)

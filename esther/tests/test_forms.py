@@ -27,10 +27,10 @@ class PostFormTests(EstherDBTestCase, BlogMixin):
         self.assertTrue(form.validate())
         self.assertEqual(len(form.tags.data), 3)
 
-        tags = {tag.name: tag for tag in form.tags.data}
-        self.assertEqual(tags['green'], original_green_tag)
-        self.assertEqual(tags['red'].id, None)
-        self.assertEqual(tags['blue'].id, None)
+        tags = form.tags.data
+        self.assertEqual(tags[0], original_green_tag)
+        self.assertEqual(tags[1].id, None)
+        self.assertEqual(tags[2].id, None)
 
     def test_empty_tags_value_creates_empty_set(self):
         self.form_data['tags'] = ''
@@ -43,3 +43,12 @@ class PostFormTests(EstherDBTestCase, BlogMixin):
         form = PostForm(self.form_data)
         self.assertTrue(form.validate())
         self.assertEqual(len(form.tags.data), 1)
+
+    def test_tag_name_ordering_preserved(self):
+        self.form_data['tags'] = 'blue, green, blue, red'
+        form = PostForm(self.form_data)
+        self.assertTrue(form.validate())
+        self.assertEqual(len(form.tags.data), 3)
+        self.assertEqual(form.tags.data[0].name, 'blue')
+        self.assertEqual(form.tags.data[1].name, 'green')
+        self.assertEqual(form.tags.data[2].name, 'red')

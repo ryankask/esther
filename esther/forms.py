@@ -103,25 +103,28 @@ class TagListField(Field):
 
     def process_formdata(self, valuelist):
         if valuelist and valuelist[0]:
-            tag_names = set()
+            # Order is preserved here but ``Post.tags`` orders by tag name
+            seen = set()
+            tag_names = []
             for value in valuelist[0].split(','):
                 stripped_value = value.strip()
-                if stripped_value:
-                    tag_names.add(stripped_value)
+                if stripped_value and stripped_value not in seen:
+                    tag_names.append(stripped_value)
+                    seen.add(stripped_value)
 
             existing_tags = Tag.query.filter(Tag.name.in_(tag_names))
             existing_tag_names = {t.name: t for t in existing_tags}
 
-            tags = set()
+            tags = []
             for tag_name in tag_names:
                 try:
-                    tags.add(existing_tag_names[tag_name])
+                    tags.append(existing_tag_names[tag_name])
                 except KeyError:
-                    tags.add(Tag(tag_name))
+                    tags.append(Tag(tag_name))
 
             self.data = tags
         else:
-            self.data = set()
+            self.data = []
 
 
 class UTCDateTimeField(DateTimeField):
