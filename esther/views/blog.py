@@ -6,7 +6,7 @@ from sqlalchemy.orm import subqueryload
 
 from esther import db
 from esther.forms import PostForm
-from esther.models import PostStatus, Post, utc_now
+from esther.models import PostStatus, Post, utc_now, Tag
 
 blueprint = Blueprint('blog', __name__)
 
@@ -103,3 +103,12 @@ def post_archive(year, month=None, day=None):
 
     return render_template('blog/post_archive.html', posts=posts, year=year,
                            month=month, day=day)
+
+@blueprint.route('/tags', defaults={'page': 1})
+@blueprint.route('/tags/page/<int:page>')
+def tag_list(page):
+    has_published_post = Tag.posts.any(Post.status == PostStatus.published)
+    tags = Tag.query.order_by(Tag.name).filter(has_published_post)
+    per_page = current_app.config['NUM_TAGS_PER_LIST_PAGE']
+    paginated_tags = tags.paginate(page, per_page)
+    return render_template('blog/tag_list.html', tags=paginated_tags)

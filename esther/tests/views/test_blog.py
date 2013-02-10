@@ -172,3 +172,15 @@ class PublicTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.assert_archive(posts, year=now.year)
         self.assert_archive(posts, year=now.year, month=now.month)
         self.assert_archive(posts, year=now.year, month=now.month, day=now.day)
+
+    def test_tag_list(self):
+        """ Also tests that tags without published posts are not included. """
+        tag = Tag('blue')
+        db.session.add(tag)
+        self.create_post(self.create_user(), tags=[tag],
+                         status=PostStatus.published)
+        url = url_for('blog.tag_list')
+        self.assert_page(url, 'blog/tag_list.html')
+        tags = self.get_context_variable('tags').items
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0], tag)

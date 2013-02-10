@@ -1,0 +1,18 @@
+{% extends "page.html" %}
+{% from "helpers/pagination.html" import render_pagination %}
+
+{% block title %}All tags - Blog {{ super() }}{% endblock %}
+
+{% block page_content %}
+<h1>All Tags</h1>
+{% if tags.items %}
+<ul>
+  {% for tag in tags.items %}
+  <li>{{ tag.name }}</li>
+  {% endfor %}
+</ul>
+{{ render_pagination(tags, 'blog.tag_list', 'right') }}
+{% else %}
+<p>No tags to display.</p>
+{% endif %}
+{% endblock %}
