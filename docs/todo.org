@@ -4,7 +4,8 @@
 * DONE Add "read more" link below posts with a preview          :style:quick:
   CLOSED: [2012-12-26 Wed 12:23]
 * TODO Auto generate Post slugs                         :functionality:quick:
-* TODO Tagging system                                    :functionality:long:
+* DONE Tagging system                                    :functionality:long:
+  CLOSED: [2013-02-10 Sun 17:06]
 * DONE Add space below code samples                             :style:quick:
   CLOSED: [2012-11-25 Sun 08:45]
 * DONE Syntax highlighting for code samples                     :style:quick:
@@ -30,3 +31,7 @@
    - [[https://github.com/twilio/flask-restful][Flask-Restful]] for the API
 * TODO Print coverage report after running tests        :functionality:quick:
 * TODO Allow only running tests from specified modules  :functionality:quick:
+* TODO Support mixed-case tags
+** An integrity error is raised if you attempt to add two tags that differ only in case
+** This is because the generated slug is the same
+** Need to slightly alter the slug like in django-tagging
