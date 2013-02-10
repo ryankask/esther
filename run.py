@@ -4,8 +4,8 @@ import sys
 from flask.ext.script import Manager, prompt, prompt_bool, prompt_pass
 from sqlalchemy.exc import DatabaseError
 
-from esther import create_app, db
-from esther import models
+from esther import create_app, db, models
+from esther.tests import run_tests
 
 app = create_app(['esther.settings.site'])
 manager = Manager(app)
@@ -35,7 +35,6 @@ def make_shell_context():
 
 @manager.command
 def tests():
-    from esther.tests import run_tests
     result = run_tests()
 
     if not result:
