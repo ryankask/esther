@@ -10,11 +10,12 @@ from esther.tests.views.test_auth import AuthMixin
 
 
 class BlogMixin(AuthMixin):
-    def create_post(self, user, **kwargs):
+    def create_post(self, user, commit=True, **kwargs):
         post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
                     body='Post body', **kwargs)
         db.session.add(post)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return post
 
     def create_post_and_login(self, post_data=None):
@@ -80,7 +81,12 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         self.assertEqual(form.body.data, u'Post body')
 
     def edit_post(self, **kwargs):
-        post = self.create_post_and_login()
+        post = kwargs.pop('post', None)
+        if post is None:
+            post = self.create_post_and_login()
+        else:
+            self.login(create_user=False)
+
         edit_data = {
             'title': 'My first edited post',
             'slug': post.slug,
@@ -108,6 +114,16 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         utc_pub_date = datetime.datetime(2012, 9, 5, 12, 45, 12).replace(
             tzinfo=pytz.utc)
         self.assertEqual(edited_post.pub_date, utc_pub_date)
+
+    def test_edit_post_tags(self):
+        user = self.create_user(commit=False)
+        post = self.create_post(user, commit=False)
+        post.tags = set([Tag('yellow'), Tag('brown')])
+        db.session.commit()
+        self.edit_post(post=post, tags='yellow')
+        self.assertEqual(len(post.tags), 1)
+        self.edit_post(post=post, tags='')
+        self.assertEqual(len(post.tags), 0)
 
     def assert_author_only(self, view):
         john = self.create_user(email='john@example.com')

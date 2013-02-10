@@ -98,12 +98,17 @@ class TagListField(Field):
 
     def _value(self):
         if self.data:
-            return u', '.join(self.data)
+            return u', '.join([tag.name for tag in self.data])
         return u''
 
     def process_formdata(self, valuelist):
-        if valuelist:
-            tag_names = set(value.strip() for value in valuelist[0].split(','))
+        if valuelist and valuelist[0]:
+            tag_names = set()
+            for value in valuelist[0].split(','):
+                stripped_value = value.strip()
+                if stripped_value:
+                    tag_names.add(stripped_value)
+
             existing_tags = Tag.query.filter(Tag.name.in_(tag_names))
             existing_tag_names = {t.name: t for t in existing_tags}
 
@@ -122,8 +127,11 @@ class TagListField(Field):
 class UTCDateTimeField(DateTimeField):
     def populate_obj(self, obj, name):
         if self.data:
-            timezone = current_app.config['TIME_ZONE']
-            setattr(obj, name, timezone.localize(self.data, is_dst=None))
+            dt = self.data
+            if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+                timezone = current_app.config['TIME_ZONE']
+                dt = timezone.localize(self.data, is_dst=None)
+            setattr(obj, name, dt)
 
 
 class PostForm(Form):
