@@ -8,7 +8,7 @@
 {% if tags.items %}
 <ul>
   {% for tag in tags.items %}
-  <li>{{ tag.name }}</li>
+  <li><a href="{{ tag.url }}">{{ tag.name }}</a></li>
   {% endfor %}
 </ul>
 {{ render_pagination(tags, 'blog.tag_list', 'right') }}
