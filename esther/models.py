@@ -4,6 +4,7 @@ from flask import url_for, current_app
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
+from sqlalchemy.orm import subqueryload
 
 from esther import db, bcrypt
 from esther.decl_enum import DeclEnum
@@ -134,7 +135,7 @@ class Post(db.Model):
             num = current_app.config['NUM_POSTS_PER_INDEX_PAGE']
 
         pub_date = Post.pub_date.desc()
-        posts = cls.query.filter_by(
+        posts = cls.query.options(subqueryload(Post.tags)).filter_by(
             status=PostStatus.published).order_by(pub_date)
 
         return posts.paginate(page, per_page=num)

@@ -2,6 +2,7 @@ from flask import (Blueprint, request, flash, render_template, redirect,
                    url_for, abort, current_app)
 from flask.ext.login import login_required, current_user
 from sqlalchemy import and_, extract
+from sqlalchemy.orm import subqueryload
 
 from esther import db
 from esther.forms import PostForm
@@ -14,7 +15,8 @@ blueprint = Blueprint('blog', __name__)
 @login_required
 def view_posts(page):
     created = Post.created.desc()
-    posts = Post.query.filter_by(author=current_user).order_by(created)
+    posts = Post.query.options(subqueryload(Post.tags)).filter_by(
+        author=current_user).order_by(created)
     per_page = current_app.config['NUM_POSTS_PER_LIST_PAGE']
     paginated_posts = posts.paginate(page, per_page)
     return render_template('blog/post_list.html', posts=paginated_posts)
