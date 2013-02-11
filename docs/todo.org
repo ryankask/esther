@@ -34,7 +34,8 @@
 * DONE Allow only running tests from specified modules  :functionality:quick:
   CLOSED: [2013-02-10 Sun 19:40]
 ** Only a single label is supported now
-* TODO Support mixed-case tags
+* TODO Support mixed-case tags                          :functionality:quick:
 ** An integrity error is raised if you attempt to add two tags that differ only in case
 ** This is because the generated slug is the same
 ** Need to slightly alter the slug like in django-tagging
+* TODO Show latest posts in sidebar                     :functionality:quick:
