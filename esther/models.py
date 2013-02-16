@@ -167,6 +167,7 @@ class List(db.Model):
     title = db.Column(db.String(128), unique=True, nullable=False)
     slug = db.Column(db.String(128), unique=True, nullable=False)
     description = db.Column(db.Text)
+    is_public = db.Column(db.Boolean, default=True, nullable=False)
     created = db.Column(UTCDateTime, default=utc_now)
     modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
 
@@ -183,8 +184,12 @@ class List(db.Model):
         super(List, self).__init__(**field_values)
 
     def __repr__(self):
-        return u'<List: "{}" owned by {}>'.format(
-            self.title, self.owner).encode('utf-8')
+        output =u'<List: "{}" owned by {} ({})>'.format(
+            self.title,
+            self.owner,
+            u'public' if self.is_public else u'private',
+        )
+        return output.encode('utf-8')
 
 
 class Item(db.Model):
