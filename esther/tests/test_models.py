@@ -1,7 +1,7 @@
 import datetime
 
 from esther import db
-from esther.models import User, Post, PostStatus, Tag
+from esther.models import User, Post, PostStatus, Tag, List
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -94,5 +94,8 @@ class TagTests(EstherTestCase):
 
 class ListTests(EstherTestCase):
     def test_slug_generated_from_title(self):
-        todo_list = Tag('Long Term Tasks')
+        todo_list = List(title='Long Term Tasks')
         self.assertEqual(todo_list.slug, 'long-term-tasks')
+        # If a title isn't passed, no slug should be generated
+        todo_list = List()
+        self.assertEqual(todo_list.slug, None)

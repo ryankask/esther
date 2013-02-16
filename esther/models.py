@@ -163,20 +163,28 @@ class Tag(db.Model):
 class List(db.Model):
     __tablename__ = 'lists'
     id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(128), unique=True, nullable=False)
     slug = db.Column(db.String(128), unique=True, nullable=False)
     description = db.Column(db.Text)
     created = db.Column(UTCDateTime, default=utc_now)
     modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
 
-    def __init__(self, title, description=None):
-        self.title = title
-        self.description = description
-        if not self.id and not self.slug:
-            self.slug = slugify(unicode(title))
+    owner = db.relation(User, backref=db.backref('todo_lists', lazy='dyanmic'))
+
+    def __init__(self, **field_values):
+        try:
+            title = field_values['title']
+        except KeyError:
+            pass
+        else:
+            if not self.id and not self.slug:
+                field_values['slug'] = slugify(unicode(title))
+        super(List, self).__init__(**field_values)
 
     def __repr__(self):
-        return u'<List: "{}">'.format(self.title).encode('utf-8')
+        return u'<List: "{}" owned by {}>'.format(
+            self.title, self.owner).encode('utf-8')
 
 
 class Item(db.Model):
