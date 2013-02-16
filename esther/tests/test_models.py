@@ -90,3 +90,9 @@ class TagTests(EstherTestCase):
     def test_url(self):
         tag = Tag('train spotting')
         self.assertEqual(tag.url, '/blog/tags/train-spotting')
+
+
+class ListTests(EstherTestCase):
+    def test_slug_generated_from_title(self):
+        todo_list = Tag('Long Term Tasks')
+        self.assertEqual(todo_list.slug, 'long-term-tasks')

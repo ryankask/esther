@@ -158,3 +158,39 @@ class Tag(db.Model):
     @property
     def url(self):
         return url_for('blog.tag_posts', slug=self.slug)
+
+
+class List(db.Model):
+    __tablename__ = 'lists'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128), unique=True, nullable=False)
+    slug = db.Column(db.String(128), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    created = db.Column(UTCDateTime, default=utc_now)
+    modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
+
+    def __init__(self, title, description=None):
+        self.title = title
+        self.description = description
+        if not self.id and not self.slug:
+            self.slug = slugify(unicode(title))
+
+    def __repr__(self):
+        return u'<List: "{}">'.format(self.title).encode('utf-8')
+
+
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
+    details = db.Column(db.Text)
+    is_done = db.Column(db.Boolean, default=False, nullable=False)
+    created = db.Column(UTCDateTime, default=utc_now)
+    modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
+
+    todo_list = db.relation(List, backref=db.backref('items', lazy='dynamic'))
+
+    def __repr__(self):
+        return u'<Item: "{}" for list {}>'.format(
+            self.title, self.todo_list.title).encode('utf-8')
