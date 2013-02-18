@@ -16,8 +16,8 @@
   <header>
     <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
     <h6 class="meta">
-      Posted by {{ post.author.full_name }} on
-      {{ post.pub_date|localize_datetime|format_date }} {{ tags(post) }}
+      Posted by <a rel="author" href="https://ryankaskel.com">{{ post.author.full_name }}</a>
+      on {{ post.pub_date|localize_datetime|format_date }} {{ tags(post) }}
     </h6>
   </header>
   <div class="row">
