@@ -5,59 +5,60 @@
 {% block page_content %}
 <h1>About</h1>
 
-<img src="{{ url_for('static', filename='img/about/berlin-bridge-2012.jpg') }}" alt="Ryan Kaskel in Berlin" class="profile-picture" width="240" height="309">
-<p>I'm <strong>Ryan Kaskel</strong>. Welcome to my humble home on the web!</p>
-<p>Here are a few facts about me:</p>
+<div itemscope itemtype="http://data-vocabulary.org/Person">
+  <img itemprop="photo" src="{{ url_for('static', filename='img/about/berlin-bridge-2012.jpg') }}" alt="Ryan Kaskel in Berlin" class="profile-picture" width="240" height="309">
+  <p>I'm <strong itemprop="name">Ryan Kaskel</strong>. Welcome to my humble home on the web!</p>
+  <p>Here are a few facts about me:</p>
 
-<ul>
-  <li>Born January 22, 1987 in <a title="Miami on Wikipedia" href="http://en.wikipedia.org/wiki/Miami">Miami</a>,
-    <a title="Florida on Wikipedia" href="http://en.wikipedia.org/wiki/Florida">Florida</a>,
-    <a title="United States on Wikipedia" href="http://en.wikipedia.org/wiki/United_States">USA</a></li>
-  <li>Attended <a title="Miami-Palmetto Senior High school website" href="http://mpsh.dadeschools.net/">Miami-Palmetto Senior High School</a></li>
-  <li>Graduated in 2010 from <a title="Tufts University website" href="http://www.tufts.edu/">Tufts University</a> in
-    <a title="Boston on Wikipedia" href="http://en.wikipedia.org/wiki/Boston">Boston</a>,
-    <a title="Massachusetts on Wikipedia" href="http://en.wikipedia.org/wiki/Massachusetts">Massachusetts</a> with a Bachelor of Arts</li>
-  <li>I majored in History</li>
-  <li>I have an M.A. in <a title="King's College medieval history program" href="http://www.kcl.ac.uk/schools/humanities/depts/history/study/grad/taught/med/"> Medieval History</a> from <a title="King's College London" href="http://www.kcl.ac.uk/">King&#8217;s College London</a></li>
-  <li>I live in <a title="London on Wikipedia" href="http://en.wikipedia.org/wiki/London">London</a>,
-    <a title="United Kingdom on Wikipedia" href="http://en.wikipedia.org/wiki/United_Kingdom">United Kingdom</a></li>
-  <li>I work as a <a title="Django website" href="http://www.djangoproject.com/">Django</a>/
-    <a title="Python programming language website" href="http://www.python.org">Python</a>
-    developer at <a title="Languagelab.com" href="http://www.languagelab.com">Languagelab.com</a></li>
-  <li>I support <a title="Arsenal's website" href="http://www.arsenal.com/">Arsenal F.C.</a></li>
-  <li>I am learning Polish. I can speak Spanish and have studied Latin and Kiswahili in the past.</li>
-</ul>
+  <ul>
+    <li>Born January 22, 1987 in <a title="Miami on Wikipedia" href="http://en.wikipedia.org/wiki/Miami">Miami</a>,
+      <a title="Florida on Wikipedia" href="http://en.wikipedia.org/wiki/Florida">Florida</a>,
+      <a title="United States on Wikipedia" href="http://en.wikipedia.org/wiki/United_States">USA</a></li>
+    <li>Attended <a title="Miami-Palmetto Senior High school website" href="http://mpsh.dadeschools.net/">Miami-Palmetto Senior High School</a></li>
+    <li>Graduated in 2010 from <a title="Tufts University website" href="http://www.tufts.edu/">Tufts University</a> in
+      <a title="Boston on Wikipedia" href="http://en.wikipedia.org/wiki/Boston">Boston</a>,
+      <a title="Massachusetts on Wikipedia" href="http://en.wikipedia.org/wiki/Massachusetts">Massachusetts</a> with a Bachelor of Arts</li>
+    <li>I majored in History</li>
+    <li>I have an M.A. in <a title="King's College medieval history program" href="http://www.kcl.ac.uk/schools/humanities/depts/history/study/grad/taught/med/"> Medieval History</a> from <a title="King's College London" href="http://www.kcl.ac.uk/">King&#8217;s College London</a></li>
+    <li>I live in <a title="London on Wikipedia" href="http://en.wikipedia.org/wiki/London">London</a>,
+      <a title="United Kingdom on Wikipedia" href="http://en.wikipedia.org/wiki/United_Kingdom">United Kingdom</a></li>
+    <li>I am the <span itemprop="title">lead developer</span> at <a itemprop="affiliation" title="Languagelab.com" href="http://www.languagelab.com">Languagelab.com</a></li>
+    <li>I support <a title="Arsenal's website" href="http://www.arsenal.com/">Arsenal F.C.</a></li>
+    <li>I am learning Polish. I can speak Spanish and have studied Latin and Kiswahili in the past.</li>
+  </ul>
 
-<p>I am also a proud computer nerd. Here is a brief, incomplete list of my favorite software:</p>
-<ul>
-  <li>I use the <a title="Ubuntu" href="http://www.ubuntu.com/">Ubuntu</a> distribution of
-    <a title="Linux on Wikipedia" href="http://en.wikipedia.org/wiki/Linux">GNU/Linux</a>. (currently 12.04 "Precise Pangolin")</li>
-  <li><a title="emacs 24" href="http://www.gnu.org/software/emacs/">emacs 24</a> with
-    <a title="Workrave RSI prevention" href="http://www.workrave.org/">Workrave</a>
-    <a href="http://en.wikipedia.org/wiki/Repetitive_strain_injury">RSI</a> prevention software.</li>
-  <li><a title="org-mode for emacs website" href="http://orgmode.org/">org-mode</a> for emacs; a lifesaver for daily organization</li>
-  <li><a href="http://tmux.sourceforge.net/">tmux</a></li>
-  <li><a title="Virtualenv on the Python Package Index" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>/
-    <a title="virtualenvwrapper website" href="http://www.doughellmann.com/projects/virtualenvwrapper/">virtualenvwrapper </a>
-    - Python interpreter isolation for the sane developer.</li>
-  <li><a href="https://lastpass.com/">LastPass</a></li>
-  <li><a href="http://www.quicklisp.org/">Quicklisp</a>, <a href="http://common-lisp.net/project/slime/">SLIME</a>, and
-    <a href="http://www.sbcl.org/">SBCL</a> - for all my Common Lisp needs. I am learning the language using the excellent book
-    <a href="http://www.gigamonkeys.com/book/">Practical Common Lisp</a> by Peter Seibel.</li>
-  <li><a href="http://gitscm.org/">Git</a></li>
-</ul>
+  <p>I am also a proud computer nerd. Here is a brief, incomplete list of my favorite software:</p>
+  <ul>
+    <li>I use the <a title="Ubuntu" href="http://www.ubuntu.com/">Ubuntu</a> distribution of
+      <a title="Linux on Wikipedia" href="http://en.wikipedia.org/wiki/Linux">GNU/Linux</a>. (currently 12.04 "Precise Pangolin")</li>
+    <li><a title="emacs 24" href="http://www.gnu.org/software/emacs/">emacs 24</a> with
+      <a title="Workrave RSI prevention" href="http://www.workrave.org/">Workrave</a>
+      <a href="http://en.wikipedia.org/wiki/Repetitive_strain_injury">RSI</a> prevention software.</li>
+    <li><a title="org-mode for emacs website" href="http://orgmode.org/">org-mode</a> for emacs; a lifesaver for daily organization</li>
+    <li><a href="http://tmux.sourceforge.net/">tmux</a></li>
+    <li><a title="Virtualenv on the Python Package Index" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>/
+      <a title="virtualenvwrapper website" href="http://www.doughellmann.com/projects/virtualenvwrapper/">virtualenvwrapper </a>
+      - Python interpreter isolation for the sane developer.</li>
+    <li><a href="https://lastpass.com/">LastPass</a></li>
+    <li><a href="http://www.quicklisp.org/">Quicklisp</a>, <a href="http://common-lisp.net/project/slime/">SLIME</a>, and
+      <a href="http://www.sbcl.org/">SBCL</a> - for all my Common Lisp needs. I am learning the language using the excellent book
+      <a href="http://www.gigamonkeys.com/book/">Practical Common Lisp</a> by Peter Seibel.</li>
+    <li><a href="http://gitscm.org/">Git</a></li>
+  </ul>
 
-<p>You can find me on <a title="My Google Profile" href="http://www.google.com/profiles/ryankaskel?hl=en">Google</a>,
-  <a title="Ryan Kaskel on GitHub" href="https://github.com/ryankask">GitHub</a>, and
-  <a title="Ryan Kaskel on Launchpad.net" href="https://launchpad.net/~ryankaskel">Launchpad</a>. I also have a
-  <a title="ryankask on Twitter" href="http://twitter.com/#!/ryankask">Twitter account</a>, but rarely use it.</p>
+  <p>
+    You can find me on <a title="My Google Profile" href="https://plus.google.com/104275111833639999928/?rel=author" rel="me">Google+</a>,
+    <a title="Ryan Kaskel on GitHub" href="https://github.com/ryankask" rel="me">GitHub</a>,
+    <a title="Ryan Kaskel on Launchpad.net" href="https://launchpad.net/~ryankaskel" rel="me">Launchpad</a>, and
+    <a title="ryankask on Twitter" href="http://twitter.com/#!/ryankask" rel="me">Twitter</a>.
+  </p>
+  <p>Finally, here is some miscellaneous stuff I like:</p>
+  <ul>
+    <li>Airplanes and airport design. Check out <a title="Ryan Kaskel's photos on Airliners.net" href="http://www.airliners.net/search/photo.search?photographersearch=Ryan%20Kaskel&amp;distinct_entry=true">my photos on Airliners.net</a></li>
+    <li>Trains, trains, and trains. This healthy obsession has increased a hundredfold since moving to England. My favorite site is
+      <a title="RailForums.co.uk" href="http://railforums.co.uk/">RailForums.co.uk</a>.</li>
+  </ul>
 
-<p>Finally, here is some miscellaneous stuff I like:</p>
-<ul>
-  <li>Airplanes and airport design. Check out <a title="Ryan Kaskel's photos on Airliners.net" href="http://www.airliners.net/search/photo.search?photographersearch=Ryan%20Kaskel&amp;distinct_entry=true">my photos on Airliners.net</a></li>
-  <li>Trains, trains, and trains. This healthy obsession has increased a hundredfold since moving to England. My favorite site is
-    <a title="RailForums.co.uk" href="http://railforums.co.uk/">RailForums.co.uk</a>.</li>
-</ul>
-
-<p>That's all for now!</p>
+  <p>That's all for now!</p>
+</div>
 {% endblock %}
