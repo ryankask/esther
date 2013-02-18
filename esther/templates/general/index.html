@@ -11,13 +11,15 @@
 {% endblock %}
 
 {% block content %}
+{%- for post in posts.items %}
 <article>
-  {%- for post in posts.items %}
-  <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-  <h6 class="meta">
-    Posted by {{ post.author.full_name }} on
-    {{ post.pub_date|localize_datetime|format_date }} {{ tags(post) }}
-  </h6>
+  <header>
+    <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+    <h6 class="meta">
+      Posted by {{ post.author.full_name }} on
+      {{ post.pub_date|localize_datetime|format_date }} {{ tags(post) }}
+    </h6>
+  </header>
   <div class="row">
     <div class="twelve columns">
       {{ post.preview|markdown }}
@@ -25,8 +27,8 @@
     </div>
   </div>
   <hr>
-  {% endfor %}
 </article>
+{% endfor %}
 
 {% if posts.has_prev %}
 <a href="{{ url_for('.index', page=posts.prev_num) }}">&laquo; Newer</a>
