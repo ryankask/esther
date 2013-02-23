@@ -77,9 +77,9 @@ $highlightColor: $successColor;
 // $custSelectDropHeight: 200px;
 // $custDropdownBgColor: #fff;
 // $custDropdownBorderColor: darken(#fff, 20%);
-// $custDropdownFontColor: #555;
-// $custDropdownSelectedBgColor: lighten(#2ba6cb, 40%);
-// $custDropdownSelectedFontColor: #000;
+// $custDropdownFontColor: #555
+$custDropdownSelectedBgColor: lighten($secondaryColor, 10%);
+$custDropdownSelectedFontColor: darken($secondaryColor, 40%);
 // $custFormDisabledBgColor: #ddd;
 
 // Tab Settings
