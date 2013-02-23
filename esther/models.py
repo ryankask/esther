@@ -13,6 +13,18 @@ from esther.utils import slugify
 def utc_now():
     return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
 
+def obj_as_dict(obj, exclude=None):
+    if exclude is None:
+        exclude = []
+    d = {}
+    for column in obj.__table__.columns:
+        if column.name not in exclude:
+            d[column.name] = getattr(obj, column.name)
+    return d
+
+def prep_query_for_json(query):
+    return [obj.as_dict() for obj in query]
+
 
 class UTCDateTime(types.TypeDecorator):
     """ Adapted from: http://stackoverflow.com/a/2528453/171744. """
@@ -190,6 +202,9 @@ class List(db.Model):
             u'public' if self.is_public else u'private',
         )
         return output.encode('utf-8')
+
+    def as_dict(self):
+        return obj_as_dict(self, exclude=['owner_id'])
 
 
 class Item(db.Model):

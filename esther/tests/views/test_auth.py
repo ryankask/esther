@@ -25,15 +25,15 @@ class AuthMixin(object):
 
         return user
 
-    def login(self, create_user=True, url=None):
-        if create_user:
-            self.create_user()
+    def login(self, user=None, password='', url=None):
+        if user is None:
+            user = self.create_user()
 
         if url is None:
             url = '/login'
 
-        return self.client.post(url, data={'email': 'ryan@example.com',
-                                           'password': 'password'})
+        return self.client.post(url, data={'email': user.email,
+                                           'password': password or 'password'})
 
 
 class AuthTests(EstherDBTestCase, AuthMixin, PageMixin):
@@ -104,7 +104,7 @@ class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
 
     def create_admin_and_login(self):
         admin = self.create_admin()
-        response = self.login(create_user=False)
+        response = self.login(user=admin)
         return admin, response
 
     def test_list_users_as_non_admin_forbidden(self):

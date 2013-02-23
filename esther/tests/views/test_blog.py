@@ -26,7 +26,7 @@ class BlogMixin(AuthMixin):
         post_data = post_data or {}
         user = self.create_user(commit=False)
         post = self.create_post(user, **post_data)
-        self.login(create_user=False)
+        self.login(user=user)
         return post
 
 
@@ -46,7 +46,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
 
     def test_add_post_success(self):
         user = self.create_user()
-        self.login(create_user=False)
+        self.login(user=user)
 
         post_data = {
             'title': 'New Railroad Opens',
@@ -91,7 +91,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
         if post is None:
             post = self.create_post_and_login()
         else:
-            self.login(create_user=False)
+            self.login(user=post.author)
 
         edit_data = {
             'title': 'My first edited post',
