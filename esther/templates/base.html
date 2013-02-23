@@ -16,9 +16,12 @@
   <body>
     <div class="row">
       <div class="twelve columns">
-        <nav class="top-bar">
+        <nav class="top-bar override">
           <ul>
             <li class="name"><h1><a href="{{ url_for('general.index') }}" title="Home">RyanKaskel.com</a></h1></li>
+            <li class="toggle-topbar"><a href="#"></a></li>
+          </ul>
+          <ul>
             <li><a rel="author" href="{{ url_for('general.about') }}" title="About">About</a></li>
             <li><a href="{{ url_for('general.contact') }}" title="Contact">Contact</a></li>
           </ul>

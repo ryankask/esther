@@ -1,8 +1,14 @@
-.top-bar ul li {
-  &:hover, &.active, &:focus {
-    background: #CF5E2E;
-    a { color: #fff; }
+.top-bar.override ul > li {
+  &:not(.toggle-topbar) {
+    &:hover, &.active, &:focus {
+      background: #CF5E2E;
+      a { color: #FFF; }
+    }
   }
+}
+
+.top-bar.override.expanded ul li.toggle-topbar {
+  a { border-bottom-color: #FFF; }
 }
 
 a code {

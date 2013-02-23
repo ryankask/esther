@@ -1,3 +1,3 @@
 source :rubygems
 
-gem "zurb-foundation", "3.2.0"
+gem "zurb-foundation", "3.2.5"
