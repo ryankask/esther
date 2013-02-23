@@ -11,7 +11,7 @@ def json_response(data, status=200, headers=None):
                                       mimetype='application/json',
                                       headers=headers or {})
 
-@blueprint.route('/api/<int:owner_id>/list', methods=['GET'])
+@blueprint.route('/api/<int:owner_id>/lists', methods=['GET'])
 def lists(owner_id):
     owner = User.query.get_or_404(owner_id)
     todo_lists = List.query.order_by(List.created).filter(List.owner == owner)
