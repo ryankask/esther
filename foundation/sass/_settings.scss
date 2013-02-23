@@ -12,12 +12,12 @@
 
 // Colors Settings
 
-$mainColor: #789435;
-$secondaryColor: #E58B3F;
-$alertColor: #AD3827;
-$successColor: #FFDE80;
+$mainColor: #4cbb17;
+// $secondaryColor: #e9e9e9;
+$alertColor: #c9193b;
+$successColor: #d85f1b;
 // $txtColor: #222;
-$highlightColor: $successColor;
+// $highlightColor: #ffff99;
 // $black: #000;
 // $white: #fff;
 // $shinyEdge: rgba(#fff, .5);
@@ -78,8 +78,8 @@ $highlightColor: $successColor;
 // $custDropdownBgColor: #fff;
 // $custDropdownBorderColor: darken(#fff, 20%);
 // $custDropdownFontColor: #555
-$custDropdownSelectedBgColor: lighten($secondaryColor, 10%);
-$custDropdownSelectedFontColor: darken($secondaryColor, 40%);
+$custDropdownSelectedBgColor: darken($mainColor, 10%);
+$custDropdownSelectedFontColor: #fff;
 // $custFormDisabledBgColor: #ddd;
 
 // Tab Settings
@@ -89,29 +89,32 @@ $custDropdownSelectedFontColor: darken($secondaryColor, 40%);
 
 // Nav Bar Settings
 
-$navBarHeight: 30px;
+// $navBarHeight: 40px;
 // $navFlyoutBaseWidth: 250px;
-$navBackgroundColor: darken($mainColor, 14%);
 
 // Top Bar Settings
 
-$topBarBgColor: #E58B3F;
+// $topBarBgColor: #222;
 // $topBarHeight: 45px;
 // $topBarHeightMobile: 45px;
-$topBarBtmMargin: 18px;
+$topBarBtmMargin: 20px;
 // $topBarTitleWeight: bold;
-$topBarTitleSize: 18px;
+// $topBarTitleSize: 17px;
 // $topBarLinkColor: #fff;
 // $topBarLinkWeight: bold;
 // $topBarLinkSize: 13px;
-$topBarDropBgColor: $topBarBgColor;
+// $topBarDropBgColor: #222;
 // $topBarDropLinkColor: #fff;
 // $topBarDropToggleSize: 5px;
 // $topBarDropToggleColor: #fff;
 // $topBarDropToggleAlpha: 0.5;
 // $topBarSearchWidth: 200px;
-$topBarBreakPoint: 480px; // Change to 9999px for always mobile layout
+// $topBarLoginWidth: 300px;
+// $topBarLoginButtonWidth: 60px;
+// $topBarLoginInputWidth: ($topBarLoginWidth - $topBarLoginButtonWidth) / 2;
+$topBarBreakPoint: 480px;
 // $topBarNavToggleSize: 8px;
+// $topBarNavToggleColor: #fff;
 
 // UI Settings
 
