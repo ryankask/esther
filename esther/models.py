@@ -191,8 +191,7 @@ class List(db.Model):
         except KeyError:
             pass
         else:
-            if not self.id and not self.slug:
-                field_values['slug'] = slugify(unicode(title))
+            self.generate_slug(title)
         super(List, self).__init__(**field_values)
 
     def __repr__(self):
@@ -202,6 +201,14 @@ class List(db.Model):
             u'public' if self.is_public else u'private',
         )
         return output.encode('utf-8')
+
+    @classmethod
+    def slugify(cls, title):
+        return slugify(unicode(title))
+
+    def generate_slug(self, title=None):
+        if not self.id and not self.slug:
+            self.slug = self.slugify(title or self.title)
 
     def as_dict(self):
         return obj_as_dict(self, exclude=['owner_id'])

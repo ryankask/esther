@@ -26,11 +26,13 @@ class TodoMixin(AuthMixin):
         return todo_list
 
 
-class ListAPITests(EstherDBTestCase, TodoMixin):
+class ListsAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
-        super(ListAPITests, self).setUp()
+        super(ListsAPITests, self).setUp()
         self.user = self.create_user()
         self.url = url_for('todo.lists', owner_id=self.user.id)
+        self.data = {'title': 'Some sort of title',
+                     'description': 'This is a new list.'}
 
     def test_get_lists(self):
         todo_list1 = self.create_list(owner=self.user, commit=False)
@@ -56,3 +58,53 @@ class ListAPITests(EstherDBTestCase, TodoMixin):
         another_user = self.create_user(email='danny@example.com')
         self.login(user=another_user)
         self.assertEqual(len(self.client.get(self.url).json), 0)
+
+    def test_post(self):
+        self.login(user=self.user)
+        response = self.client.post(self.url, data=self.data)
+        self.assertEqual(response.status_code, 201)
+        new_list = List.query.filter_by(title=self.data['title']).first()
+        url = 'http://localhost/todo/api/{}/lists/{}'.format(self.user.id,
+                                                             new_list.slug)
+        self.assertEqual(response.headers['Location'], url)
+
+    def test_post_as_another_user_fails(self):
+        response = self.client.post(self.url, data=self.data)
+        self.assertEqual(response.status_code, 403)
+        another_user = self.create_user(email='jim@example.com')
+        self.login(user=another_user)
+        response = self.client.post(self.url, data=self.data)
+        self.assertEqual(response.status_code, 403)
+
+    def assert_invalid_title(self, modify_data=lambda d: None):
+        self.login(user=self.user)
+        response = self.client.post(self.url, data=self.data)
+        self.assertEqual(response.status_code, 201)
+        modify_data(self.data)
+        response = self.client.post(self.url, data=self.data)
+        self.assertEqual(response.status_code, 422)
+        self.assertTrue(response.json['title'][0].startswith('Invalid title'))
+
+    def test_post_with_duplicate_title_fails(self):
+        self.assert_invalid_title()
+
+    def test_post_with_duplicate_slug_fails(self):
+        def modify_data(data):
+            data['title'] = data['title'].upper()
+        self.assert_invalid_title(modify_data)
+
+
+class SingleListAPITests(EstherDBTestCase, TodoMixin):
+    def setUp(self):
+        super(SingleListAPITests, self).setUp()
+        self.todo_list = self.create_list()
+        self.url = url_for('todo.list_', owner_id=self.todo_list.owner.id,
+                           slug=self.todo_list.slug)
+
+    def test_get_list(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.json['id'], self.todo_list.id)
+        self.assertEqual(response.json['title'], self.todo_list.title)
+        self.todo_list.is_public = False
+        db.session.commit()
+        self.assertEqual(self.client.get(self.url).status_code, 404)

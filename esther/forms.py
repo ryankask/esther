@@ -6,7 +6,7 @@ from flask.ext.wtf import (Form, Field, TextField, TextAreaField, PasswordField,
 from sqlalchemy.sql import exists
 
 from esther import bcrypt, db
-from esther.models import User, PostStatus, Post, Tag
+from esther.models import User, PostStatus, Post, Tag, List
 
 ### Validators
 
@@ -144,3 +144,22 @@ class PostForm(Form):
     pub_date = UTCDateTimeField(u'Date Published')
     body = TextAreaField(u'Post body', [Required()], widget=HiddenInput())
     tags = TagListField(u'Tags')
+
+
+### Todo
+
+
+class ListForm(Form):
+    title = TextField(u'Title', [Required(), Length(max=128)])
+    description = TextAreaField(u'Description', [Required()])
+    is_public = BooleanField(u'Is public?')
+
+    def validate_title(form, field):
+        title_cond = List.slug == List.slugify(field.data)
+        if (field.object_data != field.data and
+            db.session.query(exists().where(title_cond)).scalar()):
+            raise ValidationError('Invalid title. Please choose another.')
+
+    def populate_obj(self, obj):
+        super(ListForm, self).populate_obj(obj)
+        obj.generate_slug()
