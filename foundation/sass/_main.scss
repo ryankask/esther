@@ -1,3 +1,10 @@
+.top-bar ul li {
+  &:hover, &.active, &:focus {
+    background: #CF5E2E;
+    a { color: #fff; }
+  }
+}
+
 a code {
   color: $alertColor;
   &:hover { color: darken($alertColor, 5%) }

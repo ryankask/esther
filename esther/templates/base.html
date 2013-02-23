@@ -16,16 +16,13 @@
   <body>
     <div class="row">
       <div class="twelve columns">
-        <nav>
-          <ul class="nav-bar">
-            <li><a href="{{ url_for('general.index') }}">Home</a></li>
-            <li><a rel="author" href="{{ url_for('general.about') }}">About</a></li>
-            <li><a href="{{ url_for('general.contact') }}">Contact</a></li>
+        <nav class="top-bar">
+          <ul>
+            <li class="name"><h1><a href="{{ url_for('general.index') }}" title="Home">RyanKaskel.com</a></h1></li>
+            <li><a rel="author" href="{{ url_for('general.about') }}" title="About">About</a></li>
+            <li><a href="{{ url_for('general.contact') }}" title="Contact">Contact</a></li>
           </ul>
         </nav>
-
-        <h1>RyanKaskel.com <small>Welcome.</small></h1>
-        <hr>
       </div>
     </div>
 
