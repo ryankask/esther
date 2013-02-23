@@ -10,7 +10,8 @@
   CLOSED: [2012-11-25 Sun 08:45]
 * DONE Syntax highlighting for code samples                     :style:quick:
   CLOSED: [2013-02-08 Fri 23:24]
-* TODO Customize Foundation style                                :style:long:
+* DONE Customize Foundation style                                :style:long:
+  CLOSED: [2013-02-23 Sat 18:43]
 ** Drop Foundation and build my own design? Probably not.
 * DONE Markdown preview                                  :functionality:long:
   CLOSED: [2013-01-30 Wed 08:08]
