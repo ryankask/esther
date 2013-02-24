@@ -70,11 +70,9 @@
 
         <h5>Social</h5>
         <ul class="social">
-          <li><a href="https://twitter.com/ryankask" class="twitter-follow-button" data-show-count="false">
-              Follow @ryankask</a></li>
-          <li><iframe src="https://ryankaskel.com/ap-static/html/github-btn.html?user=ryankask&amp;type=follow" allowtransparency="true"
-                      frameborder="0" scrolling="0" width="132" height="20"></iframe></li>
-          <li><g:plusone href="https://ryankaskel.com/"></g:plusone></li>
+          <li><a href="https://twitter.com/ryankask" rel="me">Follow @ryankask</a></li>
+          <li><a href="https://github.com/ryankask" rel="me">ryankask on GitHub</a></li>
+          <li><a href="https://plus.google.com/104275111833639999928/?rel=author" rel="me">Google+</a></li>
         </ul>
       </nav>
     </div>
@@ -84,10 +82,7 @@
         <hr>
         <div class="row">
           <div class="twelve columns">
-            <p>
-              © 2013 <a href="https://plus.google.com/104275111833639999928/?rel=author" rel="me">Ryan Kaskel</a>.
-              Powered by <a href="https://github.com/ryankask/esther">Esther</a>.
-            </p>
+            <p>© 2013 Ryan Kaskel Powered by <a href="https://github.com/ryankask/esther">Esther</a>.</p>
           </div>
         </div>
       </div>
@@ -100,16 +95,6 @@
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
-
-      /* Google+ */
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-
-      /* Twitter button */
-      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.async=true;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
     </script>
     {% block script %}{% endblock %}
   </body>
