@@ -4,6 +4,7 @@ from esther import db
 from esther.models import List
 from esther.tests.helpers import EstherDBTestCase
 from esther.tests.views.test_auth import AuthMixin
+from esther.views.todo import API_EMPTY_BODY_ERROR, API_INVALID_PARAMETERS
 
 
 class TodoMixin(AuthMixin):
@@ -100,6 +101,7 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.todo_list = self.create_list()
         self.url = url_for('todo.list_', owner_id=self.todo_list.owner.id,
                            slug=self.todo_list.slug)
+        self.data = {'title': 'Another version of the title'}
 
     def test_get_list(self):
         response = self.client.get(self.url)
@@ -108,3 +110,38 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.todo_list.is_public = False
         db.session.commit()
         self.assertEqual(self.client.get(self.url).status_code, 404)
+
+    def test_patch(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data=self.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json['title'], self.data['title'])
+        self.assertEqual(response.json['description'],
+                         'Things I\'m doing next week')
+        self.assertEqual(response.json['is_public'], True)
+
+    def test_patching_private_list_does_not_leak_existence(self):
+        self.todo_list.is_public = False
+        db.session.commit()
+        response = self.client.patch(self.url, data=self.data)
+        self.assertEqual(response.status_code, 404)
+
+    def test_patching_public_list_as_diff_user_fails(self):
+        response = self.client.patch(self.url, data=self.data)
+        self.assertEqual(response.status_code, 403)
+
+    def test_patch_with_invalid_paremeters_fails(self):
+        self.login(user=self.todo_list.owner)
+        data = {'title': 'x' * 129}
+        response = self.client.patch(self.url, data=data)
+        self.assertEqual(response.status_code, 422)
+
+    def test_patch_with_empty_body_fails(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data={})
+        self.assertEqual(response.json, API_EMPTY_BODY_ERROR)
+
+    def test_patch_with_extraneous_parameters_fails(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data={'window': 'cleaner'})
+        self.assertEqual(response.json, API_INVALID_PARAMETERS)

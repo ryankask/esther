@@ -21,6 +21,7 @@ def unique(column, message=None):
 
     return validator
 
+
 ### General
 
 
