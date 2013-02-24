@@ -97,12 +97,12 @@ $custDropdownSelectedFontColor: #fff;
 // $topBarBgColor: #222;
 // $topBarHeight: 45px;
 // $topBarHeightMobile: 45px;
-$topBarBtmMargin: 20px;
+$topBarBtmMargin: 18px;
 // $topBarTitleWeight: bold;
-// $topBarTitleSize: 17px;
+$topBarTitleSize: 20px;
 // $topBarLinkColor: #fff;
 // $topBarLinkWeight: bold;
-// $topBarLinkSize: 13px;
+$topBarLinkSize: 15px;
 // $topBarDropBgColor: #222;
 // $topBarDropLinkColor: #fff;
 // $topBarDropToggleSize: 5px;
@@ -238,7 +238,7 @@ $topBarBreakPoint: 480px;
 // Modular Scale Settings
 
 // $ratio: $golden; // THIS IS DEFAULT IN MODULAR-SCALE
-// $baseFontSize: 14px;
+$baseFontSize: 15px;
 // $importantModNum: 44px;
 // $base-size: $baseFontSize $importantModNum;
 // Produced the following list of values: 14, 17, 23, 27, 37, 44, 59, 71, 95, 115;
