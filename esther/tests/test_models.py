@@ -107,9 +107,18 @@ class ListTests(EstherTestCase):
         todo_list = List()
         self.assertEqual(todo_list.slug, None)
 
+    def test_url(self):
+        todo_list = List(owner_id=1, slug='something')
+        self.assertEqual(todo_list.url, '/todo/api/1/lists/something')
+
 
 class ItemTests(EstherTestCase):
     def test_as_dict(self):
         self.assertEqual(set(Item().as_dict().keys()),
                          set(['id', 'content', 'details', 'is_done', 'due',
                               'created', 'modified']))
+
+    def test_url(self):
+        todo_list = List(owner_id=1, slug='something')
+        item = Item(todo_list=todo_list, id=2)
+        self.assertEqual(item.url, '/todo/api/1/lists/something/items/2')

@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, request, abort, url_for
+from flask import Blueprint, current_app, request, abort
 from flask.ext.login import current_user
 from sqlalchemy.orm import contains_eager
 
@@ -16,6 +16,20 @@ def json_response(data, status=200, headers=None):
     return current_app.response_class(dumps(data), status,
                                       mimetype='application/json',
                                       headers=headers or {})
+
+def post(create_obj, form_class, owner):
+    if owner != current_user:
+        abort(403)
+
+    form = form_class(request.form)
+    if form.validate_on_submit():
+        obj = create_obj()
+        form.populate_obj(obj)
+        db.session.add(obj)
+        db.session.commit()
+        return u'', 201, {'location': obj.url}
+
+    return json_response(form.errors, 422)
 
 def stripped_form(form_class, form_data, obj):
     """
@@ -58,24 +72,12 @@ def patch(obj, form_class, owner, is_public):
     else:
         return json_response(form.errors, 422)
 
-
 @blueprint.route('/api/<int:owner_id>/lists', methods=('GET', 'POST'))
 def lists(owner_id):
     owner = User.query.get_or_404(owner_id)
 
     if request.method == 'POST':
-        if owner != current_user:
-            abort(403)
-        form = ListForm(request.form)
-        if form.validate_on_submit():
-            new_list = List(owner=owner)
-            form.populate_obj(new_list)
-            db.session.add(new_list)
-            db.session.commit()
-            headers = {'location': url_for('.list_detail', owner_id=owner.id,
-                                           slug=new_list.slug)}
-            return u'', 201, headers
-        return json_response(form.errors, 422)
+        return post(lambda: List(owner=owner), ListForm, owner)
 
     todo_lists = List.query.order_by(List.created).filter(List.owner == owner)
     if owner != current_user:
@@ -104,18 +106,8 @@ def items(owner_id, list_slug):
         abort(404)
 
     if request.method == 'POST':
-        if todo_list.owner != current_user:
-            abort(403)
-        form = ItemForm(request.form)
-        if form.validate_on_submit():
-            item = Item(todo_list=todo_list)
-            form.populate_obj(item)
-            db.session.add(item)
-            db.session.commit()
-            location = url_for('.item_detail', owner_id=current_user.id,
-                               list_slug=item.todo_list.slug, item_id=item.id)
-            return u'', 201, {'location': location}
-        return json_response(form.errors, 422)
+        return post(lambda: Item(todo_list=todo_list), ItemForm,
+                    todo_list.owner)
 
     prepped_items = prep_query_for_json(todo_list.items)
     return json_response(prepped_items)

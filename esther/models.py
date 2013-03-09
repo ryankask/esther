@@ -213,6 +213,10 @@ class List(db.Model):
     def as_dict(self):
         return obj_as_dict(self, exclude=['owner_id'])
 
+    @property
+    def url(self):
+        return url_for('todo.list_detail', owner_id=self.owner_id,
+                       slug=self.slug)
 
 class Item(db.Model):
     __tablename__ = 'items'
@@ -234,3 +238,8 @@ class Item(db.Model):
 
     def as_dict(self):
         return obj_as_dict(self, exclude=['list_id'])
+
+    @property
+    def url(self):
+        return url_for('todo.item_detail', owner_id=self.todo_list.owner_id,
+                       list_slug=self.todo_list.slug, item_id=self.id)

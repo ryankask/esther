@@ -96,10 +96,10 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
         self.assertEqual(response.headers['Location'], url)
 
     def test_post_as_another_user_fails(self):
+        self.assert_post_403()
         another_user = self.create_user(email='jim@example.com')
         self.login(user=another_user)
-        response = self.client.post(self.url, data=self.data)
-        self.assert_403(response)
+        self.assert_post_403()
 
     def assert_invalid_title(self, modify_data=lambda d: None):
         self.login(user=self.user)
