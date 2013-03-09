@@ -117,12 +117,33 @@ def items(owner_id, list_slug):
     return json_response(prepped_items)
 
 @blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items/<int:item_id>',
-                 methods=('GET', 'POST'))
+                 methods=('GET', 'PATCH'))
 def item_detail(owner_id, list_slug, item_id):
     item = Item.query.options(contains_eager('todo_list')).join(List).filter(
         Item.id == item_id,
         List.slug == list_slug,
         List.owner_id == owner_id).first_or_404()
+
+    if request.method == 'PATCH':
+        if item.todo_list.owner != current_user:
+            if not item.todo_list.is_public:
+                abort(404)
+            else:
+                abort(403)
+
+        if not request.form:
+            return json_response(API_EMPTY_BODY_ERROR, 400)
+
+        form = stripped_form(ItemForm, request.form, item)
+        if not form:
+            return json_response(API_INVALID_PARAMETERS, 400)
+
+        if form.validate():
+            form.populate_obj(item)
+            db.session.commit()
+            return json_response(item.as_dict())
+        else:
+            return json_response(form.errors, 422)
 
     if not item.todo_list.is_public and item.todo_list.owner != current_user:
         abort(404)

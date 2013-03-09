@@ -248,6 +248,12 @@ class ItemDetailAPITests(EstherDBTestCase, TodoMixin):
             list_slug=self.todo_list.slug,
             item_id=self.item.id
         )
+        self.data = {
+            'content': 'Check if the bread is ready.',
+            'details': 'Last time it wasn\t done on time.',
+            'due': 'Sat, 01 Mar 2013 11:15:45 GMT',
+            'is_done': True
+        }
 
     def test_get_item(self):
         response = self.client.get(self.url)
@@ -268,3 +274,37 @@ class ItemDetailAPITests(EstherDBTestCase, TodoMixin):
         url = url_for('todo.item_detail', owner_id=self.todo_list.owner.id,
                       list_slug='some-invalid-slug', item_id=self.item.id)
         self.assert_404(self.client.get(url))
+
+    def test_patch(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data=self.data)
+        self.assert_200(response)
+        self.assertEqual(self.item.content, 'Check if the bread is ready.')
+        self.assertEqual(self.item.details, 'Last time it wasn\t done on time.')
+        self.assertEqual(self.item.is_done, True)
+
+    def test_patching_private_item_does_not_leak_existence(self):
+        self.todo_list.is_public = False
+        db.session.commit()
+        response = self.client.patch(self.url, data=self.data)
+        self.assert_404(response)
+
+    def test_patching_public_item_as_diff_user_fails(self):
+        response = self.client.patch(self.url, data=self.data)
+        self.assert_403(response)
+
+    def test_patch_with_invalid_paremeters_fails(self):
+        self.login(user=self.todo_list.owner)
+        data = {'due': 'x' * 256}
+        response = self.client.patch(self.url, data=data)
+        self.assert_status(response, 422)
+
+    def test_patch_with_empty_body_fails(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data={})
+        self.assertEqual(response.json, API_EMPTY_BODY_ERROR)
+
+    def test_patch_with_extraneous_parameters_fails(self):
+        self.login(user=self.todo_list.owner)
+        response = self.client.patch(self.url, data={'window': 'cleaner'})
+        self.assertEqual(response.json, API_INVALID_PARAMETERS)
