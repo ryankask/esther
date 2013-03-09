@@ -110,8 +110,6 @@ class ListTests(EstherTestCase):
 
 class ItemTests(EstherTestCase):
     def test_as_dict(self):
-        self.assertEqual(
-            set(Item().as_dict().keys()),
-            set(['id', 'list_id', 'content', 'details', 'is_done', 'due',
-                 'created', 'modified'])
-        )
+        self.assertEqual(set(Item().as_dict().keys()),
+                         set(['id', 'content', 'details', 'is_done', 'due',
+                              'created', 'modified']))

@@ -233,4 +233,4 @@ class Item(db.Model):
             self.title, self.todo_list.title).encode('utf-8')
 
     def as_dict(self):
-        return obj_as_dict(self)
+        return obj_as_dict(self, exclude=['list_id'])
