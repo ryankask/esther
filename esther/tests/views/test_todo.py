@@ -235,3 +235,36 @@ class ItemsAPITests(EstherDBTestCase, TodoMixin):
         response = self.client.post(self.url, data=self.data)
         self.assert_status(response, 422)
         self.assertEqual(response.json['content'][0], 'This field is required.')
+
+
+class ItemDetailAPITests(EstherDBTestCase, TodoMixin):
+    def setUp(self):
+        super(ItemDetailAPITests, self).setUp()
+        self.item = self.create_item()
+        self.todo_list = self.item.todo_list
+        self.url = url_for(
+            'todo.item_detail',
+            owner_id=self.todo_list.owner.id,
+            list_slug=self.todo_list.slug,
+            item_id=self.item.id
+        )
+
+    def test_get_item(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.json['id'], self.item.id)
+        self.assertEqual(response.json['content'], self.item.content)
+        self.item.todo_list.is_public = False
+        db.session.commit()
+        self.assert_404(self.client.get(self.url))
+        self.login(user=self.todo_list.owner)
+        self.assert_200(self.client.get(self.url))
+
+    def test_get_item_with_different_owner_id_fails(self):
+        url = url_for('todo.item_detail', owner_id=self.todo_list.owner.id,
+                      list_slug=self.todo_list.slug, item_id=999)
+        self.assert_404(self.client.get(url))
+
+    def test_get_item_with_different_list_slug_fails(self):
+        url = url_for('todo.item_detail', owner_id=self.todo_list.owner.id,
+                      list_slug='some-invalid-slug', item_id=self.item.id)
+        self.assert_404(self.client.get(url))
