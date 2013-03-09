@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, request, abort, url_for
 from flask.ext.login import current_user
+from sqlalchemy.orm import contains_eager
 
 from esther import db
 from esther.forms import ListForm, ItemForm
@@ -118,7 +119,7 @@ def items(owner_id, list_slug):
 @blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items/<int:item_id>',
                  methods=('GET', 'POST'))
 def item_detail(owner_id, list_slug, item_id):
-    item = Item.query.join(List).filter(
+    item = Item.query.options(contains_eager('todo_list')).join(List).filter(
         Item.id == item_id,
         List.slug == list_slug,
         List.owner_id == owner_id).first_or_404()
