@@ -4,6 +4,8 @@ from flask.ext.wtf import (Form, Field, TextField, TextAreaField, PasswordField,
                            ValidationError, Required, Length, Email,
                            HiddenInput, TextInput)
 from sqlalchemy.sql import exists
+from wtforms.ext.dateutil.fields import DateTimeField as ExtDateTimeField
+
 
 from esther import bcrypt, db
 from esther.models import User, PostStatus, Post, Tag, List
@@ -164,3 +166,10 @@ class ListForm(Form):
     def populate_obj(self, obj):
         super(ListForm, self).populate_obj(obj)
         obj.generate_slug()
+
+
+class ItemForm(Form):
+    content = TextField(u'Content', [Required(), Length(max=255)])
+    details = TextAreaField(u'Details', [Length(max=2048)])
+    is_done = BooleanField(u'Is done?')
+    due = ExtDateTimeField(u'Due')

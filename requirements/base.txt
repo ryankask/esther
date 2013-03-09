@@ -12,3 +12,4 @@ blinker>=1.2
 raven>=3.1.8
 Pygments==1.6
 simplejson>=3.1.0
+python-dateutil==2.1

@@ -1,6 +1,7 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from flask import url_for
+import pytz
 
 from esther import db
 from esther.models import utc_now, List, Item
@@ -47,6 +48,10 @@ class TodoMixin(AuthMixin):
 
         return item
 
+    def assert_post_403(self):
+        response = self.client.post(self.url, data=self.data)
+        self.assert_403(response)
+
 
 class ListsAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
@@ -91,8 +96,6 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
         self.assertEqual(response.headers['Location'], url)
 
     def test_post_as_another_user_fails(self):
-        response = self.client.post(self.url, data=self.data)
-        self.assert_403(response)
         another_user = self.create_user(email='jim@example.com')
         self.login(user=another_user)
         response = self.client.post(self.url, data=self.data)
@@ -175,17 +178,27 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
 class ItemsAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
         super(ItemsAPITests, self).setUp()
-        self.first_item = self.create_item(commit=False)
-        self.todo_list = self.first_item.todo_list
+        self.user = self.create_user(commit=False)
+        self.todo_list = self.create_list(owner=self.user)
+        self.url = url_for('todo.items', owner_id=self.user.id,
+                           list_slug=self.todo_list.slug)
+        self.data = {
+            'content': 'Buy four pieces of shrimp.',
+            'details': 'Bottom shelf, aisle 12.',
+            'due': 'Sat, 09 Mar 2013 10:15:39 GMT'
+        }
+
+    def create_items(self):
+        self.first_item = self.create_item(todo_list=self.todo_list,
+                                           commit=False)
         self.second_item = self.create_item(
             content='Eat at the place',
             todo_list=self.todo_list,
             due=self.first_item.due - timedelta(hours=2)
         )
-        self.url = url_for('todo.items', owner_id=self.todo_list.owner.id,
-                           list_slug=self.todo_list.slug)
 
     def test_get_items(self):
+        self.create_items()
         response = self.client.get(self.url)
         self.assert_200(response)
         self.assertEqual(len(response.json), 2)
@@ -196,3 +209,28 @@ class ItemsAPITests(EstherDBTestCase, TodoMixin):
         self.todo_list.is_public = False
         db.session.commit()
         self.assert_404(self.client.get(self.url))
+
+    def test_post(self):
+        self.login(user=self.user)
+        response = self.client.post(self.url, data=self.data)
+        self.assert_status(response, 201)
+        new_item = Item.query.filter_by(content=self.data['content']).first()
+        self.assertEqual(new_item.details, 'Bottom shelf, aisle 12.')
+        expected_due = datetime(2013, 3, 9, 10, 15, 39, tzinfo=pytz.utc)
+        self.assertEqual(new_item.due, expected_due)
+        # url = 'http://localhost/todo/api/{}/lists/{}/items/{}'.format(
+        #     self.user.id, self.todo_list.slug, new_item.id)
+        # self.assertEqual(response.headers['Location'], url)
+
+    def test_post_as_another_user_fails(self):
+        self.assert_post_403()
+        another_user = self.create_user(email='jim@example.com')
+        self.login(user=another_user)
+        self.assert_post_403()
+
+    def test_post_missing_fields_fails(self):
+        self.login(user=self.user)
+        del self.data['content']
+        response = self.client.post(self.url, data=self.data)
+        self.assert_status(response, 422)
+        self.assertEqual(response.json['content'][0], 'This field is required.')

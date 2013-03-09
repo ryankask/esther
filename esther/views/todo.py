@@ -2,9 +2,9 @@ from flask import Blueprint, current_app, request, abort, url_for
 from flask.ext.login import current_user
 
 from esther import db
-from esther.forms import ListForm
+from esther.forms import ListForm, ItemForm
 from esther.json import dumps
-from esther.models import prep_query_for_json, User, List
+from esther.models import prep_query_for_json, User, List, Item
 
 blueprint = Blueprint('todo', __name__)
 
@@ -89,13 +89,29 @@ def list_(owner_id, slug):
         abort(404)
     return json_response(todo_list.as_dict())
 
-@blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items')
+@blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items',
+                 methods=('GET', 'POST'))
 def items(owner_id, list_slug):
     query = List.query.filter_by(owner_id=owner_id, slug=list_slug)
     todo_list = query.first_or_404()
 
     if not todo_list.is_public and todo_list.owner != current_user:
         abort(404)
+
+    if request.method == 'POST':
+        if todo_list.owner != current_user:
+            abort(403)
+        form = ItemForm(request.form)
+        if form.validate_on_submit():
+            item = Item(todo_list=todo_list)
+            form.populate_obj(item)
+            db.session.add(item)
+            db.session.commit()
+            # location = url_for('.item', owner_id=owner.id, slug=new_list.slug,
+            #                    item_id=item.id)
+            # headers = {'location': location}
+            return u'', 201, {} # headers
+        return json_response(form.errors, 422)
 
     prepped_items = prep_query_for_json(todo_list.items)
     return json_response(prepped_items)
