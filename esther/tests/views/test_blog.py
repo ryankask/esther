@@ -205,4 +205,4 @@ class PublicTests(EstherDBTestCase, BlogMixin, PageMixin):
         db.session.add(tag)
         db.session.commit()
         url = url_for('blog.tag_posts', slug=tag.slug)
-        self.assertEqual(self.client.get(url).status_code, 404)
+        self.assert_404(self.client.get(url))

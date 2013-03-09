@@ -61,7 +61,7 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
         todo_list2 = self.create_list(title='My second list', owner=self.user,
                                       description='Nothing really here')
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        self.assert_200(response)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(len(response.json), 2)
         self.assertEqual(response.json[0]['title'], todo_list1.title)
@@ -84,7 +84,7 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
     def test_post(self):
         self.login(user=self.user)
         response = self.client.post(self.url, data=self.data)
-        self.assertEqual(response.status_code, 201)
+        self.assert_status(response, 201)
         new_list = List.query.filter_by(title=self.data['title']).first()
         url = 'http://localhost/todo/api/{}/lists/{}'.format(self.user.id,
                                                              new_list.slug)
@@ -92,19 +92,19 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
 
     def test_post_as_another_user_fails(self):
         response = self.client.post(self.url, data=self.data)
-        self.assertEqual(response.status_code, 403)
+        self.assert_403(response)
         another_user = self.create_user(email='jim@example.com')
         self.login(user=another_user)
         response = self.client.post(self.url, data=self.data)
-        self.assertEqual(response.status_code, 403)
+        self.assert_403(response)
 
     def assert_invalid_title(self, modify_data=lambda d: None):
         self.login(user=self.user)
         response = self.client.post(self.url, data=self.data)
-        self.assertEqual(response.status_code, 201)
+        self.assert_status(response, 201)
         modify_data(self.data)
         response = self.client.post(self.url, data=self.data)
-        self.assertEqual(response.status_code, 422)
+        self.assert_status(response, 422)
         self.assertTrue(response.json['title'][0].startswith('Invalid title'))
 
     def test_post_with_duplicate_title_fails(self):
@@ -130,12 +130,12 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.assertEqual(response.json['title'], self.todo_list.title)
         self.todo_list.is_public = False
         db.session.commit()
-        self.assertEqual(self.client.get(self.url).status_code, 404)
+        self.assert_404(self.client.get(self.url))
 
     def test_patch(self):
         self.login(user=self.todo_list.owner)
         response = self.client.patch(self.url, data=self.data)
-        self.assertEqual(response.status_code, 200)
+        self.assert_200(response)
         self.assertEqual(response.json['title'], self.data['title'])
         self.assertEqual(response.json['description'],
                          'Things I\'m doing next week')
@@ -145,17 +145,17 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.todo_list.is_public = False
         db.session.commit()
         response = self.client.patch(self.url, data=self.data)
-        self.assertEqual(response.status_code, 404)
+        self.assert_404(response)
 
     def test_patching_public_list_as_diff_user_fails(self):
         response = self.client.patch(self.url, data=self.data)
-        self.assertEqual(response.status_code, 403)
+        self.assert_403(response)
 
     def test_patch_with_invalid_paremeters_fails(self):
         self.login(user=self.todo_list.owner)
         data = {'title': 'x' * 129}
         response = self.client.patch(self.url, data=data)
-        self.assertEqual(response.status_code, 422)
+        self.assert_status(response, 422)
 
     def test_patch_with_empty_body_fails(self):
         self.login(user=self.todo_list.owner)
