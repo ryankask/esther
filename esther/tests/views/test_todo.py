@@ -123,7 +123,7 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
         super(SingleListAPITests, self).setUp()
         self.todo_list = self.create_list()
-        self.url = url_for('todo.list_', owner_id=self.todo_list.owner.id,
+        self.url = url_for('todo.list_detail', owner_id=self.todo_list.owner.id,
                            slug=self.todo_list.slug)
         self.data = {'title': 'Another version of the title'}
 
@@ -136,7 +136,8 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.assert_404(self.client.get(self.url))
 
     def test_get_list_with_different_owner_id_fails(self):
-        url = url_for('todo.list_', owner_id=999, slug=self.todo_list.slug)
+        url = url_for('todo.list_detail', owner_id=999,
+                      slug=self.todo_list.slug)
         self.assert_404(self.client.get(url))
 
     def test_patch(self):

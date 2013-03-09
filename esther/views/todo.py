@@ -49,7 +49,7 @@ def lists(owner_id):
             form.populate_obj(new_list)
             db.session.add(new_list)
             db.session.commit()
-            headers = {'location': url_for('.list_', owner_id=owner.id,
+            headers = {'location': url_for('.list_detail', owner_id=owner.id,
                                            slug=new_list.slug)}
             return u'', 201, headers
         return json_response(form.errors, 422)
@@ -61,7 +61,7 @@ def lists(owner_id):
     return json_response(prepped_todo_lists)
 
 @blueprint.route('/api/<int:owner_id>/lists/<slug>', methods=('GET', 'PATCH'))
-def list_(owner_id, slug):
+def list_detail(owner_id, slug):
     todo_list = List.query.filter_by(owner_id=owner_id, slug=slug).first_or_404()
 
     if request.method == 'PATCH':
