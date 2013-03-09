@@ -57,9 +57,7 @@ def edit_post(post_id):
         if (post.pub_date is None and post.status == PostStatus.published):
             post.pub_date = utc_now()
 
-        db.session.add(post)
         db.session.commit()
-
         message = u'Edited post "{0}".'.format(form.title.data)
         flash(message, 'success')
         return redirect(url_for('.view_posts'))

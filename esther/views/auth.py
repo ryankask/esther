@@ -79,7 +79,6 @@ def edit_user(user_id):
 
     if form.validate_on_submit():
         form.populate_obj(user)
-        db.session.add(user)
         db.session.commit()
 
         message = u'Edited user "{0}".'.format(user.email)
