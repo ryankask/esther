@@ -219,9 +219,9 @@ class ItemsAPITests(EstherDBTestCase, TodoMixin):
         self.assertEqual(new_item.details, 'Bottom shelf, aisle 12.')
         expected_due = datetime(2013, 3, 9, 10, 15, 39, tzinfo=pytz.utc)
         self.assertEqual(new_item.due, expected_due)
-        # url = 'http://localhost/todo/api/{}/lists/{}/items/{}'.format(
-        #     self.user.id, self.todo_list.slug, new_item.id)
-        # self.assertEqual(response.headers['Location'], url)
+        url = 'http://localhost/todo/api/{}/lists/{}/items/{}'.format(
+            self.user.id, self.todo_list.slug, new_item.id)
+        self.assertEqual(response.headers['Location'], url)
 
     def test_post_as_another_user_fails(self):
         self.assert_post_403()

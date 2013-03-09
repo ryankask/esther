@@ -107,10 +107,9 @@ def items(owner_id, list_slug):
             form.populate_obj(item)
             db.session.add(item)
             db.session.commit()
-            # location = url_for('.item', owner_id=owner.id, slug=new_list.slug,
-            #                    item_id=item.id)
-            # headers = {'location': location}
-            return u'', 201, {} # headers
+            location = url_for('.item_detail', owner_id=current_user.id,
+                               list_slug=item.todo_list.slug, item_id=item.id)
+            return u'', 201, {'location': location}
         return json_response(form.errors, 422)
 
     prepped_items = prep_query_for_json(todo_list.items)
