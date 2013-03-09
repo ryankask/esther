@@ -221,11 +221,16 @@ class Item(db.Model):
     content = db.Column(db.String(255), nullable=False)
     details = db.Column(db.Text)
     is_done = db.Column(db.Boolean, default=False, nullable=False)
+    due = db.Column(UTCDateTime)
     created = db.Column(UTCDateTime, default=utc_now)
     modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
 
-    todo_list = db.relation(List, backref=db.backref('items', lazy='dynamic'))
+    todo_list = db.relation(List, backref=db.backref(
+        'items', lazy='dynamic', order_by='[Item.due, Item.created]'))
 
     def __repr__(self):
         return u'<Item: "{}" for list {}>'.format(
             self.title, self.todo_list.title).encode('utf-8')
+
+    def as_dict(self):
+        return obj_as_dict(self)

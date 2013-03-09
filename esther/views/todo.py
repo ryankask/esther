@@ -88,3 +88,14 @@ def list_(owner_id, slug):
     if not todo_list.is_public and todo_list.owner != current_user:
         abort(404)
     return json_response(todo_list.as_dict())
+
+@blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items')
+def items(owner_id, list_slug):
+    query = List.query.filter_by(owner_id=owner_id, slug=list_slug)
+    todo_list = query.first_or_404()
+
+    if not todo_list.is_public and todo_list.owner != current_user:
+        abort(404)
+
+    prepped_items = prep_query_for_json(todo_list.items)
+    return json_response(prepped_items)

@@ -1,7 +1,9 @@
+from datetime import timedelta
+
 from flask import url_for
 
 from esther import db
-from esther.models import List
+from esther.models import utc_now, List, Item
 from esther.tests.helpers import EstherDBTestCase
 from esther.tests.views.test_auth import AuthMixin
 from esther.views.todo import API_EMPTY_BODY_ERROR, API_INVALID_PARAMETERS
@@ -25,6 +27,25 @@ class TodoMixin(AuthMixin):
             db.session.commit()
 
         return todo_list
+
+    def create_item(self, commit=True, **field_values):
+        default_field_values = {
+            'content': 'Go to the store',
+            'details': 'Publix in South Miami',
+            'due': utc_now() + timedelta(hours=3)
+        }
+        default_field_values.update(field_values)
+
+        if 'todo_list' not in field_values:
+            default_field_values['todo_list'] = self.create_list(commit=False)
+
+        item = Item(**default_field_values)
+
+        db.session.add(item)
+        if commit:
+            db.session.commit()
+
+        return item
 
 
 class ListsAPITests(EstherDBTestCase, TodoMixin):
@@ -145,3 +166,29 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         self.login(user=self.todo_list.owner)
         response = self.client.patch(self.url, data={'window': 'cleaner'})
         self.assertEqual(response.json, API_INVALID_PARAMETERS)
+
+
+class ItemsAPITests(EstherDBTestCase, TodoMixin):
+    def setUp(self):
+        super(ItemsAPITests, self).setUp()
+        self.first_item = self.create_item(commit=False)
+        self.todo_list = self.first_item.todo_list
+        self.second_item = self.create_item(
+            content='Eat at the place',
+            todo_list=self.todo_list,
+            due=self.first_item.due - timedelta(hours=2)
+        )
+        self.url = url_for('todo.items', owner_id=self.todo_list.owner.id,
+                           list_slug=self.todo_list.slug)
+
+    def test_get_items(self):
+        response = self.client.get(self.url)
+        self.assert_200(response)
+        self.assertEqual(len(response.json), 2)
+        self.assertEqual(response.json[0]['content'], 'Eat at the place')
+        self.assertEqual(response.json[1]['content'], 'Go to the store')
+
+    def test_get_items_private(self):
+        self.todo_list.is_public = False
+        db.session.commit()
+        self.assert_404(self.client.get(self.url))

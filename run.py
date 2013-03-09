@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 import sys
 
 from flask.ext.script import Manager, prompt, prompt_bool, prompt_pass
+from flask.ext.sqlalchemy import get_debug_queries
 from sqlalchemy.exc import DatabaseError
 
 from esther import create_app, db, models
@@ -11,7 +13,7 @@ app = create_app(['esther.settings.site'])
 manager = Manager(app)
 
 @manager.command
-def server(toolbar=False):
+def server(toolbar=False, db_stats=False):
     app.debug = True
 
     if toolbar:
@@ -21,6 +23,13 @@ def server(toolbar=False):
             pass
         else:
             DebugToolbarExtension(app)
+
+    if db_stats:
+        @app.after_request
+        def print_db_stats(response):
+            queries = get_debug_queries()
+            print u'↱ number of queries: {}'.format(len(queries))
+            return response
 
     app.run()
 

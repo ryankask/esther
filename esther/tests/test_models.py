@@ -1,7 +1,7 @@
 import datetime
 
 from esther import db
-from esther.models import User, Post, PostStatus, Tag, List
+from esther.models import User, Post, PostStatus, Tag, List, Item
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -106,3 +106,12 @@ class ListTests(EstherTestCase):
         # If a title isn't passed, no slug should be generated
         todo_list = List()
         self.assertEqual(todo_list.slug, None)
+
+
+class ItemTests(EstherTestCase):
+    def test_as_dict(self):
+        self.assertEqual(
+            set(Item().as_dict().keys()),
+            set(['id', 'list_id', 'content', 'details', 'is_done', 'due',
+                 'created', 'modified'])
+        )
