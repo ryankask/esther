@@ -119,9 +119,9 @@ class ListsAPITests(EstherDBTestCase, TodoMixin):
         self.assert_invalid_title(modify_data)
 
 
-class SingleListAPITests(EstherDBTestCase, TodoMixin):
+class ListDetailAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
-        super(SingleListAPITests, self).setUp()
+        super(ListDetailAPITests, self).setUp()
         self.todo_list = self.create_list()
         self.url = url_for('todo.list_detail', owner_id=self.todo_list.owner.id,
                            slug=self.todo_list.slug)
