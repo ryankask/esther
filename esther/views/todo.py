@@ -62,7 +62,7 @@ def lists(owner_id):
 
 @blueprint.route('/api/<int:owner_id>/lists/<slug>', methods=('GET', 'PATCH'))
 def list_(owner_id, slug):
-    todo_list = List.query.filter_by(slug=slug).first_or_404()
+    todo_list = List.query.filter_by(owner_id=owner_id, slug=slug).first_or_404()
 
     if request.method == 'PATCH':
         if todo_list.owner != current_user:

@@ -132,6 +132,10 @@ class SingleListAPITests(EstherDBTestCase, TodoMixin):
         db.session.commit()
         self.assert_404(self.client.get(self.url))
 
+    def test_get_list_with_different_owner_id_fails(self):
+        url = url_for('todo.list_', owner_id=999, slug=self.todo_list.slug)
+        self.assert_404(self.client.get(url))
+
     def test_patch(self):
         self.login(user=self.todo_list.owner)
         response = self.client.patch(self.url, data=self.data)
