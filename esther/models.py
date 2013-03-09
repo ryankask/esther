@@ -13,6 +13,18 @@ from esther.utils import slugify
 def utc_now():
     return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
 
+def obj_as_dict(obj, exclude=None):
+    if exclude is None:
+        exclude = []
+    d = {}
+    for column in obj.__table__.columns:
+        if column.name not in exclude:
+            d[column.name] = getattr(obj, column.name)
+    return d
+
+def prep_query_for_json(query):
+    return [obj.as_dict() for obj in query]
+
 
 class UTCDateTime(types.TypeDecorator):
     """ Adapted from: http://stackoverflow.com/a/2528453/171744. """
@@ -158,3 +170,76 @@ class Tag(db.Model):
     @property
     def url(self):
         return url_for('blog.tag_posts', slug=self.slug)
+
+
+class List(db.Model):
+    __tablename__ = 'lists'
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    title = db.Column(db.String(128), unique=True, nullable=False)
+    slug = db.Column(db.String(128), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    is_public = db.Column(db.Boolean, default=True, nullable=False)
+    created = db.Column(UTCDateTime, default=utc_now)
+    modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
+
+    owner = db.relation(User, backref=db.backref('todo_lists', lazy='dyanmic'))
+
+    def __init__(self, **field_values):
+        try:
+            title = field_values['title']
+        except KeyError:
+            pass
+        else:
+            self.generate_slug(title)
+        super(List, self).__init__(**field_values)
+
+    def __repr__(self):
+        output =u'<List: "{}" owned by {} ({})>'.format(
+            self.title,
+            self.owner,
+            u'public' if self.is_public else u'private',
+        )
+        return output.encode('utf-8')
+
+    @classmethod
+    def slugify(cls, title):
+        return slugify(unicode(title))
+
+    def generate_slug(self, title=None):
+        if not self.id and not self.slug:
+            self.slug = self.slugify(title or self.title)
+
+    def as_dict(self):
+        return obj_as_dict(self, exclude=['owner_id'])
+
+    @property
+    def url(self):
+        return url_for('todo.list_detail', owner_id=self.owner_id,
+                       slug=self.slug)
+
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
+    details = db.Column(db.Text)
+    is_done = db.Column(db.Boolean, default=False, nullable=False)
+    due = db.Column(UTCDateTime)
+    created = db.Column(UTCDateTime, default=utc_now)
+    modified = db.Column(UTCDateTime, default=utc_now, onupdate=utc_now)
+
+    todo_list = db.relation(List, backref=db.backref(
+        'items', lazy='dynamic', order_by='[Item.due, Item.created]'))
+
+    def __repr__(self):
+        return u'<Item: "{}" for list {}>'.format(
+            self.title, self.todo_list.title).encode('utf-8')
+
+    def as_dict(self):
+        return obj_as_dict(self, exclude=['list_id'])
+
+    @property
+    def url(self):
+        return url_for('todo.item_detail', owner_id=self.todo_list.owner_id,
+                       list_slug=self.todo_list.slug, item_id=self.id)
