@@ -37,6 +37,28 @@ def stripped_form(form_class, form_data, obj):
 
     return form
 
+def patch(obj, form_class, owner, is_public):
+    if owner != current_user:
+        if not is_public:
+            abort(404)
+        else:
+            abort(403)
+
+    if not request.form:
+        return json_response(API_EMPTY_BODY_ERROR, 400)
+
+    form = stripped_form(form_class, request.form, obj)
+    if not form:
+        return json_response(API_INVALID_PARAMETERS, 400)
+
+    if form.validate():
+        form.populate_obj(obj)
+        db.session.commit()
+        return json_response(obj.as_dict())
+    else:
+        return json_response(form.errors, 422)
+
+
 @blueprint.route('/api/<int:owner_id>/lists', methods=('GET', 'POST'))
 def lists(owner_id):
     owner = User.query.get_or_404(owner_id)
@@ -66,25 +88,7 @@ def list_detail(owner_id, slug):
     todo_list = List.query.filter_by(owner_id=owner_id, slug=slug).first_or_404()
 
     if request.method == 'PATCH':
-        if todo_list.owner != current_user:
-            if not todo_list.is_public:
-                abort(404)
-            else:
-                abort(403)
-
-        if not request.form:
-            return json_response(API_EMPTY_BODY_ERROR, 400)
-
-        form = stripped_form(ListForm, request.form, todo_list)
-        if not form:
-            return json_response(API_INVALID_PARAMETERS, 400)
-
-        if form.validate():
-            form.populate_obj(todo_list)
-            db.session.commit()
-            return json_response(todo_list.as_dict())
-        else:
-            return json_response(form.errors, 422)
+        return patch(todo_list, ListForm, todo_list.owner, todo_list.is_public)
 
     if not todo_list.is_public and todo_list.owner != current_user:
         abort(404)
@@ -123,28 +127,11 @@ def item_detail(owner_id, list_slug, item_id):
         Item.id == item_id,
         List.slug == list_slug,
         List.owner_id == owner_id).first_or_404()
+    todo_list = item.todo_list
 
     if request.method == 'PATCH':
-        if item.todo_list.owner != current_user:
-            if not item.todo_list.is_public:
-                abort(404)
-            else:
-                abort(403)
+        return patch(item, ItemForm, todo_list.owner, todo_list.is_public)
 
-        if not request.form:
-            return json_response(API_EMPTY_BODY_ERROR, 400)
-
-        form = stripped_form(ItemForm, request.form, item)
-        if not form:
-            return json_response(API_INVALID_PARAMETERS, 400)
-
-        if form.validate():
-            form.populate_obj(item)
-            db.session.commit()
-            return json_response(item.as_dict())
-        else:
-            return json_response(form.errors, 422)
-
-    if not item.todo_list.is_public and item.todo_list.owner != current_user:
+    if not todo_list.is_public and todo_list.owner != current_user:
         abort(404)
     return json_response(item.as_dict())
