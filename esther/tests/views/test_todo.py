@@ -5,7 +5,7 @@ import pytz
 
 from esther import db
 from esther.models import utc_now, List, Item
-from esther.tests.helpers import EstherDBTestCase
+from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 from esther.tests.views.test_auth import AuthMixin
 from esther.views.todo import API_EMPTY_BODY_ERROR, API_INVALID_PARAMETERS
 
@@ -51,6 +51,12 @@ class TodoMixin(AuthMixin):
     def assert_post_403(self):
         response = self.client.post(self.url, data=self.data)
         self.assert_403(response)
+
+
+class FrontendTests(EstherTestCase):
+    def test_index_accessible(self):
+        self.client.get('/todo')
+        self.assert_template_used('todo/index.html')
 
 
 class ListsAPITests(EstherDBTestCase, TodoMixin):

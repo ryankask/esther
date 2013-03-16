@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, request, abort
+from flask import Blueprint, render_template, current_app, request, abort
 from flask.ext.login import current_user
 from sqlalchemy.orm import contains_eager
 
@@ -11,6 +11,14 @@ blueprint = Blueprint('todo', __name__)
 
 API_EMPTY_BODY_ERROR = {'__all__': [u'Request body must contain data.']}
 API_INVALID_PARAMETERS = {'__all__': [u'Invalid parameters in request body.']}
+
+### Frontend
+
+@blueprint.route('')
+def index():
+    return render_template('todo/index.html')
+
+### API
 
 def json_response(data, status=200, headers=None):
     return current_app.response_class(dumps(data), status,

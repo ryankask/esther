@@ -42,8 +42,8 @@
     {% endif %}
     {%- endwith %}
 
-    <div class="row">
-      <div class="nine columns" role="main">
+    <div class="row"{% block main_container_attrs %}{% endblock %}>
+      <div class="nine columns" role="main"{% block main_attrs %}{% endblock %}>
         {% block content %}{% endblock %}
       </div>
 

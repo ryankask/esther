@@ -8,6 +8,7 @@ from sqlalchemy.exc import DatabaseError
 
 from esther import create_app, db, models
 from esther.tests import run_tests
+from esther.tests.angular.views import blueprint as angular_blueprint
 
 app = create_app(['esther.settings.site'])
 manager = Manager(app)
@@ -15,6 +16,7 @@ manager = Manager(app)
 @manager.command
 def server(toolbar=False, db_stats=False):
     app.debug = True
+    app.register_blueprint(angular_blueprint, url_prefix='/tests/angular')
 
     if toolbar:
         try:

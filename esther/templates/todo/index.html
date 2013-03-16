@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}TODO {{ super() }}{% endblock %}
+{% block main_container_attrs %} ng-app="todoApp"{% endblock %}
+{% block main_attrs %} ng-controller="TodoCtrl"{% endblock %}
+
+{% block content %}
+<h1>TODO</h1>
+{% endblock content %}
+
+{% block script %}
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+<script>window.angular || document.write('<script src="{{ url_for('static', filename='js/app.js') }}"><\/script>')</script>
+<script src="{{ url_for('static', filename='js/todo/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/todo/services.js') }}"></script>
+<script src="{{ url_for('static', filename='js/todo/controllers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/todo/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='js/todo/directives.js') }}"></script>
+{% endblock %}
