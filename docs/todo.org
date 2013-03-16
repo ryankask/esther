@@ -3,7 +3,8 @@
 
 * DONE Add "read more" link below posts with a preview          :style:quick:
   CLOSED: [2012-12-26 Wed 12:23]
-* TODO Auto generate Post slugs                         :functionality:quick:
+* DONE Auto generate Post slugs                         :functionality:quick:
+  CLOSED: [2013-03-16 Sat 17:21]
 * DONE Tagging system                                    :functionality:long:
   CLOSED: [2013-02-10 Sun 17:06]
 * DONE Add space below code samples                             :style:quick:
