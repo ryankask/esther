@@ -35,6 +35,7 @@ def create_app(config_objects):
     from esther.views import auth
     from esther.views import blog
     from esther.views import general
+    from esther.views import feeds
     from esther.views import todo
 
     # Flask-Login settings are stored on the ``LoginManager`` instance
@@ -44,6 +45,7 @@ def create_app(config_objects):
     app.register_blueprint(auth.blueprint)
     app.register_blueprint(blog.blueprint, url_prefix='/blog')
     app.register_blueprint(general.blueprint)
+    app.register_blueprint(feeds.blueprint, url_prefix='/feeds')
     app.register_blueprint(todo.blueprint, url_prefix='/todo')
 
     @app.errorhandler(404)

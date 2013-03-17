@@ -142,14 +142,17 @@ class Post(db.Model):
             return preview_part
 
     @classmethod
-    def get_recent(cls, page, num=None):
-        if num is None:
-            num = current_app.config['NUM_POSTS_PER_INDEX_PAGE']
-
+    def get_published(cls, num=None):
         pub_date = Post.pub_date.desc()
         posts = cls.query.options(subqueryload(Post.tags)).filter_by(
             status=PostStatus.published).order_by(pub_date)
+        return posts.limit(num) if num else posts
 
+    @classmethod
+    def get_recent(cls, page, num=None):
+        if num is None:
+            num = current_app.config['NUM_POSTS_PER_INDEX_PAGE']
+        posts = cls.get_published()
         return posts.paginate(page, per_page=num)
 
 

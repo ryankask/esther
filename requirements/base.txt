@@ -13,3 +13,4 @@ raven>=3.1.8
 Pygments==1.6
 simplejson>=3.1.0
 python-dateutil==2.1
+PyRSS2Gen==1.1

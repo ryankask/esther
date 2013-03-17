@@ -59,6 +59,12 @@ class PostTests(EstherDBTestCase):
         post.publish()
         self.assertEqual(len(Post.get_recent(1).items), 1)
 
+    def test_get_published(self):
+        post = self.create_post()
+        self.assertEqual(len(Post.get_published().all()), 0)
+        post.publish()
+        self.assertEqual(len(Post.get_published().all()), 1)
+
     def test_is_published(self):
         post = Post(status=PostStatus.published)
         self.assertTrue(post.is_published)

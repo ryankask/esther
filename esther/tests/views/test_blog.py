@@ -11,8 +11,14 @@ from esther.tests.views.test_auth import AuthMixin
 
 class BlogMixin(AuthMixin):
     def create_post(self, user, commit=True, **kwargs):
-        post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
-                    body='Post body', **kwargs)
+        default_fields = {
+            'author': user,
+            'title': u'My First Post',
+            'slug': u'my-first-post',
+            'body': u'Post body'
+        }
+        default_fields.update(kwargs)
+        post = Post(**default_fields)
 
         if post.status == PostStatus.published and post.pub_date is None:
             post.pub_date = utc_now()

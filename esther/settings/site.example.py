@@ -15,4 +15,12 @@ MAIL_USE_TLS = True
 MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
 
+FEEDS_CONFIG = {
+    'feed-key': {
+        'title': 'The title of the feed',
+        'description': 'Describe the feed',
+        'webmaster': 'webmaster@example.com (Webmaster name)',
+    }
+}
+
 SENTRY_DSN = 'https://'
