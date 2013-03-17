@@ -12,6 +12,7 @@
 
     <link href="//fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="alternate" type="application/rss+xml" title="Blog posts" href="{{ url_for('feeds.blog_posts', _external=True) }}">
     {% block extra_head %}{% endblock %}
   </head>
   <body>
@@ -51,6 +52,7 @@
         <h5>Blog</h5>
           <ul class="side-nav">
             <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
+            <li><a href="{{ url_for('feeds.blog_posts') }}">RSS Feed <img src="{{ url_for('static', filename='img/feeds/icon-14x14.png') }}" alt="RSS feed" height="14" width="14"></a></li>
           </ul>
 
         <h5>Admin</h5>
