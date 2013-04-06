@@ -1,16 +1,65 @@
 {% extends "base.html" %}
 
 {% block title %}TODO {{ super() }}{% endblock %}
-{% block main_container_attrs %} ng-app="todoApp"{% endblock %}
-{% block main_attrs %} ng-controller="TodoCtrl"{% endblock %}
+{% block main_container_attrs %} ng-app="todoApp" ng-controller="TodoCtrl"{% endblock %}
 
 {% block content %}
+{% if current_user.is_authenticated() %}
+<link data-register-url itemprop="lists" href="{{ url_for('todo.lists', owner_id=current_user.id) }}">
+{% endif %}
 <h1>TODO</h1>
+<div id="create-list" ng-show="showCreateListForm">
+  <h4 class="small">Create a new list</h4>
+  <form ng-submit="createList()">
+    <div class="row">
+      <div class="two mobile-one columns">
+        <label class="right inline">Title</label>
+      </div>
+      <div class="ten mobile-three columns">
+        <input type="text" name="title" ng-model="newList.title">
+      </div>
+    </div>
+    <div class="row">
+      <div class="two mobile-one columns">
+        <label class="right inline">Description</label>
+      </div>
+      <div class="ten mobile-three columns">
+        <textarea name="description" ng-model="newList.description"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="two mobile-one columns">
+        <label class="right inline">Public?</label>
+      </div>
+      <div class="ten mobile-three columns">
+        <input type="checkbox" name="is_public" ng-model="newList.is_public">
+      </div>
+    </div>
+    <div class="row">
+      <div class="two mobile-one columns">
+      </div>
+      <div class="ten mobile-three columns">
+        <input class="button" type="submit" value="Create List">
+        <button class="button alert" ng-click="showCreateListForm = false">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
 {% endblock content %}
 
+{% block side_nav %}
+<ul class="options side-nav">
+  <h5>Options</h5>
+  <li><a href="#" ng-click="showCreateListForm = true">Create list</a></li>
+  <li><a href="#">All lists</a></li>
+</ul>
+<hr>
+{{ super() }}
+{% endblock side_nav %}
+
 {% block script %}
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
-<script>window.angular || document.write('<script src="{{ url_for('static', filename='js/app.js') }}"><\/script>')</script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script>window.angular || document.write('<script src="{{ url_for('static', filename='js/angular-1.0.6.min.js') }}"><\/script>')</script>
 <script src="{{ url_for('static', filename='js/todo/app.js') }}"></script>
 <script src="{{ url_for('static', filename='js/todo/services.js') }}"></script>
 <script src="{{ url_for('static', filename='js/todo/controllers.js') }}"></script>
