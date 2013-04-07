@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 
 {% block title %}TODO {{ super() }}{% endblock %}
-{% block main_container_attrs %} ng-app="todoApp" ng-controller="TodoCtrl"{% endblock %}
+{% block main_container_attrs %} ng-app="todoApp" ng-controller="TodoCtrl" data-user-id="{{ current_user.id }}"{% endblock %}
 
 {% block content %}
-{% if current_user.is_authenticated() %}
-<link data-register-url itemprop="lists" href="{{ url_for('todo.lists', owner_id=current_user.id) }}">
-{% endif %}
 <h1>TODO</h1>
 <div id="create-list" ng-show="showCreateListForm">
   <h4 class="small">Create a new list</h4>
@@ -60,6 +57,7 @@
 {% block script %}
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 <script>window.angular || document.write('<script src="{{ url_for('static', filename='js/angular-1.0.6.min.js') }}"><\/script>')</script>
+<script src="{{ url_for('static', filename='js/angular-resource-1.0.6.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/todo/app.js') }}"></script>
 <script src="{{ url_for('static', filename='js/todo/services.js') }}"></script>
 <script src="{{ url_for('static', filename='js/todo/controllers.js') }}"></script>

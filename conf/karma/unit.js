@@ -4,6 +4,7 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
   'esther/static/js/angular-1.0.6.min.js',
+  'esther/static/js/angular-resource-1.0.6.min.js',
   'esther/tests/angular/static/js/lib/angular-mocks.js',
   'esther/static/js/todo/*.js',
   'esther/tests/angular/unit/*.js'

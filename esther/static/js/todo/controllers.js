@@ -1,11 +1,10 @@
 'use strict';
 
-function TodoCtrl($scope, UrlRegistry) {
+function TodoCtrl($scope, $rootElement, List) {
+  var userId = $rootElement.data('user-id');
   $scope.showCreateListForm = false;
 
   $scope.createList = function() {
-    console.log("Createing new list with title: " + $scope.newList.title +
-                "; desscription: " + $scope.newList.description +
-                "; is public? " + $scope.newList.is_public);
+    List.save({'userId': userId}, $scope.newList);
   };
 }

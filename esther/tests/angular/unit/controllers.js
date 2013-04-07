@@ -4,9 +4,11 @@ describe('TodoCtrl', function() {
   var scope, todoCtrl;
 
   beforeEach(module('todoApp.services'));
-  beforeEach(inject(function($rootScope, $controller, UrlRegistry) {
+  beforeEach(inject(function($rootScope, $controller, $rootElement, List) {
+    var deps;
     scope = $rootScope.$new();
-    todoCtrl = $controller(TodoCtrl, {$scope: scope, UrlRegistry: UrlRegistry});
+    deps = {$scope: scope, $rootElement: $rootElement, List: List};
+    todoCtrl = $controller(TodoCtrl, deps);
   }));
 
   it('should have a create list form boolean set to false ', function() {
