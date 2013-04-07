@@ -23,7 +23,7 @@ def index():
     if (current_user.is_authenticated() and
         CSRF_COOKIE_NAME not in request.cookies):
         csrf_token = ListForm().generate_csrf_token(session)
-        response.set_cookie(CSRF_COOKIE_NAME, csrf_token, httponly=True)
+        response.set_cookie(CSRF_COOKIE_NAME, csrf_token)
 
     return response
 
