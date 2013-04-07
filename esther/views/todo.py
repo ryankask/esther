@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, current_app, request, abort
+from flask import (Blueprint, make_response, render_template, current_app,
+                   request, session, abort)
 from flask.ext.login import current_user
 from sqlalchemy.orm import contains_eager
 
@@ -9,6 +10,7 @@ from esther.models import prep_query_for_json, User, List, Item
 
 blueprint = Blueprint('todo', __name__)
 
+CSRF_COOKIE_NAME = 'XSRF-TOKEN'
 API_EMPTY_BODY_ERROR = {'__all__': [u'Request body must contain data.']}
 API_INVALID_PARAMETERS = {'__all__': [u'Invalid parameters in request body.']}
 
@@ -16,7 +18,14 @@ API_INVALID_PARAMETERS = {'__all__': [u'Invalid parameters in request body.']}
 
 @blueprint.route('')
 def index():
-    return render_template('todo/index.html')
+    response = make_response(render_template('todo/index.html'))
+
+    if (current_user.is_authenticated() and
+        CSRF_COOKIE_NAME not in request.cookies):
+        csrf_token = ListForm().generate_csrf_token(session)
+        response.set_cookie(CSRF_COOKIE_NAME, csrf_token, httponly=True)
+
+    return response
 
 ### API
 

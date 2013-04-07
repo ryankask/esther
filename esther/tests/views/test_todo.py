@@ -2,12 +2,14 @@ from datetime import datetime, timedelta
 
 from flask import url_for
 import pytz
+from werkzeug.http import parse_cookie
 
 from esther import db
 from esther.models import utc_now, List, Item
-from esther.tests.helpers import EstherTestCase, EstherDBTestCase
+from esther.tests.helpers import EstherDBTestCase
 from esther.tests.views.test_auth import AuthMixin
-from esther.views.todo import API_EMPTY_BODY_ERROR, API_INVALID_PARAMETERS
+from esther.views.todo import (CSRF_COOKIE_NAME, API_EMPTY_BODY_ERROR,
+                               API_INVALID_PARAMETERS)
 
 
 class TodoMixin(AuthMixin):
@@ -53,10 +55,26 @@ class TodoMixin(AuthMixin):
         self.assert_403(response)
 
 
-class FrontendTests(EstherTestCase):
+class FrontendTests(EstherDBTestCase, AuthMixin):
+    def get_set_cookie_names(self, response):
+        set_cookies = response.headers.getlist('Set-Cookie')
+        return [parse_cookie(c).keys()[0] for c in set_cookies]
+
     def test_index_accessible(self):
-        self.client.get('/todo')
+        response = self.client.get('/todo')
         self.assert_template_used('todo/index.html')
+        cookie_names = self.get_set_cookie_names(response)
+        self.assertFalse(CSRF_COOKIE_NAME in cookie_names)
+
+        # The CSRF token should be set for authenticated users
+        self.login()
+        response = self.client.get('/todo')
+        cookie_names = self.get_set_cookie_names(response)
+        self.assertTrue(CSRF_COOKIE_NAME in cookie_names)
+
+        response = self.client.get('/todo')
+        cookie_names = self.get_set_cookie_names(response)
+        self.assertFalse(CSRF_COOKIE_NAME in cookie_names)
 
 
 class ListsAPITests(EstherDBTestCase, TodoMixin):

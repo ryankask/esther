@@ -1,4 +1,6 @@
-from flask import current_app
+from datetime import timedelta
+
+from flask import current_app, request
 from flask.ext.wtf import (Form, Field, TextField, TextAreaField, PasswordField,
                            BooleanField, SelectField, DateTimeField,
                            ValidationError, Required, Length, Email,
@@ -152,7 +154,15 @@ class PostForm(Form):
 ### Todo
 
 
-class ListForm(Form):
+class APIForm(Form):
+    TIME_LIMIT = timedelta(hours=2)
+
+    def validate_csrf_token(self, field):
+        field.data = request.headers.get('X-Xsrf-Token')
+        super(APIForm, self).validate_csrf_token(field)
+
+
+class ListForm(APIForm):
     title = TextField(u'Title', [Required(), Length(max=128)])
     description = TextAreaField(u'Description', [Required()])
     is_public = BooleanField(u'Is public?')
@@ -168,7 +178,7 @@ class ListForm(Form):
         obj.generate_slug()
 
 
-class ItemForm(Form):
+class ItemForm(APIForm):
     content = TextField(u'Content', [Required(), Length(max=255)])
     details = TextAreaField(u'Details', [Length(max=2048)])
     is_done = BooleanField(u'Is done?')
