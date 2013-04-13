@@ -18,3 +18,4 @@ exclude_lines =
     from .* import .*',
     import .*
 ignore_errors = True
+include = esther/*
