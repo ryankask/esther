@@ -14,7 +14,7 @@ from esther.models import User, PostStatus, Post, Tag, List
 
 def unique(column, message=None):
     if message is None:
-        message = u'{0} is not unique.'
+        message = u'{} is not unique.'
 
     def validator(form, field):
         if (field.object_data != field.data and

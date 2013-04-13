@@ -151,7 +151,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
 
     def test_preview_post(self):
         post = self.create_post_and_login()
-        self.assert_page(u'/blog/posts/{0}/preview'.format(post.id),
+        self.assert_page(u'/blog/posts/{}/preview'.format(post.id),
                          'blog/post_preview.html')
 
     def test_preview_non_author_aborts(self):

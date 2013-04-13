@@ -63,7 +63,7 @@ def database(action):
     elif action == 'drop':
         db.drop_all()
     else:
-        print(u'Invalid action: "{0}"'.format(action))
+        print(u'Invalid action: "{}"'.format(action))
         sys.exit(1)
 
 @manager.command
@@ -83,10 +83,10 @@ def add_user():
     try:
         db.session.commit()
     except DatabaseError as exc:
-        print(u'Error creating user: \'{0}\''.format(exc.message))
+        print(u'Error creating user: \'{}\''.format(exc.message))
         sys.exit(1)
 
-    print(u'User "{0}" created.'.format(user.email))
+    print(u'User "{}" created.'.format(user.email))
 
 if __name__ == '__main__':
     manager.run()

@@ -42,7 +42,7 @@ def add_post():
         db.session.add(post)
         db.session.commit()
 
-        message = u'Post "{0}" successfully added.'.format(form.title.data)
+        message = u'Post "{}" successfully added.'.format(form.title.data)
         flash(message, 'success')
         return redirect(url_for('.view_posts'))
 
@@ -61,7 +61,7 @@ def edit_post(post_id):
             post.pub_date = utc_now()
 
         db.session.commit()
-        message = u'Edited post "{0}".'.format(form.title.data)
+        message = u'Edited post "{}".'.format(form.title.data)
         flash(message, 'success')
         return redirect(url_for('.view_posts'))
 

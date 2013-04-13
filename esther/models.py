@@ -67,7 +67,7 @@ class User(db.Model, UserMixin):
         super(User, self).__init__(**columns)
 
     def __repr__(self):
-        return u'<User "{0}">'.format(self.email).encode('utf-8')
+        return u'<User "{}">'.format(self.email).encode('utf-8')
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
@@ -108,7 +108,7 @@ class Post(db.Model):
                            order_by=lambda: Tag.name)
 
     def __repr__(self):
-        return u'<Post "{0}">'.format(self.title).encode('utf-8')
+        return u'<Post "{}">'.format(self.title).encode('utf-8')
 
     def publish(self, commit=True):
         self.status = PostStatus.published
@@ -144,7 +144,7 @@ class Post(db.Model):
         preview_part = parts[0].rstrip()
 
         if len(parts) == 2:
-            return u'{0}...'.format(preview_part)
+            return u'{}...'.format(preview_part)
         else:
             return preview_part
 
