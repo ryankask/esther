@@ -1,6 +1,10 @@
+from __future__ import absolute_import
+
 from flask import current_app
 from jinja2 import Markup
 import markdown as md
+
+from esther.markdown import EstherExtension
 
 def localize_datetime(value):
     # Return immediatley if a naive datetime is received
@@ -20,7 +24,9 @@ def format_date(value, format_string=None):
     return format_datetime(value, format_string, 'DATE_FORMAT')
 
 def markdown(value):
-    return Markup(md.markdown(value, ['codehilite']))
+    extensions = [EstherExtension()]
+    return Markup(md.markdown(value, ['codehilite'], output_format='html5',
+                              extensions=extensions))
 
 def register_all(app):
     app.add_template_filter(localize_datetime)

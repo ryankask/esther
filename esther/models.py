@@ -131,6 +131,13 @@ class Post(db.Model):
                            slug=self.slug)
 
     @property
+    def continue_url(self):
+        url = self.url
+        if url:
+            continue_fragment = current_app.config['POST_CONTINUE_LINK_FRAGMENT']
+            return u'{}#{}'.format(url, continue_fragment)
+
+    @property
     def preview(self):
         separator = current_app.config['POST_BODY_PREVIEW_SEPARATOR']
         parts = self.body.split(separator, 1)

@@ -75,6 +75,14 @@ class PostTests(EstherDBTestCase):
         post.pub_date = datetime.date(2012, 4, 3)
         self.assertEqual(post.url, '/blog/2012/04/03/test-post')
 
+    def test_continue_url(self):
+        post = Post(status=PostStatus.published, slug='test-post')
+        self.assertEqual(post.continue_url, None)
+        post.pub_date = datetime.date(2012, 4, 3)
+        expected = '/blog/2012/04/03/test-post#{}'.format(
+            self.app.config['POST_CONTINUE_LINK_FRAGMENT'])
+        self.assertEqual(post.continue_url, expected)
+
     def test_preview(self):
         post = Post(body=u'test <!-- preview -->')
         self.assertEqual(post.preview, u'test...')
