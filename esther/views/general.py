@@ -23,13 +23,15 @@ def contact():
 
     if form.validate_on_submit():
         email_body = render_template('general/email.txt', form=form)
+        from_email = u'{} <{}>'.format(form.name.data, form.email.data)
 
         mail.send_message(
-            sender=current_app.config['CONTACT_EMAIL_SENDER'],
+            sender=from_email,
             recipients=current_app.config['CONTACT_EMAIL_RECIPIENTS'],
-            reply_to=u'{} <{}>'.format(form.name.data, form.email.data),
+            reply_to=from_email,
             subject=current_app.config['CONTACT_EMAIL_SUBJECT'],
-            body=email_body
+            body=email_body,
+            extra_headers={'Sender': current_app.config['CONTACT_EMAIL_SENDER']}
         )
 
         flash(u'Your message has been sent. I will get back to you as soon '

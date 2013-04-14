@@ -27,11 +27,14 @@ class GeneralTestsWithDB(EstherDBTestCase, PageMixin):
 
         # Check that the e-mail was sent
         self.assertEqual(len(outbox), 1)
-        self.assertEqual(outbox[0].sender,
+
+        from_email = 'John Smith <john@example.com>'
+        self.assertEqual(outbox[0].sender, from_email)
+        self.assertEqual(outbox[0].reply_to, from_email)
+        self.assertEqual(outbox[0].extra_headers['Sender'],
                          self.app.config['CONTACT_EMAIL_SENDER'])
         self.assertEqual(outbox[0].recipients,
                          self.app.config['CONTACT_EMAIL_RECIPIENTS'])
-        self.assertEqual(outbox[0].reply_to, 'John Smith <john@example.com>')
 
         for value in form_data.values():
             self.assertTrue(value in outbox[0].body)
