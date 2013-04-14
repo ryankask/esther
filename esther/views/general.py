@@ -27,6 +27,7 @@ def contact():
         mail.send_message(
             sender=current_app.config['CONTACT_EMAIL_SENDER'],
             recipients=current_app.config['CONTACT_EMAIL_RECIPIENTS'],
+            reply_to=u'{} <{}>'.format(form.name.data, form.email.data),
             subject=current_app.config['CONTACT_EMAIL_SUBJECT'],
             body=email_body
         )
