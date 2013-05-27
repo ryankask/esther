@@ -142,7 +142,8 @@ class UTCDateTimeField(DateTimeField):
 
 class PostForm(Form):
     title = TextField(u'Title', [Required(), Length(max=255)])
-    slug = TextField(u'Slug', [Required(), Length(max=80), unique(Post.slug)])
+    slug = TextField(u'Slug (press s to generate from title)',
+                     [Required(), Length(max=80), unique(Post.slug)])
     status = StatusField(u'Status', choices=[(v, h) for v, h in PostStatus])
     pub_date = UTCDateTimeField(u'Date Published')
     body = TextAreaField(u'Post body', [Required()], widget=HiddenInput())
