@@ -24,9 +24,9 @@ def format_date(value, format_string=None):
     return format_datetime(value, format_string, 'DATE_FORMAT')
 
 def markdown(value):
-    extensions = [EstherExtension()]
-    return Markup(md.markdown(value, ['codehilite'], output_format='html5',
-                              extensions=extensions))
+    extensions = ['codehilite', EstherExtension()]
+    return Markup(md.markdown(value, extensions=extensions,
+                              output_format='html5'))
 
 def register_all(app):
     app.add_template_filter(localize_datetime)
