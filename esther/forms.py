@@ -1,10 +1,10 @@
 import re
 
 from flask import current_app
-from flask.ext.wtf import (Form, Field, TextField, TextAreaField, PasswordField,
-                           BooleanField, SelectField, DateTimeField,
-                           ValidationError, Required, Length, Email,
-                           HiddenInput, TextInput)
+from flask.ext.wtf import (Form, Field, TextField, TextAreaField,
+                           PasswordField, BooleanField, SelectField,
+                           DateTimeField, ValidationError, Required, Length,
+                           Email, HiddenInput, TextInput)
 from sqlalchemy.sql import exists
 from wtforms.ext.dateutil.fields import DateTimeField as ExtDateTimeField
 
