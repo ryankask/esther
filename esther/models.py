@@ -4,7 +4,7 @@ from flask import url_for, current_app
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
-from sqlalchemy.orm import subqueryload
+from sqlalchemy.orm import subqueryload, configure_mappers
 
 from esther import db, bcrypt
 from esther.decl_enum import DeclEnum
