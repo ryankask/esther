@@ -1,7 +1,6 @@
 'use strict';
 
-var services = angular.module('todoApp.services', ['ngResource']);
-
-services.factory('List', function($resource) {
-  return $resource('/todo/api/:userId/lists');
-});
+angular.module('todoApp.services', ['ngResource'])
+  .factory('List', function($resource) {
+    return $resource('/todo/api/:userId/lists');
+  });

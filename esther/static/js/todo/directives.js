@@ -1,3 +1,3 @@
 'use strict';
 
-var directives = angular.module('todoApp.directives', []);
+angular.module('todoApp.directives', []);

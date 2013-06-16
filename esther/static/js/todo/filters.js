@@ -1,3 +1,3 @@
 'use strict';
 
-var filters = angular.module('todoApp.filters', []);
+angular.module('todoApp.filters', []);
