@@ -7,15 +7,62 @@
 {% block main_container_attrs %} ng-app="todoApp" ng-controller="TodoCtrl" data-user-id="{{ current_user.id }}"{% endblock %}
 
 {% block content %}
-<button class="create-list button small right" ng-click="showCreateListForm = true">Create List</button>
+<button class="create-list button small right" ng-click="showCreateListForm = true"
+        ng-hide="isAnonymousUser">Create List</button>
 <h1>TODO</h1>
 
 <div class="row">
   <div class="six columns">
     <h4>Lists</h4>
+    <ul>
+      <li ng-repeat="list in allLists">
+        <a href="#" ng-click="loadItems(list)">[[ list.title ]]</a> - [[ list.description ]]
+      </li>
+    </ul>
   </div>
-  <div class="six columns">
-    <h4>Items</h4>
+  <div class="six columns" ng-show="activeList">
+    <h4>[[ activeList.title ]]</h4>
+    <p>[[ activeList.description ]]</p>
+    <div class="items" ng-show="activeList.hasItemsToDo">
+      <strong>Items:</strong>
+      <ul>
+        <li ng-repeat="item in activeList.items | filter:{ is_done: false }">
+          [[ item.content ]] - [[ item.details ]]
+          <span ng-hide="isAnonymousUser">
+            - <a href="#" ng-click="markDone(activeList, item)">[ ✓ ]</a>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <strong ng-hide="activeList.items.hasItemsToDo">No items</strong>
+    <div class="create-item" ng-hide="isAnonymousUser">
+      <h5>Create Item</h5>
+      <form name="createItemForm" ng-submit="createItem(activeList)">
+        <div class="row">
+          <div class="two mobile-one columns">
+            <label class="right inline">Content</label>
+          </div>
+          <div class="ten mobile-three columns">
+            <input type="text" name="content" ng-model="newItem.content" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="two mobile-one columns">
+            <label class="right inline">Details</label>
+          </div>
+          <div class="ten mobile-three columns">
+            <textarea name="details" ng-model="newItem.details" required></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="two mobile-one columns">
+          </div>
+          <div class="ten mobile-three columns">
+            <input class="small button" type="submit" value="Add">
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 

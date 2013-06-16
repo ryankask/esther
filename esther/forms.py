@@ -1,4 +1,3 @@
-from datetime import timedelta
 import re
 
 from flask import current_app, request
@@ -14,6 +13,7 @@ from esther import bcrypt, db
 from esther.models import User, PostStatus, Post, Tag, List
 
 ### Validators
+
 
 def unique(column, message=None):
     if message is None:
@@ -158,7 +158,7 @@ class PostForm(Form):
 
 
 class APIForm(Form):
-    TIME_LIMIT = timedelta(hours=2)
+    TIME_LIMIT = None
 
     def validate_csrf_token(self, field):
         field.data = request.headers.get('X-Xsrf-Token')
