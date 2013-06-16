@@ -40,7 +40,7 @@ class AuthTests(EstherDBTestCase, AuthMixin, PageMixin):
     def add_protected_view(self):
         url = '/_protected'
         quoted_url = url_quote_plus('/_protected')
-        self.redirect_url = '/login?next={0}'.format(quoted_url)
+        self.redirect_url = '/login?next={}'.format(quoted_url)
 
         @self.app.route(url)
         @login_required

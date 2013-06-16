@@ -1,4 +1,4 @@
 ipdb>=0.7
-Flask-DebugToolbar>=0.7.1
+Flask-DebugToolbar>=0.8
 Flask-Testing>=0.4
-Fabric>=1.4.2
+Fabric>=1.6

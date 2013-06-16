@@ -12,6 +12,7 @@ mail = Mail()
 login_manager = LoginManager()
 sentry = Sentry()
 
+
 def create_app(config_objects):
     app = Flask(__name__)
 
@@ -24,6 +25,9 @@ def create_app(config_objects):
 
     bcrypt.init_app(app)
     db.init_app(app)
+    # Initialize the inter-mapper relationships of all mappers
+    # see: http://docs.sqlalchemy.org/en/rel_0_8/orm/mapper_config.html#sqlalchemy.orm.configure_mappers
+    db.configure_mappers()
     login_manager.init_app(app)
     mail.init_app(app)
     sentry.init_app(app)

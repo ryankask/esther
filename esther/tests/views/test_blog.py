@@ -1,4 +1,5 @@
 import datetime
+from xml.etree import cElementTree
 
 from flask import url_for
 import pytz
@@ -11,8 +12,14 @@ from esther.tests.views.test_auth import AuthMixin
 
 class BlogMixin(AuthMixin):
     def create_post(self, user, commit=True, **kwargs):
-        post = Post(author=user, title=u'My First Post', slug=u'my-first-post',
-                    body='Post body', **kwargs)
+        default_fields = {
+            'author': user,
+            'title': u'My First Post',
+            'slug': u'my-first-post',
+            'body': u'Post body'
+        }
+        default_fields.update(kwargs)
+        post = Post(**default_fields)
 
         if post.status == PostStatus.published and post.pub_date is None:
             post.pub_date = utc_now()
@@ -144,7 +151,7 @@ class AdminTests(EstherDBTestCase, BlogMixin, PageMixin):
 
     def test_preview_post(self):
         post = self.create_post_and_login()
-        self.assert_page(u'/blog/posts/{0}/preview'.format(post.id),
+        self.assert_page(u'/blog/posts/{}/preview'.format(post.id),
                          'blog/post_preview.html')
 
     def test_preview_non_author_aborts(self):
@@ -206,3 +213,25 @@ class PublicTests(EstherDBTestCase, BlogMixin, PageMixin):
         db.session.commit()
         url = url_for('blog.tag_posts', slug=tag.slug)
         self.assert_404(self.client.get(url))
+
+
+class PostsFeedTests(EstherDBTestCase, BlogMixin):
+    def test_rss_feed(self):
+        user = self.create_user(commit=False)
+        self.create_post(user, status=PostStatus.published, commit=False)
+        self.create_post(user, title='Just another post',
+                         slug='just-another-post', status=PostStatus.published)
+
+        response = self.client.get('/blog/posts/feed')
+        self.assert_200(response)
+        self.assertEqual(response.mimetype, 'application/rss+xml')
+
+        feed_config = self.app.config['BLOG_POSTS_FEED']
+
+        channel = cElementTree.fromstring(response.data)[0]
+        self.assertEqual(channel.find('title').text, feed_config['title'])
+        self.assertEqual(channel.find('webMaster').text,
+                         feed_config['webmaster'])
+        self.assertEqual(channel.find('description').text,
+                         feed_config['description'])
+        self.assertEqual(len(channel.findall('item')), 2)

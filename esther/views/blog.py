@@ -1,6 +1,9 @@
+from urlparse import urljoin
+
 from flask import (Blueprint, request, flash, render_template, redirect,
                    url_for, abort, current_app)
 from flask.ext.login import login_required, current_user
+from PyRSS2Gen import RSS2, RSSItem, Guid
 from sqlalchemy import and_, extract
 from sqlalchemy.orm import subqueryload
 
@@ -39,7 +42,7 @@ def add_post():
         db.session.add(post)
         db.session.commit()
 
-        message = u'Post "{0}" successfully added.'.format(form.title.data)
+        message = u'Post "{}" successfully added.'.format(form.title.data)
         flash(message, 'success')
         return redirect(url_for('.view_posts'))
 
@@ -58,7 +61,7 @@ def edit_post(post_id):
             post.pub_date = utc_now()
 
         db.session.commit()
-        message = u'Edited post "{0}".'.format(form.title.data)
+        message = u'Edited post "{}".'.format(form.title.data)
         flash(message, 'success')
         return redirect(url_for('.view_posts'))
 
@@ -122,3 +125,38 @@ def tag_posts(slug, page):
     paginated_posts = posts.paginate(page, per_page)
     return render_template('blog/tag_posts.html', tag=tag,
                            posts=paginated_posts)
+
+### Feeds
+
+@blueprint.route('/posts/feed')
+def posts_feed():
+    base_url = url_for('general.index', _external=True)
+    items = []
+    posts = Post.get_published(num=10).all()
+
+    for post in posts:
+        post_url = urljoin(base_url, post.url)
+        item = RSSItem(
+            title=post.title,
+            link=post_url,
+            description=post.body.split('\r\n', 1)[0], # Add a real description?
+            author='{} ({})'.format(post.author.email, post.author.full_name),
+            categories=[tag.name for tag in post.tags],
+            guid=Guid(post_url),
+            pubDate=post.pub_date
+        )
+        items.append(item)
+
+    feed_config = current_app.config['BLOG_POSTS_FEED']
+    rss2_feed = RSS2(
+        title=feed_config['title'],
+        link=base_url,
+        description=feed_config['description'],
+        language='en-us',
+        webMaster=feed_config['webmaster'],
+        lastBuildDate=posts[0].pub_date if posts else None,
+        ttl=1440,
+        items=items
+    )
+    return current_app.response_class(rss2_feed.to_xml(encoding='utf-8'),
+                                      mimetype='application/rss+xml')

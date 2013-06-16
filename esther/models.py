@@ -4,7 +4,7 @@ from flask import url_for, current_app
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
-from sqlalchemy.orm import subqueryload
+from sqlalchemy.orm import subqueryload, configure_mappers
 
 from esther import db, bcrypt
 from esther.decl_enum import DeclEnum
@@ -67,7 +67,7 @@ class User(db.Model, UserMixin):
         super(User, self).__init__(**columns)
 
     def __repr__(self):
-        return u'<User "{0}">'.format(self.email).encode('utf-8')
+        return u'<User "{}">'.format(self.email).encode('utf-8')
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
@@ -108,7 +108,7 @@ class Post(db.Model):
                            order_by=lambda: Tag.name)
 
     def __repr__(self):
-        return u'<Post "{0}">'.format(self.title).encode('utf-8')
+        return u'<Post "{}">'.format(self.title).encode('utf-8')
 
     def publish(self, commit=True):
         self.status = PostStatus.published
@@ -131,25 +131,35 @@ class Post(db.Model):
                            slug=self.slug)
 
     @property
+    def continue_url(self):
+        url = self.url
+        if url:
+            continue_fragment = current_app.config['POST_CONTINUE_LINK_FRAGMENT']
+            return u'{}#{}'.format(url, continue_fragment)
+
+    @property
     def preview(self):
         separator = current_app.config['POST_BODY_PREVIEW_SEPARATOR']
         parts = self.body.split(separator, 1)
         preview_part = parts[0].rstrip()
 
         if len(parts) == 2:
-            return u'{0}...'.format(preview_part)
+            return u'{}...'.format(preview_part)
         else:
             return preview_part
+
+    @classmethod
+    def get_published(cls, num=None):
+        pub_date = Post.pub_date.desc()
+        posts = cls.query.options(subqueryload(Post.tags)).filter_by(
+            status=PostStatus.published).order_by(pub_date)
+        return posts.limit(num) if num else posts
 
     @classmethod
     def get_recent(cls, page, num=None):
         if num is None:
             num = current_app.config['NUM_POSTS_PER_INDEX_PAGE']
-
-        pub_date = Post.pub_date.desc()
-        posts = cls.query.options(subqueryload(Post.tags)).filter_by(
-            status=PostStatus.published).order_by(pub_date)
-
+        posts = cls.get_published()
         return posts.paginate(page, per_page=num)
 
 

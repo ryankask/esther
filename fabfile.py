@@ -14,7 +14,7 @@ def deploy(requirements='no', restart='yes'):
         run('git pull')
 
         if requirements == 'yes':
-            with prefix(u'workon {0}'.format(env.virtualenv_name)):
+            with prefix(u'workon {}'.format(env.virtualenv_name)):
                 run('pip install -r requirements/base.txt')
 
     if restart == 'yes':

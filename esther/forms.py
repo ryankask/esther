@@ -1,10 +1,11 @@
 from datetime import timedelta
+import re
 
 from flask import current_app, request
-from flask.ext.wtf import (Form, Field, TextField, TextAreaField, PasswordField,
-                           BooleanField, SelectField, DateTimeField,
-                           ValidationError, Required, Length, Email,
-                           HiddenInput, TextInput)
+from flask.ext.wtf import (Form, Field, TextField, TextAreaField,
+                           PasswordField, BooleanField, SelectField,
+                           DateTimeField, ValidationError, Required, Length,
+                           Email, HiddenInput, TextInput)
 from sqlalchemy.sql import exists
 from wtforms.ext.dateutil.fields import DateTimeField as ExtDateTimeField
 
@@ -16,12 +17,13 @@ from esther.models import User, PostStatus, Post, Tag, List
 
 def unique(column, message=None):
     if message is None:
-        message = u'{0} is not unique.'
+        message = u'{} is not unique.'
 
     def validator(form, field):
         if (field.object_data != field.data and
             db.session.query(exists().where(column == field.data)).scalar()):
-            raise ValidationError(message.format(field.label.text))
+            label_text = re.sub(r'\([^)]*\)', '', field.label.text).strip()
+            raise ValidationError(message.format(label_text))
 
     return validator
 
@@ -144,7 +146,8 @@ class UTCDateTimeField(DateTimeField):
 
 class PostForm(Form):
     title = TextField(u'Title', [Required(), Length(max=255)])
-    slug = TextField(u'Slug', [Required(), Length(max=80), unique(Post.slug)])
+    slug = TextField(u'Slug (press s to generate from title)',
+                     [Required(), Length(max=80), unique(Post.slug)])
     status = StatusField(u'Status', choices=[(v, h) for v, h in PostStatus])
     pub_date = UTCDateTimeField(u'Date Published')
     body = TextAreaField(u'Post body', [Required()], widget=HiddenInput())

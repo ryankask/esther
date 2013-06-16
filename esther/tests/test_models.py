@@ -59,6 +59,12 @@ class PostTests(EstherDBTestCase):
         post.publish()
         self.assertEqual(len(Post.get_recent(1).items), 1)
 
+    def test_get_published(self):
+        post = self.create_post()
+        self.assertEqual(len(Post.get_published().all()), 0)
+        post.publish()
+        self.assertEqual(len(Post.get_published().all()), 1)
+
     def test_is_published(self):
         post = Post(status=PostStatus.published)
         self.assertTrue(post.is_published)
@@ -68,6 +74,14 @@ class PostTests(EstherDBTestCase):
         self.assertEqual(post.url, None)
         post.pub_date = datetime.date(2012, 4, 3)
         self.assertEqual(post.url, '/blog/2012/04/03/test-post')
+
+    def test_continue_url(self):
+        post = Post(status=PostStatus.published, slug='test-post')
+        self.assertEqual(post.continue_url, None)
+        post.pub_date = datetime.date(2012, 4, 3)
+        expected = '/blog/2012/04/03/test-post#{}'.format(
+            self.app.config['POST_CONTINUE_LINK_FRAGMENT'])
+        self.assertEqual(post.continue_url, expected)
 
     def test_preview(self):
         post = Post(body=u'test <!-- preview -->')

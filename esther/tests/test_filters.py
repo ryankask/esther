@@ -36,3 +36,9 @@ class FilterTests(EstherTestCase):
     def test_markdown(self):
         text = '# Test Title'
         self.assertEqual(filters.markdown(text), '<h1>Test Title</h1>')
+
+    def test_markdown_uses_esther_extension(self):
+        text = '{}'.format(self.app.config['POST_BODY_PREVIEW_SEPARATOR'])
+        continue_fragment = self.app.config['POST_CONTINUE_LINK_FRAGMENT']
+        self.assertEqual(unicode(filters.markdown(text)),
+                         u'<div id="{}"></div>'.format(continue_fragment))

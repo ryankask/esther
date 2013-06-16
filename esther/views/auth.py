@@ -65,7 +65,7 @@ def add_user():
         db.session.add(user)
         db.session.commit()
 
-        message = u'User "{0}" successfully added.'.format(user.email)
+        message = u'User "{}" successfully added.'.format(user.email)
         flash(message, 'success')
         return redirect(url_for('.list_users'))
 
@@ -81,7 +81,7 @@ def edit_user(user_id):
         form.populate_obj(user)
         db.session.commit()
 
-        message = u'Edited user "{0}".'.format(user.email)
+        message = u'Edited user "{}".'.format(user.email)
         flash(message, 'success')
         return redirect(url_for('.list_users'))
 

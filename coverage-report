@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-coverage run run.py tests
+RCFILE_OPT="--rcfile=$(dirname $0)/conf/coveragerc"
+
+coverage run $RCFILE_OPT run.py tests
 echo
-coverage report -m
-coverage erase
+coverage report $RCFILE_OPT -m
+coverage erase $RCFILE_OPT
