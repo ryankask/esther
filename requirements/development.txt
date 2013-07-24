@@ -1,3 +1,4 @@
+-r base.txt
 ipdb>=0.7
 Flask-DebugToolbar>=0.8
 Flask-Testing>=0.4
