@@ -2,7 +2,7 @@ code { font-size: 14px; }
 
 article, section {
   h1 {
-    font-size: ms(3);
+    font-size: 44px;
     clear: right;
   }
 
@@ -19,6 +19,7 @@ article, section {
   }
 
   h6.meta {
+    font-size: 13px;
     margin-bottom: ms(2);
   }
 
@@ -37,15 +38,24 @@ article, section {
   color: $alertColor;
 }
 
-nav .side-nav {
-  padding: 0 0 5px 0;
-}
-
-.social {
-  list-style: none;
+nav.side {
+  h5 {
+    font-size: 18px;
+  }
 
   li {
-    margin-top: 10px;
+    font-size: 15px;
+  }
+
+  ul {
+    padding: 0 0 5px 0;
+    list-style: none;
+  }
+
+  .social {
+    li {
+      margin-top: 10px;
+    }
   }
 }
 

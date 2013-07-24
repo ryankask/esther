@@ -48,15 +48,15 @@
         {% block content %}{% endblock %}
       </div>
 
-      <nav class="three columns side">
+      <nav class="two offset-by-one columns side">
         <h5>Blog</h5>
-          <ul class="side-nav">
-            <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
-            <li><a href="{{ url_for('blog.posts_feed') }}">RSS Feed <img src="{{ url_for('static', filename='img/feeds/icon-14x14.png') }}" alt="RSS feed" height="14" width="14"></a></li>
-          </ul>
+        <ul>
+          <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
+          <li><a href="{{ url_for('blog.posts_feed') }}">RSS Feed <img src="{{ url_for('static', filename='img/feeds/icon-14x14.png') }}" alt="RSS feed" height="14" width="14"></a></li>
+        </ul>
 
         <h5>Admin</h5>
-        <ul class="side-nav">
+        <ul>
           {%- if current_user.is_authenticated() %}
           {%- if current_user.is_admin %}
           <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
@@ -71,7 +71,7 @@
         </ul>
 
         <h5>Social</h5>
-        <ul class="social">
+        <ul>
           <li><a href="https://twitter.com/ryankask" rel="me">Follow @ryankask</a></li>
           <li><a href="https://github.com/ryankask" rel="me">ryankask on GitHub</a></li>
           <li><a href="https://plus.google.com/104275111833639999928/" rel="me">Google+</a></li>
