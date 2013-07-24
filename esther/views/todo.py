@@ -1,10 +1,9 @@
-from flask import Blueprint, current_app, request, abort
+from flask import Blueprint, current_app, request, abort, json
 from flask.ext.login import current_user
 from sqlalchemy.orm import contains_eager
 
 from esther import db
 from esther.forms import ListForm, ItemForm
-from esther.json import dumps
 from esther.models import prep_query_for_json, User, List, Item
 
 blueprint = Blueprint('todo', __name__)
@@ -14,7 +13,7 @@ API_INVALID_PARAMETERS = {'__all__': [u'Invalid parameters in request body.']}
 
 
 def json_response(data, status=200, headers=None):
-    return current_app.response_class(dumps(data), status,
+    return current_app.response_class(json.dumps(data), status,
                                       mimetype='application/json',
                                       headers=headers or {})
 
