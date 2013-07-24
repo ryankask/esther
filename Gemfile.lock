@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    chunky_png (1.2.7)
+    chunky_png (1.2.8)
     compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -11,8 +11,8 @@ GEM
       compass (>= 0.12.1)
       sass (>= 3.2.0)
       sassy-math (>= 1.5)
-    rake (10.0.3)
-    sass (3.2.6)
+    rake (10.1.0)
+    sass (3.2.9)
     sassy-math (1.5)
       compass (~> 0.11)
     zurb-foundation (3.2.5)
@@ -25,4 +25,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  compass (= 0.12.2)
   zurb-foundation (= 3.2.5)
