@@ -13,6 +13,7 @@ from esther.models import PostStatus, Post, utc_now, Tag
 
 blueprint = Blueprint('blog', __name__)
 
+
 @blueprint.route('/posts', defaults={'page': 1})
 @blueprint.route('/posts/page/<int:page>')
 @login_required
@@ -23,6 +24,7 @@ def view_posts(page):
     per_page = current_app.config['NUM_POSTS_PER_LIST_PAGE']
     paginated_posts = posts.paginate(page, per_page)
     return render_template('blog/post_list.html', posts=paginated_posts)
+
 
 @blueprint.route('/posts/add', methods=('GET', 'POST'))
 @login_required
@@ -48,6 +50,7 @@ def add_post():
 
     return render_template('blog/post_add.html', form=form)
 
+
 @blueprint.route('/posts/<int:post_id>', methods=('GET', 'POST'))
 @login_required
 def edit_post(post_id):
@@ -67,13 +70,16 @@ def edit_post(post_id):
 
     return render_template('blog/post_edit.html', post=post, form=form)
 
+
 @blueprint.route('/posts/<int:post_id>/preview', methods=('GET', 'POST'))
 @login_required
 def preview_post(post_id):
     post = Post.query.filter_by(author=current_user, id=post_id).first_or_404()
     return render_template('blog/post_preview.html', post=post)
 
+
 ### Public views
+
 
 @blueprint.route('/<int:year>/<int(fixed_digits=2):month>/<int(fixed_digits=2):day>/<slug>')
 def view_post(year, month, day, slug):
@@ -84,6 +90,7 @@ def view_post(year, month, day, slug):
         (Post.status == PostStatus.published) &
         (Post.slug == slug)).first_or_404()
     return render_template('blog/post_view.html', post=post)
+
 
 @blueprint.route('/<int:year>')
 @blueprint.route('/<int:year>/<int(fixed_digits=2):month>')
@@ -105,6 +112,7 @@ def post_archive(year, month=None, day=None):
     return render_template('blog/post_archive.html', posts=posts, year=year,
                            month=month, day=day)
 
+
 @blueprint.route('/tags', defaults={'page': 1})
 @blueprint.route('/tags/page/<int:page>')
 def tag_list(page):
@@ -113,6 +121,7 @@ def tag_list(page):
     per_page = current_app.config['NUM_TAGS_PER_LIST_PAGE']
     paginated_tags = tags.paginate(page, per_page)
     return render_template('blog/tag_list.html', tags=paginated_tags)
+
 
 @blueprint.route('/tags/<slug>', defaults={'page': 1})
 @blueprint.route('/tags/<slug>/page/<int:page>')
@@ -126,7 +135,9 @@ def tag_posts(slug, page):
     return render_template('blog/tag_posts.html', tag=tag,
                            posts=paginated_posts)
 
+
 ### Feeds
+
 
 @blueprint.route('/posts/feed')
 def posts_feed():
@@ -136,10 +147,12 @@ def posts_feed():
 
     for post in posts:
         post_url = urljoin(base_url, post.url)
+
+        # TODO: Add a real description
         item = RSSItem(
             title=post.title,
             link=post_url,
-            description=post.body.split('\r\n', 1)[0], # Add a real description?
+            description=post.body.split('\r\n', 1)[0],
             author='{} ({})'.format(post.author.email, post.author.full_name),
             categories=[tag.name for tag in post.tags],
             guid=Guid(post_url),

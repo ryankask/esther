@@ -111,8 +111,8 @@ class ListTests(EstherTestCase):
         todo_list = List(id=3, owner_id=4, title='Long Term Tasks',
                          description='My cool list', is_public=False)
         self.assertEqual(set(todo_list.as_dict().keys()),
-                         set(['id', 'title', 'slug', 'description', 'is_public',
-                              'created', 'modified']))
+                         set(['id', 'title', 'slug', 'description',
+                              'is_public', 'created', 'modified']))
 
     def test_slug_generated_from_title(self):
         todo_list = List(title='Long Term Tasks')

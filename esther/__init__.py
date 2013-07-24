@@ -19,8 +19,8 @@ def create_app(config_objects):
     for config_object in config_objects:
         app.config.from_object(config_object)
 
-    # Conver the time zone name into a pytz timezone and store it in the config.
-    # TODO: Is there a better way to do this?
+    # Conver the time zone name into a pytz timezone and store it in the
+    # config. TODO: Is there a better way to do this?
     app.config['TIME_ZONE'] = pytz.timezone(app.config['TIME_ZONE_NAME'])
 
     bcrypt.init_app(app)

@@ -8,8 +8,10 @@ from esther.tests.views.test_blog import BlogMixin
 
 
 class PostFormTests(EstherDBTestCase, BlogMixin):
-    form_data = MultiDict({'title': 'My Second Post', 'slug': 'my-first-post',
-                           'status': PostStatus.draft.value, 'body': 'Welcome'})
+    form_data = MultiDict({
+        'title': 'My Second Post', 'slug': 'my-first-post',
+        'status': PostStatus.draft.value, 'body': 'Welcome'
+    })
 
     def test_used_slug_raises_validation_error(self):
         self.create_post(self.create_user(commit=False))

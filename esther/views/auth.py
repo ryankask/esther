@@ -11,14 +11,17 @@ from esther.models import User
 
 blueprint = Blueprint('auth', __name__)
 
+
 def configure(login_manager, app):
     login_manager.login_view = app.config.get('AUTH_LOGIN_VIEW', 'auth.login')
     login_manager.login_message = app.config.get('AUTH_LOGIN_MESSAGE', None)
     # Bind ``user_callback`` here instead of using the API's decorator
     login_manager.user_callback = load_user
 
+
 def load_user(user_id):
     return User.query.get(user_id)
+
 
 @blueprint.route('/login', methods=('GET', 'POST'))
 def login():
@@ -30,13 +33,16 @@ def login():
 
     return render_template('auth/login.html', form=form)
 
+
 @blueprint.route('/logout')
 def logout():
     logout_user()
     flash(u'You have successfully logged out.', 'success')
     return redirect(request.args.get('next') or url_for('general.index'))
 
+
 ### User management views
+
 
 def admin_required(func):
     @wraps(func)
@@ -47,11 +53,13 @@ def admin_required(func):
         return func(*args, **kwargs)
     return decorated
 
+
 @blueprint.route('/users')
 @admin_required
 def list_users():
     users = User.query.order_by(User.email).all()
     return render_template('auth/user_list.html', users=users)
+
 
 @blueprint.route('/users/add', methods=('GET', 'POST'))
 @admin_required
@@ -59,8 +67,10 @@ def add_user():
     form = AddUserForm()
 
     if form.validate_on_submit():
-        user = User(email=form.email.data, full_name=form.full_name.data,
-                    short_name=form.short_name.data, password=form.password.data,
+        user = User(email=form.email.data,
+                    full_name=form.full_name.data,
+                    short_name=form.short_name.data,
+                    password=form.password.data,
                     is_admin=form.is_admin.data)
         db.session.add(user)
         db.session.commit()
@@ -70,6 +80,7 @@ def add_user():
         return redirect(url_for('.list_users'))
 
     return render_template('auth/user_add.html', form=form)
+
 
 @blueprint.route('/users/<int:user_id>', methods=('GET', 'POST'))
 @admin_required

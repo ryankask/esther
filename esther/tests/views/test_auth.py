@@ -52,7 +52,8 @@ class AuthTests(EstherDBTestCase, AuthMixin, PageMixin):
 
     def test_login_required_redirects_to_login_page(self):
         self.add_protected_view()
-        self.assert_redirects(self.client.get('/_protected'), self.redirect_url)
+        self.assert_redirects(self.client.get('/_protected'),
+                              self.redirect_url)
 
     def test_login_success(self):
         self.login()
@@ -91,7 +92,8 @@ class AuthTests(EstherDBTestCase, AuthMixin, PageMixin):
         self.assertEqual(response.data, 'success')
 
         self.assert_redirects(self.client.get('/logout'), '/')
-        self.assert_redirects(self.client.get('/_protected'), self.redirect_url)
+        self.assert_redirects(self.client.get('/_protected'),
+                              self.redirect_url)
 
     def test_logout_with_next_param(self):
         self.assert_redirects(self.client.get('/logout?next=/about'), '/about')
@@ -127,7 +129,8 @@ class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
             'password': 'password',
             'is_admin': False
         }
-        response = self.client.post(url_for('auth.add_user'), data=new_user_data)
+        response = self.client.post(url_for('auth.add_user'),
+                                    data=new_user_data)
         self.assert_redirects(response, url_for('auth.list_users'))
         user = User.query.filter_by(email='john@example.com').first()
         # Just check that the e-mail and full name are set; wtforms is doing
@@ -149,8 +152,9 @@ class UserManagementTests(EstherDBTestCase, AuthMixin, PageMixin):
             'full_name': 'Admin Boss',
             'short_name': 'admin'
         }
-        response = self.client.post(url_for('auth.edit_user', user_id=admin.id),
-                                    data=change_data, follow_redirects=True)
+        url = url_for('auth.edit_user', user_id=admin.id)
+        response = self.client.post(url, data=change_data,
+                                    follow_redirects=True)
         # The user is no longer an admin so they can't view the page
         self.assert_403(response)
 

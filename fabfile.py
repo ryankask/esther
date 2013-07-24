@@ -9,6 +9,7 @@ env.db_backups_dir = '~/var/db-backups'
 env.dev_db_name = 'esther'
 env.hosts = ['ryankaskel.com']
 
+
 def deploy(requirements='no', restart='yes'):
     with cd(env.code_dir):
         run('git pull')
@@ -19,6 +20,7 @@ def deploy(requirements='no', restart='yes'):
 
     if restart == 'yes':
         run('~/webapps/esther/apache2/bin/restart')
+
 
 def load_db():
     backups = run('ls -r1 {}'.format(env.db_backups_dir)).split()

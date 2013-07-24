@@ -4,14 +4,16 @@ from flask import url_for, current_app
 from flask.ext.login import UserMixin
 import pytz
 from sqlalchemy import types
-from sqlalchemy.orm import subqueryload, configure_mappers
+from sqlalchemy.orm import subqueryload
 
 from esther import db, bcrypt
 from esther.decl_enum import DeclEnum
 from esther.utils import slugify
 
+
 def utc_now():
     return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+
 
 def obj_as_dict(obj, exclude=None):
     if exclude is None:
@@ -21,6 +23,7 @@ def obj_as_dict(obj, exclude=None):
         if column.name not in exclude:
             d[column.name] = getattr(obj, column.name)
     return d
+
 
 def prep_query_for_json(query):
     return [obj.as_dict() for obj in query]
@@ -92,7 +95,8 @@ class PostStatus(DeclEnum):
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                          nullable=False)
     status = db.Column(PostStatus.db_type(), default=PostStatus.draft,
                        nullable=False)
     title = db.Column(db.String(255), nullable=False)
@@ -134,8 +138,8 @@ class Post(db.Model):
     def continue_url(self):
         url = self.url
         if url:
-            continue_fragment = current_app.config['POST_CONTINUE_LINK_FRAGMENT']
-            return u'{}#{}'.format(url, continue_fragment)
+            continue_frag = current_app.config['POST_CONTINUE_LINK_FRAGMENT']
+            return u'{}#{}'.format(url, continue_frag)
 
     @property
     def preview(self):
@@ -205,7 +209,7 @@ class List(db.Model):
         super(List, self).__init__(**field_values)
 
     def __repr__(self):
-        output =u'<List: "{}" owned by {} ({})>'.format(
+        output = u'<List: "{}" owned by {} ({})>'.format(
             self.title,
             self.owner,
             u'public' if self.is_public else u'private',
@@ -227,6 +231,7 @@ class List(db.Model):
     def url(self):
         return url_for('todo.list_detail', owner_id=self.owner_id,
                        slug=self.slug)
+
 
 class Item(db.Model):
     __tablename__ = 'items'

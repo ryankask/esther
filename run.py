@@ -12,6 +12,7 @@ from esther.tests import run_tests
 app = create_app(['esther.settings.site'])
 manager = Manager(app)
 
+
 @manager.command
 def server(toolbar=False, db_stats=False):
     app.debug = True
@@ -33,6 +34,7 @@ def server(toolbar=False, db_stats=False):
 
     app.run()
 
+
 @manager.shell
 def make_shell_context():
     context = {
@@ -41,6 +43,7 @@ def make_shell_context():
         'models': models
     }
     return context
+
 
 @manager.command
 def tests(label=None):
@@ -56,6 +59,7 @@ def tests(label=None):
     if not result:
         sys.exit(1)
 
+
 @manager.command
 def database(action):
     if action == 'create':
@@ -65,6 +69,7 @@ def database(action):
     else:
         print(u'Invalid action: "{}"'.format(action))
         sys.exit(1)
+
 
 @manager.command
 def add_user():
@@ -87,6 +92,7 @@ def add_user():
         sys.exit(1)
 
     print(u'User "{}" created.'.format(user.email))
+
 
 if __name__ == '__main__':
     manager.run()

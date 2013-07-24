@@ -1,5 +1,6 @@
 import unittest
 
+
 def build_suite(labels):
     suite = None
 
@@ -12,6 +13,7 @@ def build_suite(labels):
         return unittest.defaultTestLoader.discover('.')
 
     return suite
+
 
 def run_tests(verbosity=1, labels=None):
     suite = build_suite(labels)

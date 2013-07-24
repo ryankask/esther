@@ -1,6 +1,7 @@
 import re
 import unicodedata
 
+
 def slugify(value):
     """ From django.utils.text """
     value = unicodedata.normalize('NFKD', value).encode(

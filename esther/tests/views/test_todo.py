@@ -123,7 +123,8 @@ class ListDetailAPITests(EstherDBTestCase, TodoMixin):
     def setUp(self):
         super(ListDetailAPITests, self).setUp()
         self.todo_list = self.create_list()
-        self.url = url_for('todo.list_detail', owner_id=self.todo_list.owner.id,
+        self.url = url_for('todo.list_detail',
+                           owner_id=self.todo_list.owner.id,
                            slug=self.todo_list.slug)
         self.data = {'title': 'Another version of the title'}
 
@@ -234,7 +235,8 @@ class ItemsAPITests(EstherDBTestCase, TodoMixin):
         del self.data['content']
         response = self.client.post(self.url, data=self.data)
         self.assert_status(response, 422)
-        self.assertEqual(response.json['content'][0], 'This field is required.')
+        self.assertEqual(response.json['content'][0],
+                         'This field is required.')
 
 
 class ItemDetailAPITests(EstherDBTestCase, TodoMixin):
@@ -280,7 +282,8 @@ class ItemDetailAPITests(EstherDBTestCase, TodoMixin):
         response = self.client.patch(self.url, data=self.data)
         self.assert_200(response)
         self.assertEqual(self.item.content, 'Check if the bread is ready.')
-        self.assertEqual(self.item.details, 'Last time it wasn\t done on time.')
+        self.assertEqual(self.item.details,
+                         'Last time it wasn\t done on time.')
         self.assertEqual(self.item.is_done, True)
 
     def test_patching_private_item_does_not_leak_existence(self):

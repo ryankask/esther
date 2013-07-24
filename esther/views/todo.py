@@ -12,10 +12,12 @@ blueprint = Blueprint('todo', __name__)
 API_EMPTY_BODY_ERROR = {'__all__': [u'Request body must contain data.']}
 API_INVALID_PARAMETERS = {'__all__': [u'Invalid parameters in request body.']}
 
+
 def json_response(data, status=200, headers=None):
     return current_app.response_class(dumps(data), status,
                                       mimetype='application/json',
                                       headers=headers or {})
+
 
 def post(create_obj, form_class, owner):
     if owner != current_user:
@@ -30,6 +32,7 @@ def post(create_obj, form_class, owner):
         return u'', 201, {'location': obj.url}
 
     return json_response(form.errors, 422)
+
 
 def stripped_form(form_class, form_data, obj):
     """
@@ -50,6 +53,7 @@ def stripped_form(form_class, form_data, obj):
             delattr(form, field_name)
 
     return form
+
 
 def patch(obj, form_class, owner, is_public):
     if owner != current_user:
@@ -72,6 +76,7 @@ def patch(obj, form_class, owner, is_public):
     else:
         return json_response(form.errors, 422)
 
+
 @blueprint.route('/api/<int:owner_id>/lists', methods=('GET', 'POST'))
 def lists(owner_id):
     owner = User.query.get_or_404(owner_id)
@@ -85,9 +90,11 @@ def lists(owner_id):
     prepped_todo_lists = prep_query_for_json(todo_lists)
     return json_response(prepped_todo_lists)
 
+
 @blueprint.route('/api/<int:owner_id>/lists/<slug>', methods=('GET', 'PATCH'))
 def list_detail(owner_id, slug):
-    todo_list = List.query.filter_by(owner_id=owner_id, slug=slug).first_or_404()
+    todo_list = List.query.filter_by(
+        owner_id=owner_id, slug=slug).first_or_404()
 
     if request.method == 'PATCH':
         return patch(todo_list, ListForm, todo_list.owner, todo_list.is_public)
@@ -95,6 +102,7 @@ def list_detail(owner_id, slug):
     if not todo_list.is_public and todo_list.owner != current_user:
         abort(404)
     return json_response(todo_list.as_dict())
+
 
 @blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items',
                  methods=('GET', 'POST'))
@@ -111,6 +119,7 @@ def items(owner_id, list_slug):
 
     prepped_items = prep_query_for_json(todo_list.items)
     return json_response(prepped_items)
+
 
 @blueprint.route('/api/<int:owner_id>/lists/<list_slug>/items/<int:item_id>',
                  methods=('GET', 'PATCH'))
