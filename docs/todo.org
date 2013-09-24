@@ -44,3 +44,4 @@
 ** Need to slightly alter the slug like in django-tagging
 * TODO Show latest posts in sidebar                     :functionality:quick:
 * TODO Clean up code style                                            :quick:
+* TODO Update Foundation (?)                                     :style:long:
