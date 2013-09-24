@@ -1,12 +1,12 @@
 import re
 
 from flask import current_app
-from flask.ext.wtf import (Form, Field, TextField, TextAreaField,
-                           PasswordField, BooleanField, SelectField,
-                           DateTimeField, ValidationError, Required, Length,
-                           Email, HiddenInput, TextInput)
+from flask.ext.wtf import Form
 from sqlalchemy.sql import exists
-
+from wtforms import (Field, TextField, TextAreaField, PasswordField,
+                     BooleanField, SelectField, DateTimeField, ValidationError)
+from wtforms.validators import Required, Length, Email
+from wtforms.widgets import HiddenInput, TextInput
 
 from esther import bcrypt, db
 from esther.models import User, PostStatus, Post, Tag
