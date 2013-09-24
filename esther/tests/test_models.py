@@ -1,7 +1,7 @@
 import datetime
 
 from esther import db
-from esther.models import User, Post, PostStatus, Tag, List, Item
+from esther.models import User, Post, PostStatus, Tag
 from esther.tests.helpers import EstherTestCase, EstherDBTestCase
 
 
@@ -104,35 +104,3 @@ class TagTests(EstherTestCase):
     def test_url(self):
         tag = Tag('train spotting')
         self.assertEqual(tag.url, '/blog/tags/train-spotting')
-
-
-class ListTests(EstherTestCase):
-    def test_as_dict(self):
-        todo_list = List(id=3, owner_id=4, title='Long Term Tasks',
-                         description='My cool list', is_public=False)
-        self.assertEqual(set(todo_list.as_dict().keys()),
-                         set(['id', 'title', 'slug', 'description',
-                              'is_public', 'created', 'modified']))
-
-    def test_slug_generated_from_title(self):
-        todo_list = List(title='Long Term Tasks')
-        self.assertEqual(todo_list.slug, 'long-term-tasks')
-        # If a title isn't passed, no slug should be generated
-        todo_list = List()
-        self.assertEqual(todo_list.slug, None)
-
-    def test_url(self):
-        todo_list = List(owner_id=1, slug='something')
-        self.assertEqual(todo_list.url, '/todo/api/1/lists/something')
-
-
-class ItemTests(EstherTestCase):
-    def test_as_dict(self):
-        self.assertEqual(set(Item().as_dict().keys()),
-                         set(['id', 'content', 'details', 'is_done', 'due',
-                              'created', 'modified']))
-
-    def test_url(self):
-        todo_list = List(owner_id=1, slug='something')
-        item = Item(todo_list=todo_list, id=2)
-        self.assertEqual(item.url, '/todo/api/1/lists/something/items/2')

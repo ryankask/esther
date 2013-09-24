@@ -6,11 +6,10 @@ from flask.ext.wtf import (Form, Field, TextField, TextAreaField,
                            DateTimeField, ValidationError, Required, Length,
                            Email, HiddenInput, TextInput)
 from sqlalchemy.sql import exists
-from wtforms.ext.dateutil.fields import DateTimeField as ExtDateTimeField
 
 
 from esther import bcrypt, db
-from esther.models import User, PostStatus, Post, Tag, List
+from esther.models import User, PostStatus, Post, Tag
 
 ### Validators
 
@@ -152,29 +151,3 @@ class PostForm(Form):
     pub_date = UTCDateTimeField(u'Date Published')
     body = TextAreaField(u'Post body', [Required()], widget=HiddenInput())
     tags = TagListField(u'Tags')
-
-
-### Todo
-
-
-class ListForm(Form):
-    title = TextField(u'Title', [Required(), Length(max=128)])
-    description = TextAreaField(u'Description', [Required()])
-    is_public = BooleanField(u'Is public?')
-
-    def validate_title(form, field):
-        title_cond = List.slug == List.slugify(field.data)
-        if (field.object_data != field.data and
-            db.session.query(exists().where(title_cond)).scalar()):
-            raise ValidationError('Invalid title. Please choose another.')
-
-    def populate_obj(self, obj):
-        super(ListForm, self).populate_obj(obj)
-        obj.generate_slug()
-
-
-class ItemForm(Form):
-    content = TextField(u'Content', [Required(), Length(max=255)])
-    details = TextAreaField(u'Details', [Length(max=2048)])
-    is_done = BooleanField(u'Is done?')
-    due = ExtDateTimeField(u'Due')
