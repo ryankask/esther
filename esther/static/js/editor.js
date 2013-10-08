@@ -1,23 +1,13 @@
+/* global EpicEditor */
 (function() {
 'use strict';
 
-var body = $('#body'),
-    editor = new EpicEditor({
-      container: 'body-editor',
-      basePath: '/static/epiceditor',
-      file: {
-        name: 'esther-post-body',
-        defaultContent: $('#body').val(),
-        autoSave: 100
-      }
-    });
-
-editor.load(function() {
-  editor.importFile(null, body.val());
+var editor = new EpicEditor({
+  container: 'body-editor',
+  textarea: 'body',
+  basePath: '/static/epiceditor'
 });
 
-editor.on('save', function() {
-  body.val(editor.exportFile());
-});
+editor.load();
 
 })();
