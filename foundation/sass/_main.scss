@@ -1,3 +1,7 @@
+a:hover, a:focus {
+  color: lighten($mainColor, 30%);
+}
+
 code { font-size: 14px; }
 
 article, section {
