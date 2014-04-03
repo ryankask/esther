@@ -1,32 +1,33 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!doctype html>
+<html class="no-js">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{% block title %}- RyanKaskel.com{% endblock %}</title>
     <meta name="description" content="Ryan Kaskel's Website">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.min.css') }}">
     <link rel="alternate" type="application/rss+xml" title="Blog posts" href="{{ url_for('blog.posts_feed', _external=True) }}">
     {% block extra_head %}{% endblock %}
   </head>
   <body>
     <div class="row">
-      <div class="twelve columns">
-        <nav class="top-bar override">
-          <ul>
-            <li class="name"><h1><a href="{{ url_for('general.index') }}" title="Home">RyanKaskel.com</a></h1></li>
-            <li class="toggle-topbar"><a href="#"></a></li>
+      <div class="small-12 columns">
+        <nav class="top-bar" data-topbar>
+          <ul class="title-area">
+            <li class="name">
+              <h1><a href="{{ url_for('general.index') }}" title="Home">RyanKaskel.com</a></h1>
+            </li>
+            <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
           </ul>
-          <ul>
-            <li><a rel="author" href="{{ url_for('general.about') }}" title="About">About</a></li>
-            <li><a href="{{ url_for('general.contact') }}" title="Contact">Contact</a></li>
-          </ul>
+          <section class="top-bar-section">
+            <ul class="left">
+              <li><a rel="author" href="{{ url_for('general.about') }}" title="About">About</a></li>
+              <li><a href="{{ url_for('general.contact') }}" title="Contact">Contact</a></li>
+            </ul>
+          </section>
         </nav>
       </div>
     </div>
@@ -34,7 +35,7 @@
     {%- with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
     <div class="row">
-      <div class="twelve columns">
+      <div class="small-12 columns">
         {%- for category, message in messages %}
         <div class="alert-box{% if category %} {{ category }}{% endif %}">{{ message }}<a href="" class="close">&times;</a></div>
         {%- endfor %}
@@ -44,11 +45,11 @@
     {%- endwith %}
 
     <div class="row">
-      <div class="nine columns" role="main">
+      <div class="small-12 large-9 columns" role="main">
         {% block content %}{% endblock %}
       </div>
 
-      <nav class="two offset-by-one columns side">
+      <nav class="small-2 columns small-offset-1 side show-for-medium-up">
         <h5>Blog</h5>
         <ul>
           <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
@@ -80,30 +81,24 @@
     </div>
 
     <footer class="row">
-      <div class="twelve columns">
+      <div class="small-12 columns">
         <hr>
         <div class="row">
-          <div class="twelve columns">
+          <div class="small-12 columns">
             <p>© 2013 Ryan Kaskel Powered by <a href="https://github.com/ryankask/esther">Esther</a>.</p>
           </div>
         </div>
       </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
     <script>
-      var _gaq=[['_setAccount','UA-6663004-1'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
       e.src='//www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-6663004-7');ga('send','pageview');
+      ga('create','UA-6663004-1');ga('send','pageview');
     </script>
     {% block script %}{% endblock %}
   </body>

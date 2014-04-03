@@ -1,0 +1,22 @@
+{
+  "name": "esther",
+  "version": "1.0.0",
+  "description": "Esther is the web app that powers ryankaskel.com.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ryankask/esther.git"
+  },
+  "author": "Ryan Kaskel <dev@ryankaskel.com",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/ryankask/esther/issues"
+  },
+  "homepage": "https://github.com/ryankask/esther",
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-uglify": "^0.2.1",
+    "gulp-sass": "^0.7.1",
+    "gulp-concat": "^2.2.0",
+    "gulp-rename": "^1.2.0"
+  }
+}

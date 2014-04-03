@@ -2,16 +2,16 @@
 
 tmux new-session -d -s esther
 
-tmux new-window -t esther:2 -n 'work'
-tmux new-window -t esther:3 -n 'shell'
-tmux new-window -t esther:4 -n 'watch-server'
-tmux split-window -t esther:4
+tmux new-window -t esther:1 -n 'work'
+tmux new-window -t esther:2 -n 'shell'
+tmux new-window -t esther:3 -n 'watch-server'
+tmux split-window -t esther:3
 
-tmux send-keys -t esther:2 'workon esther' C-m
-tmux send-keys -t esther:3 'workon esther' C-m './run.py shell' C-m
-tmux send-keys -t esther:4.0 'workon esther' C-m './run.py server' C-m
-tmux send-keys -t esther:4.1 'workon esther' C-m 'bundle exec compass watch foundation' C-m
+tmux send-keys -t esther:1 'workon esther' C-m
+tmux send-keys -t esther:2 'workon esther' C-m './run.py shell' C-m
+tmux send-keys -t esther:3.0 'workon esther' C-m './run.py server' C-m
+tmux send-keys -t esther:3.1 'workon esther' C-m 'gulp' C-m
 
-tmux select-pane -t esther:4.0
-tmux select-window -t esther:2
+tmux select-pane -t esther:3.0
+tmux select-window -t esther:1
 tmux attach-session -t esther

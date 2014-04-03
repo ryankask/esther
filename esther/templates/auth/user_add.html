@@ -9,20 +9,20 @@
 <form class="custom" method="post">
   {{ form.csrf_token }}
   <div class="row">
-    <div class="six columns">
+    <div class="small-6 columns">
       {{ form_field(form.email) }}
       {{ form_field(form.full_name) }}
       <input class="button" type="submit" value="Add user" />
     </div>
-    <div class="six columns">
+    <div class="small-6 columns">
       {{ form_field(form.password) }}
       {{ form_field(form.short_name) }}
 
       <div class="row">
-        <div class="four columns">
+        <div class="small-4 columns">
           {{ form.is_admin.label }}
         </div>
-        <div class="eight columns">
+        <div class="small-8 columns">
           {{ form_field(form.is_admin, placeholder=False) }}
         </div>
       </div>

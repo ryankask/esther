@@ -1,19 +1,15 @@
 {% extends "base.html" %}
-{% from "helpers/tags.html" import tags %}
+{% from "blog/post_header.html" import post_header %}
 
 {% block title %}{{ post.title }} {{ super() }}{% endblock %}
 
 {% block content %}
 {% block pre_article %}{% endblock %}
 <article class="post">
-  <h1>{% block article_title %}{{ post.title }}{% endblock %}</h1>
-  <h6 class="meta">
-    Posted by {{ post.author.full_name }}
-    {%- if post.pub_date %} on {{ post.pub_date|localize_datetime|format_date }}{%- endif %} {{ tags(post) }}</h6>
+  {{ post_header(post, link_title=False) }}
   {%- block article_content %}
   {{ post.body|markdown }}
   {%- endblock %}
-
   <hr>
   <div id="disqus_thread"></div>
   <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>

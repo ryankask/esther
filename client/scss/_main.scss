@@ -1,34 +1,26 @@
 a:hover, a:focus {
-  color: lighten($mainColor, 20%);
+  color: lighten($primary-color, 20%);
 }
 
 code { font-size: 14px; }
 
 article, section {
-  h1 {
-    font-size: 42px;
-    clear: right;
-  }
+  .row.meta {
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+    line-height: 1.2rem;
 
-  h2 {
-    font-size: ms(2);
-  }
+    h2 {
+      display: inline-block;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1;
+    }
 
-  h3 {
-    font-size: ms(1);
-  }
-
-  h4 {
-    font-size: ms(0);
-  }
-
-  h6.meta {
-    font-size: 13px;
-    margin-bottom: ms(2);
-  }
-
-  .tags {
-    float: right;
+    .tags {
+      text-align: right;
+      font-size: 14px;
+    }
   }
 }
 
@@ -39,7 +31,7 @@ article, section {
 
 .auth-error {
   font-weight: bold;
-  color: $alertColor;
+  color: $alert-color;
 }
 
 nav.side {
@@ -52,8 +44,8 @@ nav.side {
   }
 
   ul {
-    padding: 0 0 5px 0;
     list-style: none;
+    margin-left: 0;
   }
 
   .social {
@@ -95,12 +87,17 @@ nav.side {
 }
 
 .codehilite {
-  padding: ms(1);
-  margin-bottom: ms(1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 16px;
+
+  pre {
+    white-space: pre-wrap;
+  }
 }
 
 #body-editor {
-  margin-bottom: ms(1);
+  margin-bottom: 1rem;
   height: 400px;
 }
 

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "helpers/tags.html" import tags %}
+{% from "blog/post_header.html" import post_header %}
 
 {% block title %}Welcome! {{ super() }}{% endblock %}
 {% block extra_head %}
@@ -10,15 +10,9 @@
 {% block content %}
 {%- for post in posts.items %}
 <article>
-  <header>
-    <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-    <h6 class="meta">
-      Posted by {{ post.author.full_name }} on
-      {{ post.pub_date|localize_datetime|format_date }} {{ tags(post) }}
-    </h6>
-  </header>
+  {{ post_header(post) }}
   <div class="row">
-    <div class="twelve columns">
+    <div class="small-12 columns">
       {{ post.preview|markdown }}
       <a class="right" href="{{ post.continue_url }}">Continue reading...</a>
     </div>

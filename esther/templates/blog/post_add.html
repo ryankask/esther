@@ -27,10 +27,10 @@
   {{ form.body }}
 
   <div class="row">
-    <div class="two columns">
+    <div class="small-2 columns">
       {{ form.status.label(class="inline") }}
     </div>
-    <div class="ten columns">
+    <div class="small-10 columns">
       {% if form.status.errors %}{{ form.status(class="error") }}
       <small class="error">{% for error in form.status.errors %}{{ error }}{% endfor %}</small>
       {% else %}{{ form.status(class="expand") }}{% endif %}
@@ -38,10 +38,10 @@
   </div>
   {%- if post and post.pub_date %}
   <div class="row">
-    <div class="two columns">
+    <div class="small-2 columns">
       {{ form.pub_date.label(class="inline") }}
     </div>
-    <div class="ten columns">
+    <div class="small-2 columns">
       {{ form_field(form.pub_date, placeholder=False) }}
     </div>
   </div>

@@ -10,7 +10,7 @@
 <form method="post">
   {{ form.csrf_token }}
   <div class="row">
-    <div class="six columns">
+    <div class="small-12 large-8 columns">
       {% if form.email.errors %}{{ form.email(size=80, placeholder=form.email.label.text, class="error") }}
       <small class="error">{% for error in form.email.errors %}{{ error }}{% endfor %}</small>
       {% else %}{{ form.email(size=80, placeholder=form.email.label.text) }}{% endif %}

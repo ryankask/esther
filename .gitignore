@@ -1,7 +1,12 @@
 *.pyc
-foundation/.sass-cache
-esther/settings/site.py
 *~
 \#*\#
 .elc
 .\#*
+esther.iml
+/.idea
+/bower_components
+/esther/static/css
+/esther/static/js/app.min.js
+/esther/static/js/app.js
+/esther/settings/site.py

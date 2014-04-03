@@ -1,0 +1,23 @@
+{
+  "name": "esther",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation": "zurb/bower-foundation"
+  },
+  "version": "1.0.0",
+  "homepage": "https://github.com/ryankask/esther",
+  "authors": [
+    "Ryan Kaskel <dev@ryankaskel.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "BSD",
+  "private": true
+}
