@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-tmux new-session -d -s esther
+tmux new-session -d -s esther -n 'work'
 
-tmux new-window -t esther:1 -n 'work'
 tmux new-window -t esther:2 -n 'shell'
 tmux new-window -t esther:3 -n 'watch-server'
 tmux split-window -t esther:3
