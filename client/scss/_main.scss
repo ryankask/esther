@@ -2,7 +2,14 @@ a:hover, a:focus {
   color: lighten($primary-color, 20%);
 }
 
-code { font-size: 14px; }
+nav {
+  .dropdown {
+    .icon {
+      display: inline-block;
+      margin: 0 0.5rem 0 0.2rem;
+    }
+  }
+}
 
 article, section {
   .row.meta {
@@ -32,27 +39,6 @@ article, section {
 .auth-error {
   font-weight: bold;
   color: $alert-color;
-}
-
-nav.side {
-  h5 {
-    font-size: 18px;
-  }
-
-  li {
-    font-size: 15px;
-  }
-
-  ul {
-    list-style: none;
-    margin-left: 0;
-  }
-
-  .social {
-    li {
-      margin-top: 10px;
-    }
-  }
 }
 
 @mixin admin-table {
@@ -89,7 +75,7 @@ nav.side {
 .codehilite {
   padding: 1rem;
   margin-bottom: 1rem;
-  font-size: 16px;
+  font-size: 14px;
 
   pre {
     white-space: pre-wrap;

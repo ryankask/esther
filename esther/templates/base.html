@@ -25,7 +25,57 @@
           <section class="top-bar-section">
             <ul class="left">
               <li><a rel="author" href="{{ url_for('general.about') }}" title="About">About</a></li>
+              <li class="has-dropdown">
+                <a href="#">Blog</a>
+                <ul class="dropdown">
+                  <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
+                  <li><a href="{{ url_for('blog.posts_feed') }}">
+                    RSS Feed <img class="icon" src="{{ url_for('static', filename='img/icons/rss-3-64.png') }}" alt="RSS feed" height="20" width="20"></a>
+                  </li>
+                </ul>
+              </li>
               <li><a href="{{ url_for('general.contact') }}" title="Contact">Contact</a></li>
+              <li class="has-dropdown">
+                <a href="#">Social&nbsp;&nbsp;</a>
+                <ul class="dropdown">
+                  <li>
+                    <a href="https://twitter.com/ryankask" rel="me">
+                      @ryankask
+                      <img class="icon" src="{{ url_for('static', filename='img/icons/twitter-64.png') }}" alt="@ryankask on Twitter" height="20" width="20">
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ryankask" rel="me">
+                      Github
+                      <img class="icon" src="{{ url_for('static', filename='img/icons/github-11-64.png') }}" alt="@ryankask on Github" height="20" width="20">
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://plus.google.com/+RyanKaskel" rel="me">
+                      Google+
+                      <img class="icon" src="{{ url_for('static', filename='img/icons/google-plus-64.png') }}" alt="Google+" height="20" width="20">
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="right">
+              {%- if current_user.is_authenticated() %}
+                <li class="has-dropdown">
+                  <a href="#">Admin</a>
+                  <ul class="dropdown">
+                    {%- if current_user.is_admin %}
+                      <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
+                      <li><a href="{{ url_for('auth.add_user') }}">Add user</a></li>
+                    {%- endif %}
+                    <li><a href="{{ url_for('blog.view_posts') }}">View all posts</a></li>
+                    <li><a href="{{ url_for('blog.add_post') }}">Add new post</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                  </ul>
+                </li>
+              {%- else %}
+                <li><a href="{{ url_for('auth.login') }}?next={{ url_for('blog.view_posts') }}">Login</a></li>
+              {%- endif %}
             </ul>
           </section>
         </nav>
@@ -45,39 +95,9 @@
     {%- endwith %}
 
     <div class="row">
-      <div class="small-12 large-9 columns" role="main">
+      <div class="small-12 columns" role="main">
         {% block content %}{% endblock %}
       </div>
-
-      <nav class="small-2 columns small-offset-1 side show-for-medium-up">
-        <h5>Blog</h5>
-        <ul>
-          <li><a href="{{ url_for('blog.tag_list') }}">All post tags</a></li>
-          <li><a href="{{ url_for('blog.posts_feed') }}">RSS Feed <img src="{{ url_for('static', filename='img/feeds/icon-14x14.png') }}" alt="RSS feed" height="14" width="14"></a></li>
-        </ul>
-
-        <h5>Admin</h5>
-        <ul>
-          {%- if current_user.is_authenticated() %}
-          {%- if current_user.is_admin %}
-          <li><a href="{{ url_for('auth.list_users') }}">View all users</a></li>
-          <li><a href="{{ url_for('auth.add_user') }}">Add user</a></li>
-          {%- endif %}
-          <li><a href="{{ url_for('blog.view_posts') }}">View all posts</a></li>
-          <li><a href="{{ url_for('blog.add_post') }}">Add new post</a></li>
-          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-          {%- else %}
-          <li><a href="{{ url_for('auth.login') }}?next={{ url_for('blog.view_posts') }}">Login</a></li>
-          {%- endif %}
-        </ul>
-
-        <h5>Social</h5>
-        <ul>
-          <li><a href="https://twitter.com/ryankask" rel="me">@ryankask</a></li>
-          <li><a href="https://github.com/ryankask" rel="me">GitHub</a></li>
-          <li><a href="https://plus.google.com/+RyanKaskel" rel="me">Google+</a></li>
-        </ul>
-      </nav>
     </div>
 
     <footer class="row">
