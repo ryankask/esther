@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import sys
 
 from flask.ext.script import Manager, prompt, prompt_bool, prompt_pass
@@ -7,6 +7,7 @@ from flask.ext.sqlalchemy import get_debug_queries
 from sqlalchemy.exc import DatabaseError
 
 from esther import create_app, db, models
+from esther.export import export_posts
 from esther.tests import run_tests
 
 app = create_app(['esther.settings.site'])
@@ -92,6 +93,11 @@ def add_user():
         sys.exit(1)
 
     print(u'User "{}" created.'.format(user.email))
+
+
+@manager.command
+def export():
+    export_posts()
 
 
 if __name__ == '__main__':
