@@ -20,4 +20,4 @@ def export_posts():
         post_data['tags'] = [obj_as_dict(tag) for tag in post.tags]
         data.append(post_data)
 
-    dump(data, sys.stdout)
+    dump(data, sys.stdout, indent=2)
