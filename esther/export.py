@@ -1,6 +1,4 @@
-import sys
-
-from flask.json import dump
+from flask.json import dumps
 from sqlalchemy.orm import joinedload, subqueryload
 
 from esther.models import obj_as_dict, Post, PostStatus
@@ -20,4 +18,4 @@ def export_posts():
         post_data['tags'] = [obj_as_dict(tag) for tag in post.tags]
         data.append(post_data)
 
-    dump(data, sys.stdout, indent=2)
+    print dumps(data, ensure_ascii=False, indent=2).encode('utf-8')
