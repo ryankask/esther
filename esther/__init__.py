@@ -13,11 +13,15 @@ login_manager = LoginManager()
 sentry = Sentry()
 
 
-def create_app(config_objects):
-    app = Flask(__name__)
+def create_app(config_objects=None):
+    app = Flask(__name__, instance_relative_config=True)
 
-    for config_object in config_objects:
-        app.config.from_object(config_object)
+    app.config.from_object('esther.settings.base')
+    app.config.from_pyfile('settings.py', silent=True)
+
+    if config_objects:
+        for config_object in config_objects:
+            app.config.from_object(config_object)
 
     # Conver the time zone name into a pytz timezone and store it in the
     # config. TODO: Is there a better way to do this?

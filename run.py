@@ -10,7 +10,7 @@ from esther import create_app, db, models
 from esther.export import export_posts
 from esther.tests import run_tests
 
-app = create_app(['esther.settings.site'])
+app = create_app()
 manager = Manager(app)
 
 
@@ -38,6 +38,8 @@ def server(toolbar=False, db_stats=False):
 
 @manager.shell
 def make_shell_context():
+    app.debug = True
+
     context = {
         'app': app,
         'db': db,

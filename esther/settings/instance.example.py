@@ -1,5 +1,4 @@
-# Example ``esther.settings.site`` settings file
-from esther.settings.base import *
+# Example ``esther/instance/settings.py`` settings file
 
 # Change the secret key, of course
 SECRET_KEY = '\xe6?gT\xd8\xdd\xd8e\xc7\x02\xd5Q&\xe3\xeb\x88\xb6\xf5EP\xc3<\xbc\xec\xd3\t\xa6d@\x0f\xccE\xe2\xaclP'

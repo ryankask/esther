@@ -5,7 +5,7 @@ from esther import create_app, db
 
 class EstherTestCase(TestCase):
     def create_app(self):
-        return create_app(['esther.settings.site', 'esther.settings.test'])
+        return create_app(config_objects=['esther.settings.test'])
 
 
 class EstherDBTestCase(EstherTestCase):

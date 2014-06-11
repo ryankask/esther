@@ -1,3 +1,3 @@
-from esther import create_app
+from . import create_app
 
-application = create_app(['esther.settings.site'])
+application = create_app()

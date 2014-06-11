@@ -5,8 +5,8 @@
 .\#*
 esther.iml
 /.idea
+/instance
 /bower_components
 /esther/static/css
 /esther/static/js/app.min.js
 /esther/static/js/app.js
-/esther/settings/site.py
