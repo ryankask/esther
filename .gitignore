@@ -7,6 +7,7 @@ esther.iml
 /.idea
 /instance
 /bower_components
+/node_modules
 /esther/static/css
 /esther/static/js/app.min.js
 /esther/static/js/app.js
