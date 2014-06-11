@@ -36,7 +36,7 @@ class UTCDateTime(types.TypeDecorator):
     def __init__(self, timezone=True):
         super(UTCDateTime, self).__init__(timezone)
 
-    def process_bind_param(self, value, enging):
+    def process_bind_param(self, value, engine):
         if value is not None:
             return value.astimezone(pytz.utc)
         return value
