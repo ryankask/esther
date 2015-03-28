@@ -28,7 +28,7 @@ def deploy(requirements='no', frontend='yes', restart='yes'):
 
 
 def load_db():
-    backups = run('ls -r1 {}'.format(env.db_backups_dir)).split()
+    backups = run('ls -t1 {}'.format(env.db_backups_dir)).split()
 
     if not backups:
         print('No database dumps to download.')
@@ -37,5 +37,5 @@ def load_db():
     get(os.path.join(env.db_backups_dir, backups[0]), '/tmp')
     local('dropdb {name}; createdb {name}'.format(name=env.dev_db_name))
     local_backup = os.path.join('/tmp', backups[0])
-    local('psql {} < {}'.format(env.dev_db_name, local_backup))
+    local('gunzip -c {} | psql {}'.format(local_backup, env.dev_db_name))
     local('rm {}'.format(local_backup))
